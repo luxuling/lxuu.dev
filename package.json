@@ -12,6 +12,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.1.7"
+    "@astrojs/solid-js": "^6.0.1",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.7",
+    "solid-js": "^1.9.12",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }
