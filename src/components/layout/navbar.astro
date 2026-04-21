@@ -1,0 +1,35 @@
+---
+import Container from '../base/container.astro';
+import Link from '../base/link.astro';
+import Button from '../base/button.astro';
+
+const navItems = [
+  { href: '/projects', label: 'Projects' },
+  { href: '/posts', label: 'Posts' },
+  { href: '/tools', label: 'Tools' },
+  { href: '/me', label: 'Me' },
+];
+---
+
+<header class='border-b border-edge bg-background'>
+  <Container class='flex p-6 items-center justify-between gap-4'>
+    <Link
+      href='/'
+      class='text-2xl font-black tracking-tight lowercase no-underline'
+      >lxuu.dev</Link
+    >
+
+    <nav
+      class='hidden items-center gap-6 text-sm text-muted-foreground md:flex'
+    >
+      {navItems.map((item) => <Link href={item.href}>{item.label}</Link>)}
+    </nav>
+
+    <Button
+      onclick="window.location.href='mailto:antonisaputra049@gmail.com'"
+      aria-label='Hire me via email'
+    >
+      Hire Me
+    </Button>
+  </Container>
+</header>

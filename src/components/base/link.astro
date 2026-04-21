@@ -1,0 +1,23 @@
+---
+interface Props {
+  href: string;
+  label?: string;
+  class?: string;
+  target?: string;
+  rel?: string;
+}
+
+const {
+  href,
+  label,
+  class: className = '',
+  target,
+  rel,
+} = Astro.props as Props;
+
+const baseClass = 'text-foreground hover:underline underline-offset-4';
+---
+
+<a href={href} class:list={[baseClass, className]} target={target} rel={rel}>
+  {label ? label : <slot />}
+</a>

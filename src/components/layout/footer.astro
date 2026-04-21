@@ -1,0 +1,39 @@
+---
+import Container from '../base/container.astro';
+import Link from '../base/link.astro';
+
+const links = [
+  { href: 'https://github.com/luxuling', label: 'GitHub' },
+  {
+    href: 'https://www.linkedin.com/in/antoni-saputra-3b1869241/',
+    label: 'LinkedIn',
+  },
+  { href: 'https://www.instagram.com/lxuuu.ling/', label: 'Instagram' },
+  { href: 'https://discord.com/users/520879989537898496', label: 'Discord' },
+];
+---
+
+<footer class='mx-auto min-h-screen w-full max-w-260'>
+  <Container
+    class='grid grid-cols-1 divide-y divide-edge md:grid-cols-4 md:divide-x md:divide-y-0 px-0! border-edge border'
+  >
+    {
+      links.map((link) => (
+        <Link href={link.href} class='text-center text-sm py-6 w-full'>
+          {link.label}
+        </Link>
+      ))
+    }
+  </Container>
+
+  <Container
+    class='flex flex-col items-center justify-between gap-3 px-4 text-xs text-subtle md:flex-row py-10'
+  >
+    <p>©2026 Lixu Ling</p>
+    <div class='flex items-center gap-4'>
+      <Link href='/projects' class='hover:text-foreground'>Projects</Link>
+      <Link href='/posts' class='hover:text-foreground'>Posts</Link>
+      <Link href='/me' class='hover:text-foreground'>Me</Link>
+    </div>
+  </Container>
+</footer>
