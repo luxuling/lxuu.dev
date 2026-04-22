@@ -50,7 +50,7 @@ export function Spinner() {
   const frame = createSpinner(sandFrames, 80);
 
   return (
-    <span class='font-mono text-sm flex items-center gap-2 text-foreground'>
+    <span class='flex items-center gap-2 font-mono text-base text-foreground sm:text-sm'>
       <span>{frame()}</span>
     </span>
   );
