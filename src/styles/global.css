@@ -9,6 +9,29 @@
   --color-border: #2a2a31;
   --color-edge: #2f2f37;
   --color-subtle: #8c8c94;
+  /* Contribution heatmap: same palette as the app (neutral ramp from panel → foreground) */
+  /* Empty days: pull toward border so cells read on bg-panel/30; still below contrib-1 */
+  --color-contrib-0: color-mix(
+    in srgb,
+    var(--color-border) 42%,
+    var(--color-background) 58%
+  );
+  --color-contrib-1: var(--color-border);
+  --color-contrib-2: color-mix(
+    in srgb,
+    var(--color-border) 35%,
+    var(--color-muted) 65%
+  );
+  --color-contrib-3: color-mix(
+    in srgb,
+    var(--color-muted) 25%,
+    var(--color-muted-foreground) 75%
+  );
+  --color-contrib-4: color-mix(
+    in srgb,
+    var(--color-muted-foreground) 20%,
+    var(--color-foreground) 80%
+  );
 }
 
 :root {
@@ -19,4 +42,41 @@ body {
   margin: 0;
   background: var(--color-background);
   color: var(--color-foreground);
+}
+
+/* Horizontal scroll for contribution graph — matches dark UI, no bright native track */
+.contrib-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-edge)
+    color-mix(in srgb, var(--color-panel) 92%, transparent);
+}
+
+.contrib-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.contrib-scroll::-webkit-scrollbar-track {
+  margin-inline: 2px;
+  border-radius: 9999px;
+  background: color-mix(
+    in srgb,
+    var(--color-panel) 88%,
+    var(--color-background)
+  );
+}
+
+.contrib-scroll::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: var(--color-edge);
+  border: 1px solid color-mix(in srgb, var(--color-panel) 70%, transparent);
+}
+
+.contrib-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+.contrib-scroll::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
 }

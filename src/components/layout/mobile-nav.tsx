@@ -44,7 +44,19 @@ export default function MobileNav(props: Props) {
         aria-controls='mobile-menu-panel'
         onClick={toggleMenu}
       >
-        <span aria-hidden='true'>{isOpen() ? '✕' : '☰'}</span>
+        <svg
+          class='h-6 w-6 shrink-0'
+          width='24'
+          height='24'
+          viewBox='0 0 24 24'
+          aria-hidden='true'
+        >
+          <use
+            href={
+              isOpen() ? '/icons/close.svg#icon' : '/icons/hamburger.svg#icon'
+            }
+          />
+        </svg>
       </button>
 
       <nav

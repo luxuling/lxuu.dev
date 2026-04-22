@@ -1,12 +1,36 @@
 ---
-import StatusPage from '../components/status-page.astro';
+import GitHubHome from '../components/home/github-home.astro';
+import StatusPage from '../components/base/status-page.astro';
 import Layout from '../layouts/layout.astro';
+import { fetchGitHubHome } from '../lib/github';
+
+const username = import.meta.env.PUBLIC_GITHUB_USERNAME ?? '';
+const token = import.meta.env.GITHUB_TOKEN;
+
+let data: Awaited<ReturnType<typeof fetchGitHubHome>> | null = null;
+let loadError: string | null = null;
+
+if (!username || !token) {
+  loadError =
+    'Set PUBLIC_GITHUB_USERNAME and GITHUB_TOKEN in .env. The token must stay server-side (same idea as the yuichkun Next.js example on Vercel) so GitHub returns the same contribution total as your profile.';
+} else {
+  try {
+    data = await fetchGitHubHome(username, token);
+  } catch (e) {
+    loadError = e instanceof Error ? e.message : 'Failed to load GitHub data';
+  }
+}
 ---
 
 <Layout>
-  <StatusPage
-    title='lxuu.dev: not ready yet 𓇢𓆸'
-    message='still building this thing… hang tight (≖⩊≖)'
-    showSpinner={true}
-  />
+  {
+    data ? (
+      <GitHubHome data={data} />
+    ) : (
+      <StatusPage
+        title='Could not load GitHub profile'
+        message={loadError ?? 'Unknown error'}
+      />
+    )
+  }
 </Layout>
