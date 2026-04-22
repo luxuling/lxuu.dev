@@ -1,46 +1,37 @@
-# Astro Starter Kit: Basics
+# Web Portofolio
 
-```sh
-pnpm create astro@latest -- --template basics
-```
+##### REFERENCES
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+[OPEN CODE AS UI REF](https://opencode.ai/)
+[CONTENT IDEAS](https://elianiva.my.id/)
 
-## 🚀 Project Structure
+---
 
-Inside of your Astro project, you'll see the following folders and files:
+##### TECH STACK
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+- ASTRO JS
+- TYPESCRIPT
+- GITHUB API
+- TAILWIND CSS
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+---
 
-## 🧞 Commands
+##### TODO LIST
 
-All commands are run from the root of the project, from a terminal:
+- [x] Buy Domain
+- [x] Set Up Repository
+- [x] Init Project With Framework (don't use NextJS!!)
+- [ ] Home Page
+  - [ ] Hero section (show the github contributions activities)
+  - [ ] Show PFP
+- [ ] Blog
+- [ ] About Me
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+---
 
-## 👀 Want to learn more?
+###### RULES
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. _FINISH THE STATIC SHIT FIRST_
+2. _DON'T SPEND MUCH TIME ON THE SECONDARY FEATURE_
+
+> should live in MAY 18 (the project time should only take one month)

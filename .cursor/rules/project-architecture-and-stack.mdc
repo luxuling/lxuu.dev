@@ -1,0 +1,28 @@
+---
+description: Enforce clean simple architecture, kebab-case naming, and Astro + SolidJS stack
+alwaysApply: true
+---
+
+# Project Architecture And Stack Rules
+
+## Architecture
+- Keep architecture simple and clean with clear separation of concerns.
+- Organize by feature and keep modules small, focused, and reusable.
+- Prefer composition over deep inheritance and avoid unnecessary abstraction.
+- Keep UI, state/business logic, and data/integration concerns separated.
+- Refactor when complexity grows; do not add patterns unless they solve a real problem.
+
+## File Naming
+- Use kebab-case for all new files and directories.
+- Do not create PascalCase, camelCase, or snake_case file names.
+- Rename non-kebab-case files when touching related code, unless it is risky or out of scope.
+
+## Framework And Language Constraints
+- Use Astro for app/page/layout structure.
+- Use SolidJS for interactive UI components.
+- Do not introduce React, Vue, Svelte, Angular, or other UI frameworks.
+- Do not add non-essential runtime libraries when Astro/SolidJS native patterns are enough.
+
+## Examples
+- Good file names: `hero-section.astro`, `site-header.tsx`, `contact-form.tsx`, `theme-toggle.ts`.
+- Bad file names: `HeroSection.astro`, `siteHeader.tsx`, `contact_form.tsx`.

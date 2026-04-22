@@ -1,0 +1,45 @@
+---
+import Container from '../base/container.astro';
+import Link from '../base/link.astro';
+
+const links = [
+  { href: 'https://github.com/luxuling', label: 'GitHub' },
+  {
+    href: 'https://www.linkedin.com/in/antoni-saputra-3b1869241/',
+    label: 'LinkedIn',
+  },
+  { href: 'https://www.instagram.com/lxuuu.ling/', label: 'Instagram' },
+  { href: 'https://discord.com/users/520879989537898496', label: 'Discord' },
+];
+---
+
+<footer class='mx-auto w-full max-w-260'>
+  <Container
+    class='grid grid-cols-2 divide-x divide-y divide-edge border border-edge !px-0 md:grid-cols-4 md:divide-y-0'
+  >
+    {
+      links.map((link) => (
+        <Link
+          href={link.href}
+          class='flex w-full items-center justify-center px-2 py-4 text-center text-sm md:px-3 md:py-6'
+        >
+          {link.label}
+        </Link>
+      ))
+    }
+  </Container>
+
+  <Container
+    class='flex flex-col items-center justify-between gap-4 px-4 py-6 text-center text-xs text-subtle md:flex-row md:py-10 md:text-left'
+  >
+    <p class='shrink-0'>©2026 Lixu Ling</p>
+    <nav
+      class='flex flex-wrap items-center justify-center gap-x-5 gap-y-1 md:justify-end'
+      aria-label='Footer'
+    >
+      <Link href='/projects' class='hover:text-foreground'>Projects</Link>
+      <Link href='/posts' class='hover:text-foreground'>Posts</Link>
+      <Link href='/me' class='hover:text-foreground'>Me</Link>
+    </nav>
+  </Container>
+</footer>

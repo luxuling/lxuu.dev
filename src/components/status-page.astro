@@ -1,0 +1,36 @@
+---
+import { Spinner } from './icons/spinner';
+
+interface Props {
+  title: string;
+  message: string;
+  showSpinner?: boolean;
+}
+
+const { title, message, showSpinner = false }: Props = Astro.props;
+---
+
+<section
+  class='flex min-h-[52vh] w-full flex-col items-center justify-center gap-5 px-4 py-10 sm:min-h-[60vh] sm:gap-6 sm:py-14'
+>
+  <div
+    class='mx-auto w-full max-w-xl border border-border px-4 py-3 sm:px-8 sm:py-3.5'
+  >
+    <h1
+      class='text-center text-base leading-snug tracking-tight text-pretty text-foreground sm:text-lg md:text-xl'
+    >
+      {title}
+    </h1>
+  </div>
+
+  <div
+    class='flex max-w-md flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:gap-3 sm:text-left'
+  >
+    {showSpinner ? <Spinner client:load /> : null}
+    <p
+      class='text-sm leading-relaxed text-pretty text-muted-foreground sm:text-base'
+    >
+      {message}
+    </p>
+  </div>
+</section>
