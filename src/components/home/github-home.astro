@@ -1,13 +1,13 @@
 ---
 import BaseCard from '../base/base-card.astro';
 import Container from '../base/container.astro';
-import type { GitHubHomeData } from '../../lib/github';
+import type { GitHubHomeData } from '../../lib/services/github.service';
 import {
   CONTRIBUTION_LEGEND_LEVELS,
   columnCells,
   fillForCount,
   monthLabelsForWeeks,
-} from '../../lib/github-contribution-helpers';
+} from '../../lib/helpers/github.helper';
 
 interface Props {
   data: GitHubHomeData;
@@ -26,7 +26,7 @@ const monthLabels = monthLabelsForWeeks(data.weeks);
           alt=''
           width='120'
           height='120'
-          class='mx-auto size-24 shrink-0 rounded-full border border-edge object-cover sm:mx-0 sm:size-[120px]'
+          class='mx-auto size-24 shrink-0 rounded-full border border-edge object-cover sm:mx-0 sm:size-30'
           loading='lazy'
         />
         <div class='min-w-0 flex-1 text-center sm:text-left'>
@@ -109,10 +109,10 @@ const monthLabels = monthLabelsForWeeks(data.weeks);
 
         <div class='contrib-scroll min-w-0 flex-1 overflow-x-auto pb-1'>
           <div class='inline-block min-w-max'>
-            <div class='mb-1 flex gap-[3px]'>
+            <div class='mb-1 flex gap-0.75'>
               {
                 data.weeks.map((_, i) => (
-                  <div class='relative flex h-4 w-[10px] shrink-0 justify-center sm:w-3'>
+                  <div class='relative flex h-4 w-2.5 shrink-0 justify-center sm:w-3'>
                     {monthLabels[i] ? (
                       <span class='absolute top-0 left-0 whitespace-nowrap text-[10px] text-subtle'>
                         {monthLabels[i]}
@@ -123,15 +123,15 @@ const monthLabels = monthLabelsForWeeks(data.weeks);
               }
             </div>
 
-            <div class='flex gap-[3px]'>
+            <div class='flex gap-0.75'>
               {
                 data.weeks.map((week) => (
-                  <div class='flex flex-col gap-[3px]'>
+                  <div class='flex flex-col gap-0.75'>
                     {columnCells(week).map((day) =>
                       day ? (
                         <div
                           title={`${day.contributionCount} contributions on ${day.date}`}
-                          class='size-2.5 rounded-[2px] sm:size-3'
+                          class='size-2.5 rounded-xs sm:size-3'
                           style={{
                             backgroundColor: fillForCount(
                               day.contributionCount,
@@ -168,7 +168,7 @@ const monthLabels = monthLabelsForWeeks(data.weeks);
             {
               CONTRIBUTION_LEGEND_LEVELS.map((level) => (
                 <div
-                  class='size-2.5 rounded-[2px] sm:size-3'
+                  class='size-2.5 rounded-xs sm:size-3'
                   style={{ backgroundColor: fillForCount(level) }}
                 />
               ))

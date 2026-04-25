@@ -1,4 +1,7 @@
-import type { ContributionDay, ContributionWeek } from './github';
+import type {
+  ContributionDay,
+  ContributionWeek,
+} from '../services/github.service';
 
 export function fillForCount(count: number): string {
   if (count === 0) return 'var(--color-contrib-0)';

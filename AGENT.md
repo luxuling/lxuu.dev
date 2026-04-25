@@ -16,7 +16,12 @@ This project uses the following development rules:
    - SolidJS for interactive components.
    - Do not introduce other UI frameworks.
 
-4. Project context:
+4. No unnecessary comments in code:
+   - Do not add comments that narrate what the code does (e.g. "// Import the module", "// Define the function").
+   - Only comment non-obvious intent, trade-offs, or constraints the code cannot convey on its own.
+   - Never explain a change being made in a comment.
+
+5. Project context:
    - This project is personal portfolio website for owner.
    - Keep style minimal, solid color surfaces, no decorative background patterns.
    - Prefer reusable layout and base components for consistency.
