@@ -22,10 +22,14 @@
 - [x] Set Up Repository
 - [x] Init Project With Framework (don't use NextJS!!)
 - [ ] Home Page
-  - [ ] Hero section (show the github contributions activities)
-  - [ ] Show PFP
-- [ ] Blog
-- [ ] About Me
+  - [x] Hero section (show the github contributions activities)
+  - [x] Show PFP
+- [ ] Post
+- [ ] Tools
+- [ ] Me
+  - [ ] **_Summary_** : just write some shit to tell the reader who i am and maybe add some quotes from someone so it look cool :>
+  - [ ] **_What I'm up to now_** : the current job i had, and what i want to do, or what i'm trying to do
+  - [ ] **_Experiences_** : carrer path, summary from the intern and current job
 
 ---
 
