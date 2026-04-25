@@ -1,4 +1,4 @@
-import { GitHubEndpoint } from '../../config/config';
+import { GitHubEndpoint } from '@config/config';
 
 export type ContributionDay = {
   date: string;

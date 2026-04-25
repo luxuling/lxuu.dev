@@ -1,9 +1,9 @@
 ---
-import GitHubHome from '../components/pages/home/index.astro';
-import StatusPage from '../components/base/status-page.astro';
-import Layout from '../layouts/layout.astro';
-import { getGitHubEnv } from '../config/config';
-import { fetchGitHubHome } from '../lib/services/github.service';
+import GitHubHome from '@components/pages/home/index.astro';
+import StatusPage from '@components/base/status-page.astro';
+import Layout from '@layouts/layout.astro';
+import { getGitHubEnv } from '@config/config';
+import { fetchGitHubHome } from '@lib/services/github.service';
 
 const env = getGitHubEnv();
 let data: Awaited<ReturnType<typeof fetchGitHubHome>> | null = null;

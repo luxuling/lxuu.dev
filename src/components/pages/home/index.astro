@@ -1,8 +1,8 @@
 ---
-import Container from '../../base/container.astro';
-import type { GitHubHomeData } from '../../../lib/services/github.service';
-import GitHubProfileCard from './github-profile-card.astro';
-import GitHubContribution from './github-contribution.astro';
+import Container from '@components/base/container.astro';
+import type { GitHubHomeData } from '@lib/services/github.service';
+import GitHubProfileCard from '@components/pages/home/github-profile-card.astro';
+import GitHubContribution from '@components/pages/home/github-contribution.astro';
 
 interface Props {
   data: GitHubHomeData;

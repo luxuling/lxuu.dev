@@ -1,12 +1,12 @@
 ---
-import BaseCard from '../../base/base-card.astro';
-import type { GitHubHomeData } from '../../../lib/services/github.service';
+import BaseCard from '@components/base/base-card.astro';
+import type { GitHubHomeData } from '@lib/services/github.service';
 import {
   CONTRIBUTION_LEGEND_LEVELS,
   columnCells,
   fillForCount,
   monthLabelsForWeeks,
-} from '../../../lib/helpers/github.helper';
+} from '@lib/helpers/github.helper';
 
 interface Props {
   data: Pick<GitHubHomeData, 'totalContributions' | 'weeks'>;
