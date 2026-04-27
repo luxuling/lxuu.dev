@@ -1,0 +1,116 @@
+{
+  "tagline": "A developer, occasionally a human being.",
+  "summaryParagraphs": [
+    "Hey — I'm Antoni Saputra, though most people know me as Lixu :). By day I work as a front-end engineer; outside of that I build things for fun and try to document the journey here.",
+    "Most of my time goes into the React ecosystem — shipping product, integrating APIs, and keeping the front end from falling apart.",
+    "I'm drawn to software that's built with genuine care for the people who use it."
+  ],
+  "quote": {
+    "body": "Programs must be written for people to read, and only incidentally for machines to execute.",
+    "attribution": "— Harold Abelson,",
+    "citation": "Structure and Interpretation of Computer Programs"
+  },
+  "nowItems": [
+    {
+      "tone": "default",
+      "segments": [
+        { "text": "Working as a " },
+        { "text": "Front-End Engineer", "emphasis": true },
+        { "text": " at " },
+        { "text": "Logika Data", "href": "https://logikadata.co.id/" },
+        {
+          "text": " — building UIs, integrating the APIs, and tuning SEO and performance."
+        }
+      ]
+    },
+    {
+      "tone": "default",
+      "segments": [
+        { "text": "Getting sharper at " },
+        { "text": "web and API development", "emphasis": true },
+        { "text": " — reading more, thinking more, shipping more." }
+      ]
+    },
+    {
+      "tone": "default",
+      "segments": [
+        { "text": "Slowly working through " },
+        {
+          "text": "new programming languages and competitive programming",
+          "emphasis": true
+        },
+        { "text": " — minimal crying, decent progress." }
+      ]
+    },
+    {
+      "tone": "subtle",
+      "segments": [{ "text": "Writing it all down as I go." }]
+    }
+  ],
+  "experiences": [
+    {
+      "role": "Frontend Engineer",
+      "company": "LOGIKA DATA",
+      "companyUrl": "https://logikadata.co.id/",
+      "period": "11/2024 — present",
+      "bullets": [
+        "Build and maintain client-facing web applications, owning both UI structure and interaction logic.",
+        "Improved system reliability through better observability and cleaner error handling.",
+        "Collaborated closely with backend teams to align API contracts with UI requirements.",
+        "Set up CI/CD pipelines with Docker and GitHub Actions to automate front-end deployments."
+      ],
+      "tags": [
+        "TypeScript",
+        "ReactJS",
+        "Zustand",
+        "NextJS",
+        "Node.js",
+        "Docker",
+        "GH Actions"
+      ]
+    },
+    {
+      "role": "Frontend Engineer",
+      "company": "APP SOLUTIVE",
+      "companyUrl": "https://solutive.app/",
+      "period": "10/2024 — 12/2024",
+      "bullets": [
+        "Built and maintained front-end interfaces, handling UI logic across multiple product areas.",
+        "Worked with backend teams to bridge API contracts and translate them into reliable UI behavior."
+      ],
+      "tags": ["TypeScript", "ReactJS", "VueJS", "Zustand", "NextJS", "Node.js"]
+    },
+    {
+      "role": "Full Stack Developer",
+      "company": "FLEX STUDIO ID",
+      "companyUrl": "https://flexstudio.id/",
+      "period": "01/2024 — present",
+      "bullets": [
+        "Designed and built REST APIs alongside React-based front ends for various client projects.",
+        "Handled end-to-end integration, from database queries to polished UI."
+      ],
+      "tags": ["TypeScript", "ReactJS", "Zustand", "NextJS", "Node.js"]
+    },
+    {
+      "role": "Software Engineer Intern",
+      "company": "Refactory",
+      "companyUrl": "https://refactory.id/",
+      "period": "08/2023 — 11/2023",
+      "bullets": [
+        "Learned the full software development lifecycle in a structured engineering environment.",
+        "Contributed to several production projects across different tech stacks."
+      ],
+      "tags": [
+        "TypeScript",
+        "Golang",
+        "ReactJS",
+        "VueJS",
+        "Supabase",
+        "Zustand",
+        "NextJS",
+        "NuxtJS",
+        "Node.js"
+      ]
+    }
+  ]
+}

@@ -1,12 +1,8 @@
 ---
-import StatusPage from '../components/base/status-page.astro';
-import Layout from '../layouts/layout.astro';
+import MePage from '@components/pages/me/index.astro';
+import Layout from '@layouts/layout.astro';
 ---
 
-<Layout>
-  <StatusPage
-    title='lxuu.dev: not ready yet 𓇢𓆸'
-    message='still building this thing… hang tight (≖⩊≖)'
-    showSpinner={true}
-  />
+<Layout pageTitle='me — lxuu.dev'>
+  <MePage />
 </Layout>

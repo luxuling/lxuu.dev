@@ -1,0 +1,19 @@
+---
+import Container from '@components/base/container.astro';
+import type { GitHubHomeData } from '@lib/services/github.service';
+import GitHubProfileCard from '@components/pages/home/github-profile-card.astro';
+import GitHubContribution from '@components/pages/home/github-contribution.astro';
+
+interface Props {
+  data: GitHubHomeData;
+}
+
+const { data } = Astro.props as Props;
+---
+
+<section class='py-8 sm:py-12'>
+  <Container class='flex flex-col gap-8 sm:gap-10'>
+    <GitHubProfileCard data={data} />
+    <GitHubContribution data={data} />
+  </Container>
+</section>
