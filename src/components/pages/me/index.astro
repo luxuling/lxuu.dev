@@ -1,222 +1,122 @@
 ---
 import BaseCard from '@components/base/base-card.astro';
 import Container from '@components/base/container.astro';
+import Link from '@components/base/link.astro';
+import me from '@lib/data/me.json';
+
+const data = me;
 ---
 
 <section class='py-8 sm:py-12'>
   <Container class='flex flex-col gap-6'>
-    <!-- Page header -->
     <div class='px-1'>
       <h1 class='text-xl font-semibold tracking-tight text-foreground'>
         me<span class='text-muted-foreground'>.</span>
       </h1>
-      <p class='mt-1 text-sm text-subtle'>
-        a developer, occasionally a human being.
-      </p>
+      <p class='mt-1 text-sm text-subtle'>{data.tagline}</p>
     </div>
 
-    <!-- Summary -->
     <BaseCard title='[ summary ]'>
       <div class='flex flex-col gap-5'>
         <div
           class='flex flex-col gap-3 text-sm leading-relaxed text-muted-foreground'
         >
-          <p>
-            Hey — I'm Luu. A software developer who spends most of his time
-            building things that are fast, minimal, and (hopefully) actually
-            useful. I like clean APIs, boring infrastructure that just works,
-            and UIs that don't scream for attention.
-          </p>
-          <p>
-            When I'm not staring at a terminal, I'm probably reading about
-            something I'll never implement, convincing myself that <em>this</em>
-            side project will be different, or falling down a rabbit hole on how some
-            system underneath the surface actually works.
-          </p>
-          <p>
-            I care a lot about the craft — readable code, good defaults, and not
-            making the next person who reads my code want to quit.
-          </p>
+          {data.summaryParagraphs.map((p) => <p>{p}</p>)}
         </div>
 
-        <!-- Quote -->
         <blockquote
           class='border-l-2 border-edge pl-4 text-sm italic text-subtle'
         >
-          <p>
-            "Programs must be written for people to read, and only incidentally
-            for machines to execute."
-          </p>
+          <p>&ldquo;{data.quote.body}&rdquo;</p>
           <footer class='mt-2 not-italic text-muted'>
-            — Harold Abelson, <cite
-              >Structure and Interpretation of Computer Programs</cite
-            >
+            {data.quote.attribution}{' '}
+            <cite>{data.quote.citation}</cite>
           </footer>
         </blockquote>
       </div>
     </BaseCard>
 
-    <!-- What I'm up to now -->
     <BaseCard title='[ now ]'>
       <ul class='flex flex-col gap-3'>
-        <li class='flex items-center gap-3 text-sm'>
-          <span class='shrink-0 font-mono text-foreground'>[o]</span>
-          <span class='text-muted-foreground'>
-            Working as a <span class='text-foreground'>Software Engineer</span> —
-            building backend services, wrangling APIs, and the occasional infrastructure
-            rabbit hole.
-          </span>
-        </li>
-        <li class='flex items-center gap-3 text-sm'>
-          <span class='shrink-0 font-mono text-foreground'>[*]</span>
-          <span class='text-muted-foreground'>
-            Trying to get better at
-            <span class='text-foreground'>system design</span> — reading more, thinking
-            more, building more.
-          </span>
-        </li>
-        <li class='flex items-center gap-3 text-sm'>
-          <span class='shrink-0 font-mono text-foreground'>[*]</span>
-          <span class='text-muted-foreground'>
-            Building this site as an excuse to dig into
-            <span class='text-foreground'>Astro + SolidJS</span> and make something
-            I'm actually proud of.
-          </span>
-        </li>
-        <li class='flex items-center gap-3 text-sm'>
-          <span class='shrink-0 font-mono text-foreground'>[*]</span>
-          <span class='text-muted-foreground'>
-            Slowly learning <span class='text-foreground'>Rust</span> without crying
-            too much. Progress is being made.
-          </span>
-        </li>
-        <li class='flex items-center gap-3 text-sm'>
-          <span class='shrink-0 font-mono text-subtle'>[-]</span>
-          <span class='text-subtle'>
-            still figuring out what I actually want to do long term. that's
-            fine.
-          </span>
-        </li>
+        {
+          data.nowItems.map((item) => {
+            const outer =
+              item.tone === 'subtle' ? 'text-subtle' : 'text-muted-foreground';
+            const marker =
+              item.tone === 'subtle' ? 'text-subtle' : 'text-foreground';
+            return (
+              <li class='flex items-center gap-3 text-sm'>
+                <span class:list={['shrink-0', 'font-mono', marker]}>[o]</span>
+                <span class={outer}>
+                  {item.segments.map((seg) => {
+                    if (seg.href) {
+                      return (
+                        <Link href={seg.href} target='_blank'>
+                          {seg.text}
+                        </Link>
+                      );
+                    }
+                    if (seg.emphasis) {
+                      return <span class='text-foreground'>{seg.text}</span>;
+                    }
+                    return seg.text;
+                  })}
+                </span>
+              </li>
+            );
+          })
+        }
       </ul>
     </BaseCard>
 
-    <!-- Experiences -->
     <BaseCard title='[ experiences ]'>
-      <div class='flex flex-col divide-y divide-edge'>
-        <!-- Current job -->
-        <div class='flex flex-col gap-3 pb-6'>
-          <div
-            class='flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between'
-          >
-            <div class='flex items-center gap-2'>
-              <span class='font-mono text-xs text-subtle'>[o]</span>
-              <span class='text-sm font-medium text-foreground'>
-                Software Engineer
-              </span>
-              <span class='text-subtle text-sm'>@</span>
-              <span class='text-sm text-foreground'>COMPANY_NAME</span>
-            </div>
-            <span class='ml-5 font-mono text-xs text-subtle sm:ml-0'>
-              2024 — present
-            </span>
-          </div>
-          <ul class='ml-5 flex flex-col gap-1.5'>
-            <li class='flex items-start gap-2 text-sm text-muted-foreground'>
-              <span class='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-subtle'
-              ></span>
-              <span>
-                Build and maintain backend services handling core business logic
-                and internal APIs used across multiple teams.
-              </span>
-            </li>
-            <li class='flex items-start gap-2 text-sm text-muted-foreground'>
-              <span class='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-subtle'
-              ></span>
-              <span>
-                Worked on improving system reliability — better observability,
-                cleaner error handling, reducing the "why is this broken"
-                moments.
-              </span>
-            </li>
-            <li class='flex items-start gap-2 text-sm text-muted-foreground'>
-              <span class='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-subtle'
-              ></span>
-              <span>
-                Collaborated on frontend integration work, bridging the gap
-                between backend contracts and UI requirements.
-              </span>
-            </li>
-          </ul>
-          <div class='ml-5 flex flex-wrap gap-2'>
-            {
-              [
-                'TypeScript',
-                'Node.js',
-                'PostgreSQL',
-                'Docker',
-                'REST APIs',
-              ].map((tag) => (
-                <span class='font-mono text-xs text-subtle border border-edge px-2 py-0.5 rounded-sm'>
-                  {tag}
+      <div class='flex flex-col divide-y divide-edge space-y-6'>
+        {
+          data.experiences.map((exp) => (
+            <div class='flex flex-col gap-3 pb-6'>
+              <div class='flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between'>
+                <div class='flex items-center gap-2'>
+                  <span
+                    class:list={[
+                      'font-mono',
+                      'text-sm',
+                      exp.period.includes('present')
+                        ? 'text-foreground'
+                        : 'text-subtle',
+                    ]}
+                  >
+                    [o]
+                  </span>
+                  <span class='text-sm font-medium text-foreground'>
+                    {exp.role}
+                  </span>
+                  <Link href={exp.companyUrl} target='_blank'>
+                    <span class='text-subtle text-sm'>@</span>
+                    <span class='text-sm text-foreground'>{exp.company}</span>
+                  </Link>
+                </div>
+                <span class='ml-5 font-mono text-sm text-subtle sm:ml-0'>
+                  {exp.period}
                 </span>
-              ))
-            }
-          </div>
-        </div>
-
-        <!-- Internship -->
-        <div class='flex flex-col gap-3 pt-6'>
-          <div
-            class='flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between'
-          >
-            <div class='flex items-center gap-2'>
-              <span class='font-mono text-xs text-subtle'>[*]</span>
-              <span class='text-sm font-medium text-foreground'>
-                Software Engineer Intern
-              </span>
-              <span class='text-subtle text-sm'>@</span>
-              <span class='text-sm text-foreground'>COMPANY_NAME</span>
+              </div>
+              <ul class='ml-5 flex flex-col gap-1.5'>
+                {exp.bullets.map((b) => (
+                  <li class='flex items-start gap-2 text-sm text-muted-foreground'>
+                    <span class='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-subtle' />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <div class='ml-5 flex flex-wrap gap-2'>
+                {exp.tags.map((tag) => (
+                  <span class='font-mono text-xs text-subtle border border-edge px-2 py-0.5 rounded-sm'>
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
-            <span class='ml-5 font-mono text-xs text-subtle sm:ml-0'>
-              2023 — 2024
-            </span>
-          </div>
-          <ul class='ml-5 flex flex-col gap-1.5'>
-            <li class='flex items-start gap-2 text-sm text-muted-foreground'>
-              <span class='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-subtle'
-              ></span>
-              <span>
-                First real exposure to production code — learned quickly that
-                reading existing code is harder than writing new code.
-              </span>
-            </li>
-            <li class='flex items-start gap-2 text-sm text-muted-foreground'>
-              <span class='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-subtle'
-              ></span>
-              <span>
-                Contributed to frontend features, fixed bugs that had been
-                silently lurking, and wrote tests for things nobody had tested.
-              </span>
-            </li>
-            <li class='flex items-start gap-2 text-sm text-muted-foreground'>
-              <span class='mt-1.5 h-1 w-1 shrink-0 rounded-full bg-subtle'
-              ></span>
-              <span>
-                Got comfortable with code review cycles, git workflows, and the
-                art of writing PR descriptions that people actually read.
-              </span>
-            </li>
-          </ul>
-          <div class='ml-5 flex flex-wrap gap-2'>
-            {
-              ['React', 'JavaScript', 'REST APIs', 'Git'].map((tag) => (
-                <span class='font-mono text-xs text-subtle border border-edge px-2 py-0.5 rounded-sm'>
-                  {tag}
-                </span>
-              ))
-            }
-          </div>
-        </div>
+          ))
+        }
       </div>
     </BaseCard>
   </Container>
