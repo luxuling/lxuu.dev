@@ -28,9 +28,9 @@
   - [ ] Latest posts
   - [ ] ads card for my own product
 - [ ] Post
-- [ ] Tools
-  - [ ] Thumbnail image [use this](https://raw.githubusercontent.com/luxuling/dotfiles/refs/heads/main/assets/ss.png)
-  - [ ] List of the tools that i used in this pc, use the reference on my github repository of [dotfiles](https://github.com/luxuling/dotfiles)
+- [x] Tools
+  - [x] Thumbnail image [use this](https://raw.githubusercontent.com/luxuling/dotfiles/refs/heads/main/assets/ss.png)
+  - [x] List of the tools that i used in this pc, use the reference on my github repository of [dotfiles](https://github.com/luxuling/dotfiles)
 - [x] Me
   - [x] **_Summary_** : just write some shit to tell the reader who i am and maybe add some quotes from someone so it look cool :>
   - [x] **_What I'm up to now_** : the current job i had, and what i want to do, or what i'm trying to do
