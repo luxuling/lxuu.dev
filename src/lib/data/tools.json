@@ -1,0 +1,85 @@
+{
+  "tagline": "What runs under the hood.",
+  "screenshot": {
+    "src": "https://raw.githubusercontent.com/luxuling/dotfiles/refs/heads/main/assets/ss.png",
+    "alt": "My Linux desktop setup"
+  },
+  "whyLinux": [
+    "I switched to Linux because I wanted to actually understand my environment — not just use it. The ability to configure everything from the window manager to the font rendering without hitting invisible walls is something I can't go back from.",
+    "There's something satisfying about a setup that does exactly what you tell it to, nothing more. No background services you didn't ask for, no UI decisions made for you. It keeps me focused and, honestly, makes development feel less like fighting the OS and more like working with it."
+  ],
+  "tools": [
+    {
+      "category": "OS",
+      "name": "Arch Linux",
+      "href": "https://archlinux.org/",
+      "description": "Rolling release distro. Minimal base, you build exactly what you want on top of it."
+    },
+    {
+      "category": "Editor",
+      "name": "NeoVim",
+      "href": "https://neovim.io/",
+      "description": "Modal editor. Steep curve, high ceiling. Fast and keyboard-driven."
+    },
+    {
+      "category": "Terminal",
+      "name": "Ghostty",
+      "href": "https://ghostty.org/",
+      "description": "Fast native terminal with custom shader support. Running a glow shader on top for that extra character bloom."
+    },
+    {
+      "category": "Shell",
+      "name": "Zsh + Starship",
+      "href": "https://starship.rs/",
+      "description": "Zsh for the shell, Starship for a minimal and fast cross-shell prompt."
+    },
+    {
+      "category": "Window Manager",
+      "name": "Hyprland",
+      "href": "https://hyprland.org/",
+      "description": "Dynamic tiling Wayland compositor. Smooth animations, highly configurable."
+    },
+    {
+      "category": "Terminal Multiplexer",
+      "name": "Tmux",
+      "href": "https://github.com/tmux/tmux",
+      "description": "Session and window management inside the terminal. Keeps workflows persistent."
+    },
+    {
+      "category": "Bar",
+      "name": "Waybar",
+      "href": "https://github.com/Alexays/Waybar",
+      "description": "Wayland status bar. Shows what matters, hides the rest."
+    },
+    {
+      "category": "App Launcher",
+      "name": "Rofi",
+      "href": "https://github.com/davatorium/rofi",
+      "description": "Keyboard-driven application launcher and switcher."
+    },
+    {
+      "category": "Notifications",
+      "name": "Swaync",
+      "href": "https://github.com/ErikReider/SwayNotificationCenter",
+      "description": "Notification daemon with a clean notification center panel."
+    },
+    {
+      "category": "Wallpaper",
+      "name": "Hyprpaper",
+      "href": "https://github.com/hyprwm/hyprpaper",
+      "description": "Hyprland-native wallpaper utility. Fast, wayland-native, no flicker on workspace switch."
+    },
+    {
+      "category": "Lock Screen",
+      "name": "Hyprlock",
+      "href": "https://github.com/hyprwm/hyprlock",
+      "description": "Hyprland-native lock screen. Minimal and consistent with the rest of the setup."
+    },
+    {
+      "category": "Font",
+      "name": "Maple Mono",
+      "href": "https://github.com/subframe7536/maple-font",
+      "description": "Monospace font with ligatures. Readable at small sizes in both the editor and terminal."
+    }
+  ]
+}
