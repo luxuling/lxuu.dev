@@ -3,7 +3,8 @@
 ##### REFERENCES
 
 [OPEN CODE AS UI REF](https://opencode.ai/)
-[CONTENT IDEAS](https://elianiva.my.id/)
+[CONTENT IDEAS 01](https://elianiva.my.id/)
+[CONTENT IDEAS 02](https://theodorusclarence.com/)
 
 ---
 
@@ -24,12 +25,16 @@
 - [ ] Home Page
   - [x] Hero section (show the github contributions activities)
   - [x] Show PFP
+  - [ ] Latest posts
+  - [ ] ads card for my own product
 - [ ] Post
 - [ ] Tools
-- [ ] Me
-  - [ ] **_Summary_** : just write some shit to tell the reader who i am and maybe add some quotes from someone so it look cool :>
-  - [ ] **_What I'm up to now_** : the current job i had, and what i want to do, or what i'm trying to do
-  - [ ] **_Experiences_** : carrer path, summary from the intern and current job
+  - [ ] Thumbnail image [use this](https://raw.githubusercontent.com/luxuling/dotfiles/refs/heads/main/assets/ss.png)
+  - [ ] List of the tools that i used in this pc, use the reference on my github repository of [dotfiles](https://github.com/luxuling/dotfiles)
+- [x] Me
+  - [x] **_Summary_** : just write some shit to tell the reader who i am and maybe add some quotes from someone so it look cool :>
+  - [x] **_What I'm up to now_** : the current job i had, and what i want to do, or what i'm trying to do
+  - [x] **_Experiences_** : carrer path, summary from the intern and current job
 
 ---
 
