@@ -80,3 +80,115 @@ body {
   width: 0;
   height: 0;
 }
+
+/* MDX prose for project detail pages */
+.prose-project {
+  color: var(--color-muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.75;
+  max-width: 65ch;
+}
+
+.prose-project h2 {
+  color: var(--color-foreground);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-project h2:first-child {
+  margin-top: 0;
+}
+
+.prose-project h3 {
+  color: var(--color-foreground);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-project p {
+  margin-bottom: 1rem;
+}
+
+.prose-project p:last-child {
+  margin-bottom: 0;
+}
+
+.prose-project a {
+  color: var(--color-foreground);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.prose-project img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--color-edge);
+  border-radius: 0.375rem;
+  margin: 1rem 0;
+}
+
+.prose-project ul,
+.prose-project ol {
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.prose-project li {
+  padding-left: 0.25rem;
+}
+
+.prose-project strong {
+  color: var(--color-foreground);
+  font-weight: 600;
+}
+
+.prose-project code {
+  font-family: var(--font-maple-mono), monospace;
+  font-size: 0.8125rem;
+  color: var(--color-foreground);
+  background: var(--color-panel);
+  border: 1px solid var(--color-edge);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.375rem;
+}
+
+.prose-project pre {
+  background: var(--color-panel);
+  border: 1px solid var(--color-edge);
+  border-radius: 0.375rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.prose-project pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+
+.prose-project blockquote {
+  border-left: 2px solid var(--color-edge);
+  padding-left: 1rem;
+  color: var(--color-subtle);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.prose-project hr {
+  border: none;
+  border-top: 1px solid var(--color-edge);
+  margin: 2rem 0;
+}

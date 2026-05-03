@@ -1,12 +1,29 @@
 ---
-import StatusPage from '@components/base/status-page.astro';
+export const prerender = false;
+
+import { getLiveCollection } from 'astro:content';
 import Layout from '@layouts/layout.astro';
+import ProjectsExplorer from '@components/pages/projects';
+
+const result = await getLiveCollection('projects');
+const projects = (result.entries ?? []).sort(
+  (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
+);
+
+const projectItems = projects.map((entry) => ({
+  slug: entry.id,
+  title: entry.data.title,
+  description: entry.data.description,
+  tags: entry.data.tags,
+  status: entry.data.status,
+  year: entry.data.year,
+  month: entry.data.month,
+  links: entry.data.links,
+  githubStars: entry.data.githubStars,
+  featured: entry.data.featured,
+}));
 ---
 
-<Layout>
-  <StatusPage
-    title='lxuu.dev: not ready yet 𓇢𓆸'
-    message='still building this thing… hang tight (≖⩊≖)'
-    showSpinner={true}
-  />
+<Layout pageTitle='projects — lxuu.dev'>
+  <ProjectsExplorer projects={projectItems} client:load />
 </Layout>

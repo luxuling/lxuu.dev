@@ -1,0 +1,132 @@
+---
+export const prerender = false;
+
+import { getLiveEntry } from 'astro:content';
+import Layout from '@layouts/layout.astro';
+import Container from '@components/base/container.astro';
+import Link from '@components/base/link.astro';
+
+const { slug } = Astro.params;
+const result = await getLiveEntry('projects', slug!);
+
+if (result.error || !result.entry) {
+  return Astro.redirect('/projects');
+}
+
+const project = result.entry;
+const {
+  title,
+  description,
+  tags,
+  status,
+  year,
+  month,
+  thumbnail,
+  links,
+  githubStars,
+} = project.data;
+const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+const monthLabel = MONTHS[(month - 1) % 12] ?? '';
+
+const statusLabel: Record<typeof status, string> = {
+  active: '[active]',
+  wip: '[wip]',
+  archived: '[archived]',
+};
+
+const statusColor: Record<typeof status, string> = {
+  active: 'text-foreground',
+  wip: 'text-muted-foreground',
+  archived: 'text-subtle',
+};
+---
+
+<Layout pageTitle={`${title} — lxuu.dev`}>
+  <section class='py-8 sm:py-12'>
+    <Container class='flex flex-col gap-8'>
+      <div class='flex flex-col gap-4'>
+        <Link href='/projects' class='font-mono text-xs text-subtle'>
+          ← projects
+        </Link>
+
+        <div class='flex flex-col gap-2'>
+          <div class='flex flex-wrap items-center gap-3'>
+            <h1 class='text-xl font-semibold tracking-tight text-foreground'>
+              {title}
+            </h1>
+            <span class:list={['font-mono text-xs', statusColor[status]]}>
+              {statusLabel[status]}
+            </span>
+            <span class='font-mono text-xs text-subtle'
+              >{monthLabel} {year}</span
+            >
+          </div>
+          <p class='text-sm text-muted-foreground'>{description}</p>
+        </div>
+
+        <div class='flex flex-wrap items-center gap-4'>
+          <div class='flex flex-wrap gap-1.5'>
+            {
+              tags.map((tag) => (
+                <span class='font-mono text-xs text-subtle border border-edge px-2 py-0.5 rounded-sm'>
+                  {tag}
+                </span>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      {
+        thumbnail && (
+          <img
+            src={thumbnail}
+            alt={`${title} thumbnail`}
+            loading='lazy'
+            class='aspect-video w-full max-w-4xl rounded-md border border-edge object-cover'
+          />
+        )
+      }
+      {
+        (links?.github || links?.live) && (
+          <div class='flex items-center gap-4 text-sm'>
+            {links.live && (
+              <Link href={links.live} target='_blank'>
+                ↗ live site
+              </Link>
+            )}
+            {links.github && (
+              <>
+                <Link href={links.github} target='_blank'>
+                  ⌥ source
+                </Link>
+                {typeof githubStars === 'number' && (
+                  <span class='text' aria-label='GitHub stars'>
+                    ★ {githubStars.toLocaleString()}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+        )
+      }
+
+      <div class='h-px bg-edge'></div>
+
+      <div class='prose-project' set:html={project.rendered?.html ?? ''} />
+    </Container>
+  </section>
+</Layout>
