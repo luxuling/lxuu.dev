@@ -2,6 +2,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import solidJs from '@astrojs/solid-js';
+import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,5 +16,5 @@ export default defineConfig({
       cssVariable: '--font-maple-mono',
     },
   ],
-  integrations: [solidJs()],
+  integrations: [solidJs(), mdx()],
 });

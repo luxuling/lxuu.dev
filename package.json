@@ -16,9 +16,12 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@astrojs/mdx": "^5.0.4",
     "@astrojs/solid-js": "^6.0.1",
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.7",
+    "gray-matter": "^4.0.3",
+    "marked": "^18.0.2",
     "solid-js": "^1.9.12",
     "tailwindcss": "^4.2.2"
   },

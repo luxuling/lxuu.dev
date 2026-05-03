@@ -28,6 +28,9 @@
   - [ ] Latest posts
   - [ ] ads card for my own product
 - [ ] Post
+- [x] Project
+  - [x] List Projects
+  - [x] Detail Project
 - [x] Tools
   - [x] Thumbnail image [use this](https://raw.githubusercontent.com/luxuling/dotfiles/refs/heads/main/assets/ss.png)
   - [x] List of the tools that i used in this pc, use the reference on my github repository of [dotfiles](https://github.com/luxuling/dotfiles)
