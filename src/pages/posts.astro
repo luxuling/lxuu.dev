@@ -1,12 +1,29 @@
 ---
-import StatusPage from '@components/base/status-page.astro';
+export const prerender = false;
+
+import { getLiveCollection } from 'astro:content';
 import Layout from '@layouts/layout.astro';
+import PostsExplorer from '@components/pages/posts';
+
+const result = await getLiveCollection('posts');
+const entries = (result.entries ?? []).filter((e) => !e.data.draft);
+const sorted = [...entries].sort(
+  (a, b) =>
+    b.data.year - a.data.year ||
+    b.data.month - a.data.month ||
+    (a.data.order ?? 999) - (b.data.order ?? 999),
+);
+
+const postItems = sorted.map((entry) => ({
+  slug: entry.id,
+  title: entry.data.title,
+  description: entry.data.description,
+  tags: entry.data.tags,
+  year: entry.data.year,
+  month: entry.data.month,
+}));
 ---
 
-<Layout>
-  <StatusPage
-    title='lxuu.dev: not ready yet 𓇢𓆸'
-    message='still building this thing… hang tight (≖⩊≖)'
-    showSpinner={true}
-  />
+<Layout pageTitle='posts — lxuu.dev'>
+  <PostsExplorer posts={postItems} client:load />
 </Layout>

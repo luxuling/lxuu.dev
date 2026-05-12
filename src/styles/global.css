@@ -86,7 +86,7 @@ body {
   color: var(--color-muted-foreground);
   font-size: 0.875rem;
   line-height: 1.75;
-  max-width: 65ch;
+  width: 100%;
 }
 
 .prose-project h2 {
