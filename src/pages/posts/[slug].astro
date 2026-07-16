@@ -1,28 +1,26 @@
 ---
 export const prerender = false;
 
-import { getLiveEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import Layout from '@layouts/layout.astro';
 import Container from '@components/base/container.astro';
 import Link from '@components/base/link.astro';
 import PostEngagement from '@components/pages/posts/post-engagement';
 import TableOfContents from '@components/pages/posts/table-of-contents';
-import { extractAndInjectHeadings } from '@lib/posts/toc';
+import { headingsToTocItems } from '@lib/posts/toc';
 
 const { slug } = Astro.params;
-const result = await getLiveEntry('posts', slug!);
+const entry = await getEntry('posts', slug!);
 
-if (result.error || !result.entry) {
+if (!entry || entry.data.status === 'draft') {
   return Astro.redirect('/posts');
 }
 
-const post = result.entry;
-const { title, description, tags, year, month, thumbnail, draft } = post.data;
+const { Content, headings } = await render(entry);
+const { title, description, tags, date, thumbnail } = entry.data;
+const tocItems = headingsToTocItems(headings);
 
-if (draft) {
-  return Astro.redirect('/posts');
-}
-
+const dateObj = new Date(date);
 const MONTHS = [
   'Jan',
   'Feb',
@@ -37,12 +35,8 @@ const MONTHS = [
   'Nov',
   'Dec',
 ];
-const monthLabel = MONTHS[(month - 1) % 12] ?? '';
-
-const rawHtml = post.rendered?.html ?? '';
-const { html: bodyHtml, items: tocItems } = extractAndInjectHeadings(rawHtml);
-
-const engagementApiBase = import.meta.env.PUBLIC_ENGAGEMENT_API_URL ?? '';
+const monthLabel = MONTHS[dateObj.getMonth()] ?? '';
+const year = dateObj.getFullYear();
 ---
 
 <Layout pageTitle={`${title} — lxuu.dev`}>
@@ -91,13 +85,11 @@ const engagementApiBase = import.meta.env.PUBLIC_ENGAGEMENT_API_URL ?? '';
 
       <div class='flex gap-12'>
         <div class='min-w-0 flex-1'>
-          <div class='prose-project' set:html={bodyHtml} />
+          <div class='prose-project'>
+            <Content />
+          </div>
 
-          <PostEngagement
-            client:load
-            postSlug={slug!}
-            apiBase={engagementApiBase}
-          />
+          <PostEngagement client:load postSlug={slug!} apiBase='/api' />
         </div>
 
         {

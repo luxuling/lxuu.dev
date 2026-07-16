@@ -1,14 +1,14 @@
 # Post engagement API — HTTP contract
 
-This contract is for an **external** engagement service consumed by **lxuu.dev** (or other frontends). It does **not** serve post Markdown; the site resolves content from GitHub. All engagement rows use **`post_slug`**: a stable string agreed with the static site (typically the MDX entry id without extension).
+Engagement routes are **Astro API routes** (`src/pages/api/`) inside this repo — same origin as the frontend. No external service, no CORS configuration needed.
 
-**Base URL**: implementation-defined, for example `https://api.engagement.example.com`.
+**Base URL**: `/api` (same-origin, relative).
 
-Routes are rooted at the **base URL** with **no `/v1` or other version prefix**; reserve versioning for a future hostname or header-based negotiation if needed.
+Routes are rooted at `/api` with **no `/v1` or other version prefix**.
 
-**Content type**: request bodies with a body use `Content-Type: application/json`. Responses use `application/json` unless noted (OAuth redirects use `302` with `Location`).
+**Content type**: request bodies use `Content-Type: application/json`. Responses use `application/json` unless noted (OAuth redirects use `302` with `Location`).
 
-**Chosen auth transport for this contract**: **HttpOnly session cookie** set by the API origin after OAuth callback. The browser sends `Cookie: session=<opaque>` on subsequent requests. Alternative **Bearer JWT** is summarized in [Alternative: Bearer token](#alternative-bearer-token).
+**Auth transport**: **HttpOnly session cookie** (`session=<opaque>`) set after OAuth callback. The browser sends it automatically on same-origin requests — no `credentials: 'include'` needed.
 
 ---
 
@@ -18,6 +18,7 @@ Routes are rooted at the **base URL** with **no `/v1` or other version prefix**;
 
 - Type: string, **1–128** characters, recommended charset: `[a-z0-9-]` (kebab-case).
 - Case sensitivity: **exact match**, case-sensitive (implementations should normalize on write if they choose lowercase-only).
+- **i18n**: posts are organized as a folder named after the title (e.g. `my-first-post/`) containing per-locale files (`en.mdx`, `id.mdx`). The `post_slug` is the **folder name only** — engagement (views, likes, comments) is **shared across all locales** of the same post.
 
 ### Pagination (cursor)
 
@@ -66,20 +67,6 @@ Failed requests return JSON:
 - On `429`, include header **`Retry-After`** (seconds) when possible.
 
 **Error code** for throttling: `RATE_LIMITED`.
-
----
-
-## CORS (lxuu.dev calling a different API origin)
-
-When the site is `https://lxuu.dev` and the API is another host:
-
-- Respond to **preflight** `OPTIONS` for routes used from the browser.
-- **`Access-Control-Allow-Origin`**: either `https://lxuu.dev` (recommended) or a configurable allowlist — **not** `*` if cookies are used.
-- **`Access-Control-Allow-Credentials`**: `true` so `fetch(..., { credentials: 'include' })` sends the session cookie.
-- **`Access-Control-Allow-Methods`**: `GET, POST, PATCH, DELETE, OPTIONS`.
-- **`Access-Control-Allow-Headers`**: at minimum `Content-Type`, `Authorization` (if you add Bearer later), **`Idempotency-Key`** (optional header below).
-
-Cookie session cookie must use **`SameSite=None; Secure`** if the API host differs from the site (cross-site); **`SameSite=Lax`** is enough if the API is a **subdomain** with a shared registrable domain and you use a single parent domain cookie (implementation detail).
 
 ---
 
@@ -308,46 +295,44 @@ Validation:
 
 ---
 
-## Auth — OAuth 2.0 (GitHub and Google)
+## Auth — OAuth 2.0 (GitHub)
 
-Use standard authorization code flow with **PKCE** recommended for public clients; for a confidential server-side client, PKCE is still fine.
+Server-side authorization code flow via Arctic. Only GitHub is supported.
 
 ### Start login
 
-**`GET /auth/{provider}/start`**
+**`GET /auth/github/start`**
 
-- `provider`: `github` | `google`
-- Query: `redirect_uri` — **optional** absolute URL on **lxuu.dev** (or your frontend) where the user lands **after** session is established; if omitted, use a server-configured default post-login page.
+- Query: `return_to` — optional path on lxuu.dev to redirect after login (defaults to `/`).
 
 **Behavior:**
 
-1. Generate `state` (and `code_verifier` if PKCE).
-2. **`302`** redirect to GitHub or Google authorize URL with `client_id`, `redirect_uri` pointing to the API callback below, `scope`, `state`, and PKCE `code_challenge` if used.
+1. Generate `state` via Arctic `generateState()`.
+2. Store `state` in `oauth_state` httpOnly cookie; store `return_to` in `oauth_return` httpOnly cookie.
+3. **`302`** redirect to GitHub authorize URL.
 
 ---
 
 ### OAuth callback (browser redirect endpoint)
 
-**`GET /auth/{provider}/callback`**
+**`GET /auth/github/callback`**
 
-- Query params from IdP: `code`, `state`, `error`, etc.
+- Query params from GitHub: `code`, `state`.
 
 **Behavior:**
 
-1. Validate `state`.
-2. Exchange `code` for tokens at the IdP.
-3. Resolve IdP user profile; upsert `users` + `oauth_accounts`.
-4. Create **session** row; **`Set-Cookie`** on the API domain:
+1. Validate `state` against `oauth_state` cookie.
+2. Exchange `code` for access token via Arctic.
+3. Fetch GitHub user profile; upsert `users` + `oauth_accounts`.
+4. Create **session** row; **`Set-Cookie`** (same-origin, `SameSite=Lax`):
 
    ```
-   Set-Cookie: session=<opaque>; HttpOnly; Secure; Path=/; Max-Age=...; SameSite=None
+   Set-Cookie: session=<opaque>; HttpOnly; Secure; Path=/; Max-Age=...; SameSite=Lax
    ```
 
-   (Adjust `SameSite` per [CORS](#cors-lxuu-dev-calling-a-different-api-origin) section.)
+5. **`302`** redirect to `return_to` from `oauth_return` cookie or `/`.
 
-5. **`302`** redirect to `redirect_uri` from `state` or default frontend URL (e.g. `https://lxuu.dev/posts/hello`).
-
-**Error:** redirect to frontend with query `?error=oauth_failed` or return `400` JSON if you prefer non-browser clients (pick one; browser flow should redirect).
+**Error:** `400` JSON `{ "error": "..." }`.
 
 ---
 
@@ -389,19 +374,6 @@ Use standard authorization code flow with **PKCE** recommended for public client
 
 ---
 
-## Alternative: Bearer token
-
-If the API issues **JWT access tokens** instead of cookies:
-
-- Login endpoints return JSON `{ "access_token": "...", "token_type": "Bearer", "expires_in": 3600 }`.
-- Clients send **`Authorization: Bearer <token>`** on `/me`, likes, and comment mutations.
-- **CORS** is simpler (`Access-Control-Allow-Origin` may still be an allowlist).
-- Document **`GET /auth/{provider}/start`** to return JSON with an **`authorization_url`** for SPA flows, or keep redirect-based login in a small popup.
-
-This contract’s route tables above stay the same except **Auth** becomes `Authorization` header instead of `Cookie`.
-
----
-
 ## Optional: `post_slug` allowlist
 
 If the API should reject unknown slugs:
@@ -427,8 +399,8 @@ Maintenance: sync list from CI or admin config in the API project.
 | `PATCH`  | `/comments/{comment_id}`      | Yes      | Edit own comment        |
 | `DELETE` | `/comments/{comment_id}`      | Yes      | Soft-delete own comment |
 | `GET`    | `/me`                         | Yes      | Current user            |
-| `GET`    | `/auth/{provider}/start`      | No       | Redirect to IdP         |
-| `GET`    | `/auth/{provider}/callback`   | No       | OAuth callback          |
+| `GET`    | `/auth/github/start`          | No       | Redirect to GitHub      |
+| `GET`    | `/auth/github/callback`       | No       | OAuth callback          |
 | `POST`   | `/auth/logout`                | Optional | Invalidate session      |
 | `GET`    | `/auth/session`               | Optional | Session probe           |
 

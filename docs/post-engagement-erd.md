@@ -1,6 +1,8 @@
 # Post engagement — entity-relationship model
 
-This document describes the **logical** data model for a separate engagement API service. Post bodies live in GitHub MDX (Astro live collection); this database stores **users**, **sessions**, **OAuth links**, **views**, **likes**, and **comments**, keyed by a stable string `post_slug` (for example the MDX filename without `.mdx`).
+The **Drizzle schema at `src/lib/db/schema.ts` is the source of truth** for the actual table definitions and column types. This document is the logical model.
+
+Post content lives in `content/posts/*.mdx` (Keystatic/Astro Content Collections). This database stores **users**, **sessions**, **OAuth links**, **views**, **likes**, and **comments**, keyed by a stable string `post_slug` (the Astro content collection entry id).
 
 All timestamps are stored in **UTC** (`timestamptz` in Postgres). API responses use **RFC 3339** ISO-8601 strings.
 
@@ -29,7 +31,7 @@ erDiagram
   oauth_accounts {
     uuid id PK
     uuid user_id FK
-    text provider "github | google"
+    text provider "github"
     text provider_user_id "sub from IdP"
     text provider_email "nullable, from IdP"
     timestamptz linked_at
@@ -42,7 +44,7 @@ erDiagram
     timestamptz expires_at
     timestamptz created_at
     text user_agent "nullable, truncated"
-    inet ip_address "nullable"
+    text ip_address "nullable"
   }
 
   post_counters {
@@ -89,21 +91,22 @@ erDiagram
 
 ### `oauth_accounts`
 
-- **Unique constraint**: `(provider, provider_user_id)` so the same GitHub or Google account cannot attach to two users.
-- `provider` is an enum-like string: `github` | `google`.
-- **Optional v2**: allow multiple providers per user; linking flow is out of scope for v1.
+- **Unique constraint**: `(provider, provider_user_id)` — same GitHub account cannot attach to two users.
+- `provider` is `github` only (v1).
+- **Optional v2**: support additional providers; linking flow is out of scope.
 
 ### `sessions`
 
-- Store only a **hash** of the session token (never the raw token in the database).
+- Store only a **HMAC-SHA256 hash** of the session token (never the raw token).
 - Delete or expire rows on logout; periodic job can purge `expires_at < now()`.
-- `ip_address` / `user_agent` are optional fields for abuse analysis; document retention in your privacy policy.
+- `ip_address` stored as `text` (not `inet`) for Neon HTTP driver compatibility.
+- `ip_address` / `user_agent` are optional fields for abuse analysis.
 
 ### `post_counters`
 
-- **One row per** `post_slug` that has ever received engagement (or pre-seeded slugs if you use an allowlist).
-- `view_count`, `like_count`, and `comment_count` are **denormalized** for fast reads; update them in the same transaction as the underlying `likes` / `comments` / `view_events` insert (or use triggers in the API’s database).
-- There is no FK from `post_counters` to GitHub: **`post_slug` is an application-level contract** with the static site.
+- **One row per** `post_slug` — lazy-created on first engagement.
+- `view_count`, `like_count`, and `comment_count` are **denormalized** for fast reads; updated in the same transaction as the underlying insert.
+- `post_slug` matches the Astro content collection entry id (filename without `.mdx`).
 
 ### `likes`
 

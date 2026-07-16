@@ -1,4 +1,5 @@
 import { For } from 'solid-js';
+
 const MONTHS = [
   'Jan',
   'Feb',
@@ -19,12 +20,13 @@ export interface PostListItem {
   title: string;
   description: string;
   tags: string[];
-  year: number;
-  month: number;
+  date: string;
 }
 
-function formatMonth(month: number) {
-  return MONTHS[(month - 1) % 12] ?? '';
+function formatDisplayDate(dateStr: string) {
+  const d = new Date(`${dateStr}-01`);
+  if (isNaN(d.getTime())) return dateStr;
+  return `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 export default function PostCard(props: { post: PostListItem }) {
@@ -41,7 +43,7 @@ export default function PostCard(props: { post: PostListItem }) {
             {p().title}
           </h2>
           <span class='shrink-0 font-mono text-xs text-subtle'>
-            {formatMonth(p().month)} {p().year}
+            {formatDisplayDate(p().date)}
           </span>
         </div>
 

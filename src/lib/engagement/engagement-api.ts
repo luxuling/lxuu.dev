@@ -1,70 +1,18 @@
-/** Browser client for the engagement API — see `docs/post-engagement-api-contract.md`. */
+import type {
+  CommentItem,
+  CommentsPage,
+  LikeMeResponse,
+  PostStats,
+  SessionResponse,
+} from './types';
 
-export interface PostStats {
-  post_slug: string;
-  view_count: number;
-  like_count: number;
-  comment_count: number;
-}
-
-export interface SessionUser {
-  id: string;
-  display_name: string;
-  avatar_url: string | null;
-}
-
-export interface SessionResponse {
-  authenticated: boolean;
-  user: SessionUser | null;
-}
-
-export interface MeResponse {
-  user: SessionUser;
-}
-
-export interface LikeMeResponse {
-  liked: boolean;
-}
-
-export interface LikeMutationBody {
-  post_slug: string;
-  like_count: number;
-  liked: boolean;
-}
-
-export interface CommentAuthor {
-  id: string;
-  display_name: string;
-  avatar_url: string | null;
-}
-
-export interface CommentItem {
-  id: string;
-  post_slug: string;
-  body: string;
-  created_at: string;
-  edited_at: string | null;
-  author: CommentAuthor;
-  mine: boolean;
-}
-
-export interface CommentsPage {
-  items: CommentItem[];
-  next_cursor: string | null;
-}
-
-export interface ApiErrorBody {
-  error: {
-    code: string;
-    message: string;
-    details?: Record<string, unknown>;
-  };
-}
-
-export function normalizeEngagementApiBase(raw: string | undefined): string {
-  if (!raw?.trim()) return '';
-  return raw.replace(/\/+$/, '');
-}
+export type {
+  CommentItem,
+  CommentsPage,
+  LikeMeResponse,
+  PostStats,
+  SessionResponse,
+};
 
 function joinUrl(base: string, path: string) {
   const b = base.replace(/\/+$/, '');
@@ -81,7 +29,7 @@ async function readJsonOrNull<T>(res: Response): Promise<T | null> {
 
 async function readErrorMessage(res: Response): Promise<string> {
   try {
-    const body = (await res.json()) as ApiErrorBody;
+    const body = await res.json();
     if (body?.error?.message) return body.error.message;
   } catch {
     /* ignore */
@@ -89,7 +37,7 @@ async function readErrorMessage(res: Response): Promise<string> {
   return res.statusText || `HTTP ${res.status}`;
 }
 
-export class EngagementApiError extends Error {
+class EngagementApiError extends Error {
   readonly status: number;
   readonly code?: string;
 
@@ -106,13 +54,13 @@ async function engagementFetch<T>(
   path: string,
   init?: RequestInit,
 ): Promise<{ res: Response; data: T | null }> {
+  const { headers: _h, ...rest } = init ?? {};
+  const headers = new Headers(_h);
+  headers.set('Accept', 'application/json');
   const res = await fetch(joinUrl(base, path), {
-    ...init,
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      ...(init?.headers as Record<string, string> | undefined),
-    },
+    ...rest,
+    credentials: 'include' as RequestCredentials,
+    headers,
   });
 
   if (!res.ok) {
@@ -123,7 +71,7 @@ async function engagementFetch<T>(
   return { res, data };
 }
 
-export function getOrCreateVisitorKey(): string {
+function getOrCreateVisitorKey(): string {
   if (typeof window === 'undefined' || !window.localStorage) {
     return '';
   }
@@ -134,6 +82,21 @@ export function getOrCreateVisitorKey(): string {
     window.localStorage.setItem(key, v);
   }
   return v;
+}
+
+export function normalizeEngagementApiBase(raw: string | undefined): string {
+  if (!raw?.trim()) return '';
+  return raw.replace(/\/+$/, '');
+}
+
+export function buildLoginUrl(base: string, redirectUri: string): string {
+  // base may be relative (e.g. "/api"); new URL() needs an absolute base,
+  // otherwise it throws "Invalid URL". Anchor to the current origin.
+  const origin =
+    typeof window !== 'undefined' ? window.location.origin : 'http://localhost';
+  const u = new URL(joinUrl(base, '/auth/github/start'), origin);
+  u.searchParams.set('redirect_uri', redirectUri);
+  return u.toString();
 }
 
 export async function postView(base: string, postSlug: string): Promise<void> {
@@ -225,8 +188,8 @@ export async function deleteLike(
     joinUrl(base, `/posts/${encodeURIComponent(postSlug)}/likes/me`),
     {
       method: 'DELETE',
-      credentials: 'include',
-      Accept: 'application/json',
+      credentials: 'include' as RequestCredentials,
+      headers: { Accept: 'application/json' },
     },
   );
 
@@ -301,8 +264,8 @@ export async function deleteComment(
     joinUrl(base, `/comments/${encodeURIComponent(commentId)}`),
     {
       method: 'DELETE',
-      credentials: 'include',
-      Accept: 'application/json',
+      credentials: 'include' as RequestCredentials,
+      headers: { Accept: 'application/json' },
     },
   );
 
@@ -314,21 +277,11 @@ export async function deleteComment(
 export async function postLogout(base: string): Promise<void> {
   const res = await fetch(joinUrl(base, '/auth/logout'), {
     method: 'POST',
-    credentials: 'include',
-    Accept: 'application/json',
+    credentials: 'include' as RequestCredentials,
+    headers: { Accept: 'application/json' },
   });
 
   if (!res.ok) {
     throw new EngagementApiError(await readErrorMessage(res), res.status);
   }
-}
-
-export function buildOAuthStartUrl(
-  base: string,
-  provider: 'github' | 'google',
-  redirectUri: string,
-): string {
-  const u = new URL(joinUrl(base, `/auth/${provider}/start`));
-  u.searchParams.set('redirect_uri', redirectUri);
-  return u.toString();
 }

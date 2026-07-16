@@ -1,3 +1,5 @@
+import { GITHUB_USERNAME, GITHUB_TOKEN } from '@lib/env';
+
 export enum GitHubEndpoint {
   GraphQL = 'https://api.github.com/graphql',
 }
@@ -7,8 +9,8 @@ export type GitHubEnv =
   | { ok: false; message: string };
 
 export function getGitHubEnv(): GitHubEnv {
-  const username = (import.meta.env.GITHUB_USERNAME ?? '').trim();
-  const token = (import.meta.env.GITHUB_TOKEN ?? '').trim();
+  const username = (GITHUB_USERNAME ?? '').trim();
+  const token = (GITHUB_TOKEN ?? '').trim();
   if (!username || !token) {
     return {
       ok: false,

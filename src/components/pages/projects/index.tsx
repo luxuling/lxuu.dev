@@ -39,8 +39,8 @@ export default function ProjectsExplorer(props: Props) {
     });
   });
 
-  const featured = createMemo(() => filtered().filter((p) => p.featured));
-  const rest = createMemo(() => filtered().filter((p) => !p.featured));
+  const highlighted = createMemo(() => filtered().filter((p) => p.highlight));
+  const rest = createMemo(() => filtered().filter((p) => !p.highlight));
 
   return (
     <section class='py-8 sm:py-12'>
@@ -82,12 +82,12 @@ export default function ProjectsExplorer(props: Props) {
           </div>
         </div>
 
-        <For each={featured()}>
+        <For each={highlighted()}>
           {(project, index) => (
             <>
               {index() === 0 && (
                 <span class='px-1 font-mono text-xs uppercase tracking-widest text-subtle'>
-                  [ featured ]
+                  [ highlighted ]
                 </span>
               )}
               <ProjectCard project={project} />
@@ -98,7 +98,7 @@ export default function ProjectsExplorer(props: Props) {
         <For each={rest()}>
           {(project, index) => (
             <>
-              {index() === 0 && featured().length > 0 && (
+              {index() === 0 && highlighted().length > 0 && (
                 <span class='px-1 font-mono text-xs uppercase tracking-widest text-subtle'>
                   [ other ]
                 </span>

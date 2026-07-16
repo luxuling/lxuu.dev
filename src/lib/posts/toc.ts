@@ -4,6 +4,18 @@ export interface TocItem {
   level: number;
 }
 
+export interface MarkdownHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+export function headingsToTocItems(headings: MarkdownHeading[]): TocItem[] {
+  return headings
+    .filter((h) => h.depth >= 2 && h.depth <= 3)
+    .map((h) => ({ id: h.slug, text: h.text, level: h.depth }));
+}
+
 function decodeEntities(str: string): string {
   return str
     .replace(/&amp;/g, '&')

@@ -3,7 +3,7 @@ import {
   type CommentItem,
   type PostStats,
   type SessionResponse,
-  buildOAuthStartUrl,
+  buildLoginUrl,
   deleteComment,
   deleteLike,
   getCommentsPage,
@@ -20,7 +20,6 @@ import {
 
 export interface PostEngagementProps {
   postSlug: string;
-  /** From `import.meta.env.PUBLIC_ENGAGEMENT_API_URL` (passed from Astro). */
   apiBase: string;
 }
 
@@ -115,7 +114,10 @@ export default function PostEngagement(props: PostEngagementProps) {
 
   function oauthRedirectUri() {
     if (typeof window === 'undefined') return '';
-    return window.location.href;
+    // Return a path (not full href): the callback only honors returnTo values
+    // that start with '/' (open-redirect guard), so a full URL would drop you
+    // on the home page instead of back on this post.
+    return window.location.pathname + window.location.search;
   }
 
   async function onToggleLike() {
@@ -225,7 +227,7 @@ export default function PostEngagement(props: PostEngagementProps) {
         <Show
           when={!loading()}
           fallback={
-            <p class='font-mono text-xs text-subtle'>loading engagement…</p>
+            <p class='font-mono text-xs text-subtle'>loading engagement...'</p>
           }
         >
           <Show when={error()}>
@@ -285,36 +287,16 @@ export default function PostEngagement(props: PostEngagementProps) {
             <Show
               when={authed() ? session().user : false}
               fallback={
-                <div class='flex flex-wrap gap-2'>
-                  <button
-                    type='button'
-                    class='rounded-sm border border-edge px-3 py-2 font-mono text-xs text-foreground transition-colors hover:border-muted'
-                    onClick={() => {
-                      const u = buildOAuthStartUrl(
-                        base(),
-                        'github',
-                        oauthRedirectUri(),
-                      );
-                      window.location.href = u;
-                    }}
-                  >
-                    GitHub
-                  </button>
-                  <button
-                    type='button'
-                    class='rounded-sm border border-edge px-3 py-2 font-mono text-xs text-foreground transition-colors hover:border-muted'
-                    onClick={() => {
-                      const u = buildOAuthStartUrl(
-                        base(),
-                        'google',
-                        oauthRedirectUri(),
-                      );
-                      window.location.href = u;
-                    }}
-                  >
-                    Google
-                  </button>
-                </div>
+                <button
+                  type='button'
+                  class='rounded-sm border border-edge px-3 py-2 font-mono text-xs text-foreground transition-colors hover:border-muted'
+                  onClick={() => {
+                    const u = buildLoginUrl(base(), oauthRedirectUri());
+                    window.location.href = u;
+                  }}
+                >
+                  sign in with GitHub
+                </button>
               }
             >
               {(u) => (
@@ -358,7 +340,7 @@ export default function PostEngagement(props: PostEngagementProps) {
                 rows={3}
                 value={newBody()}
                 onInput={(e) => setNewBody(e.currentTarget.value)}
-                placeholder='Plain text…'
+                placeholder='Plain text...'
                 class='w-full resize-y rounded-md border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-subtle focus:border-muted'
                 maxLength={4000}
                 disabled={busyComment()}
@@ -377,7 +359,7 @@ export default function PostEngagement(props: PostEngagementProps) {
 
           <Show when={!authed()}>
             <p class='mb-6 text-xs text-subtle'>
-              Sign in with GitHub or Google to comment.
+              Sign in with GitHub to comment.
             </p>
           </Show>
 
@@ -490,7 +472,7 @@ export default function PostEngagement(props: PostEngagementProps) {
                 onClick={() => void loadComments(false)}
                 class='rounded-sm border border-edge px-4 py-2 font-mono text-xs text-subtle hover:text-foreground disabled:opacity-50'
               >
-                {commentsLoading() ? 'loading…' : 'load more'}
+                {commentsLoading() ? 'loading...' : 'load more'}
               </button>
             </div>
           </Show>
