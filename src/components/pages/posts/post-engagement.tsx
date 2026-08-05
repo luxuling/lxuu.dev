@@ -418,21 +418,24 @@ export default function PostEngagement(props: PostEngagementProps) {
                         >
                           <button
                             type='button'
-                            class='font-mono text-[0.65rem] text-subtle hover:text-foreground'
+                            class='font-mono text-[0.65rem] text-subtle hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40'
                             onClick={() => {
                               setEditingId(null);
                               setEditDraft('');
                             }}
+                            disabled={busyComment()}
                           >
                             cancel
                           </button>
                           <button
                             type='button'
-                            class='font-mono text-[0.65rem] text-foreground hover:underline'
+                            class='font-mono text-[0.65rem] text-foreground hover:underline disabled:cursor-not-allowed disabled:opacity-40'
                             onClick={() => void onSaveEdit(c.id)}
-                            disabled={busyComment()}
+                            disabled={
+                              busyComment() || editDraft().trim().length === 0
+                            }
                           >
-                            save
+                            {busyComment() ? 'saving...' : 'save'}
                           </button>
                         </Show>
                       </div>
@@ -441,7 +444,7 @@ export default function PostEngagement(props: PostEngagementProps) {
                   <Show
                     when={editingId() === c.id}
                     fallback={
-                      <p class='whitespace-pre-wrap text-sm text-muted-foreground'>
+                      <p class='whitespace-pre-wrap text-xs text-muted-foreground'>
                         {c.body}
                       </p>
                     }

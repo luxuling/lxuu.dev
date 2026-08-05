@@ -74,6 +74,12 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
     body: updated.body,
     created_at: updated.createdAt.toISOString(),
     edited_at: updated.editedAt?.toISOString() ?? null,
+    author: {
+      id: user.id,
+      display_name: user.displayName,
+      avatar_url: user.avatarUrl,
+    },
+    mine: true,
   });
 };
 
