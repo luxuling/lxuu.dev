@@ -11,6 +11,14 @@ module.exports = [
   js.configs.recommended,
   ...eslintPluginAstro.configs['flat/recommended'],
   {
+    files: ['astro.config.mjs', 'drizzle.config.ts', 'keystatic.config.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
     files: ['**/*.{tsx,jsx}'],
     ...eslintPluginSolid.configs['flat/typescript'],
     languageOptions: {

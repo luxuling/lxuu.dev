@@ -29,7 +29,7 @@ export default defineConfig({
     react({ include: ['**/keystatic/**/*'] }),
     markdoc(),
     mdx(),
-    keystatic(),
+    ...(process.env.SKIP_KEYSTATIC ? [] : [keystatic()]),
   ],
   adapter: vercel(),
   env: {
