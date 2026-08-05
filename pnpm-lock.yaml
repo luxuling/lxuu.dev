@@ -24,10 +24,10 @@ importers:
         version: 10.0.8(astro@6.4.8(@types/node@26.1.1)(@vercel/functions@3.7.5)(idb-keyval@6.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.23.1)(yaml@2.9.0))(react@19.2.7)(rollup@4.62.2)
       '@keystatic/astro':
         specifier: ^5.2.0
-        version: 5.2.0(@keystatic/core@0.5.51(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(astro@6.4.8(@types/node@26.1.1)(@vercel/functions@3.7.5)(idb-keyval@6.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.23.1)(yaml@2.9.0))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 5.2.0(@keystatic/core@0.6.4(@keystar/ui@0.7.22(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(astro@6.4.8(@types/node@26.1.1)(@vercel/functions@3.7.5)(idb-keyval@6.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.23.1)(yaml@2.9.0))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@keystatic/core':
-        specifier: ^0.5.51
-        version: 0.5.51(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        specifier: ^0.6.4
+        version: 0.6.4(@keystar/ui@0.7.22(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)
       '@neondatabase/serverless':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1879,14 +1879,17 @@ packages:
       react: ^18.2.0 || ^19.0.0
       react-dom: ^18.2.0 || ^19.0.0
 
-  '@keystatic/core@0.5.51':
+  '@keystatic/core@0.6.4':
     resolution:
       {
-        integrity: sha512-/Tw1r3iKCaqIuJfoxL6KO03sn+B/S2z3rly2jYUCjVMxwBInNyNIzOvrCK0Bg64FXHU1MAyUUD/stacnM0aUgA==,
+        integrity: sha512-YXGqDf3xEChh74ox/qxZrLvn/O7GPyX1wAcbEZk4YTuRY/ca6MQi1jR6HDr0uTRWwDLRZqvo8sUDUsRblkKYQg==,
       }
     peerDependencies:
+      '@keystar/ui': '*'
       react: ^18.2.0 || ^19.0.0
+      react-aria: 3.50.0
       react-dom: ^18.2.0 || ^19.0.0
+      react-stately: 3.48.0
 
   '@mapbox/node-pre-gyp@2.0.3':
     resolution:
@@ -9410,37 +9413,27 @@ snapshots:
       - '@react-spectrum/provider'
       - supports-color
 
-  '@keystatic/astro@5.2.0(@keystatic/core@0.5.51(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(astro@6.4.8(@types/node@26.1.1)(@vercel/functions@3.7.5)(idb-keyval@6.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.23.1)(yaml@2.9.0))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@keystatic/astro@5.2.0(@keystatic/core@0.6.4(@keystar/ui@0.7.22(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(astro@6.4.8(@types/node@26.1.1)(@vercel/functions@3.7.5)(idb-keyval@6.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.23.1)(yaml@2.9.0))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@babel/runtime': 7.29.7
-      '@keystatic/core': 0.5.51(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@keystatic/core': 0.6.4(@keystar/ui@0.7.22(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)
       '@types/react': 19.2.17
       astro: 6.4.8(@types/node@26.1.1)(@vercel/functions@3.7.5)(idb-keyval@6.3.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.2)(tsx@4.23.1)(yaml@2.9.0)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       set-cookie-parser: 2.7.2
 
-  '@keystatic/core@0.5.51(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@keystatic/core@0.6.4(@keystar/ui@0.7.22(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@braintree/sanitize-url': 6.0.4
       '@emotion/weak-memoize': 0.3.1
       '@floating-ui/react': 0.24.8(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@internationalized/date': 3.12.2
+      '@internationalized/number': 3.6.7
       '@internationalized/string': 3.2.9
       '@keystar/ui': 0.7.22(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@markdoc/markdoc': 0.4.0(@types/react@19.2.17)(react@19.2.7)
-      '@react-aria/focus': 3.22.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-aria/i18n': 3.13.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-aria/interactions': 3.28.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-aria/label': 3.8.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-aria/overlays': 3.32.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-aria/selection': 3.28.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-aria/utils': 3.34.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-aria/visually-hidden': 3.9.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-stately/collections': 3.13.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-stately/list': 3.14.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-stately/overlays': 3.7.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@react-stately/utils': 3.12.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@react-types/shared': 3.36.0(react@19.2.7)
       '@sindresorhus/slugify': 1.1.2
       '@toeverything/y-indexeddb': 0.10.0-canary.9(yjs@13.6.31)
@@ -9483,7 +9476,9 @@ snapshots:
       prosemirror-transform: 1.12.0
       prosemirror-view: 1.42.1
       react: 19.2.7
+      react-aria: 3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-dom: 19.2.7(react@19.2.7)
+      react-stately: 3.48.0(react@19.2.7)
       scroll-into-view-if-needed: 3.1.0
       slate: 0.91.4
       slate-history: 0.86.0(slate@0.91.4)
@@ -9495,8 +9490,6 @@ snapshots:
       y-protocols: 1.0.7(yjs@13.6.31)
       yjs: 13.6.31
     transitivePeerDependencies:
-      - '@react-spectrum/provider'
-      - next
       - supports-color
 
   '@mapbox/node-pre-gyp@2.0.3':
