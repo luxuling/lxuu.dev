@@ -102,15 +102,37 @@ query ($userName: String!) {
 }
 `;
 
+const AVATAR_QUERY = `
+query ($userName: String!) {
+  user(login: $userName) {
+    avatarUrl
+  }
+}
+`;
+
+type AvatarUserQuery = { user: null | { avatarUrl: string } };
+
+export async function fetchGitHubAvatarUrl(
+  userName: string,
+  token: string,
+): Promise<string> {
+  const data = await githubGraphqlRequest<AvatarUserQuery>(
+    AVATAR_QUERY,
+    { userName },
+    token,
+  );
+  const user = data.user;
+  if (!user) throw new Error('User not found');
+  return user.avatarUrl;
+}
+
 function normalizeWeeks(weeks: RawWeek[]): ContributionWeek[] {
   return weeks.map((week) => ({
-    contributionDays: week.contributionDays.map(
-      (day): ContributionDay => ({
-        ...day,
-        color: '',
-        weekday: new Date(`${day.date}T12:00:00Z`).getUTCDay(),
-      }),
-    ),
+    contributionDays: week.contributionDays.map((day): ContributionDay => ({
+      ...day,
+      color: '',
+      weekday: new Date(`${day.date}T12:00:00Z`).getUTCDay(),
+    })),
   }));
 }
 
