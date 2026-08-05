@@ -1,30 +1,27 @@
 ---
 export const prerender = false;
 
-import { getLiveEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import Layout from '@layouts/layout.astro';
 import Container from '@components/base/container.astro';
 import Link from '@components/base/link.astro';
+import { fetchGithubStarCount } from '@lib/helpers/github.helper';
 
 const { slug } = Astro.params;
-const result = await getLiveEntry('projects', slug!);
+const entry = await getEntry('projects', slug!);
 
-if (result.error || !result.entry) {
+if (!entry) {
   return Astro.redirect('/projects');
 }
 
-const project = result.entry;
-const {
-  title,
-  description,
-  tags,
-  status,
-  year,
-  month,
-  thumbnail,
-  links,
-  githubStars,
-} = project.data;
+const { Content } = await render(entry);
+const { title, description, tags, status, date, thumbnail, links } = entry.data;
+
+const githubStars = links?.github
+  ? await fetchGithubStarCount(links.github, import.meta.env.GITHUB_TOKEN)
+  : undefined;
+
+const dateObj = new Date(date);
 const MONTHS = [
   'Jan',
   'Feb',
@@ -39,7 +36,8 @@ const MONTHS = [
   'Nov',
   'Dec',
 ];
-const monthLabel = MONTHS[(month - 1) % 12] ?? '';
+const monthLabel = MONTHS[dateObj.getMonth()] ?? '';
+const year = dateObj.getFullYear();
 
 const statusLabel: Record<typeof status, string> = {
   active: '[active]',
@@ -81,7 +79,7 @@ const statusColor: Record<typeof status, string> = {
           <div class='flex flex-wrap gap-1.5'>
             {
               tags.map((tag) => (
-                <span class='font-mono text-xs text-subtle border border-edge px-2 py-0.5 rounded-sm'>
+                <span class='rounded-sm border border-edge px-2 py-0.5 font-mono text-xs text-subtle'>
                   {tag}
                 </span>
               ))
@@ -100,15 +98,16 @@ const statusColor: Record<typeof status, string> = {
           />
         )
       }
+
       {
         (links?.github || links?.live) && (
           <div class='flex items-center gap-4 text-sm'>
-            {links.live && (
+            {links?.live && (
               <Link href={links.live} target='_blank'>
                 ↗ live site
               </Link>
             )}
-            {links.github && (
+            {links?.github && (
               <>
                 <Link href={links.github} target='_blank'>
                   ⌥ source
@@ -126,7 +125,9 @@ const statusColor: Record<typeof status, string> = {
 
       <div class='h-px bg-edge'></div>
 
-      <div class='prose-project' set:html={project.rendered?.html ?? ''} />
+      <div class='prose-project'>
+        <Content />
+      </div>
     </Container>
   </section>
 </Layout>

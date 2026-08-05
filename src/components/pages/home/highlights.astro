@@ -1,0 +1,25 @@
+---
+import Container from '@components/base/container.astro';
+import HomeHighlightsList from '@components/pages/home/home-highlights-list';
+import type { ProjectListItem } from '@components/pages/projects/card';
+import type { PostListItem } from '@components/pages/posts/card';
+
+interface Props {
+  projects: ProjectListItem[];
+  posts: PostListItem[];
+}
+
+const { projects, posts } = Astro.props as Props;
+
+const hasHighlights = projects.length > 0 || posts.length > 0;
+---
+
+{
+  hasHighlights && (
+    <section class='py-8 sm:py-12'>
+      <Container>
+        <HomeHighlightsList projects={projects} posts={posts} client:load />
+      </Container>
+    </section>
+  )
+}

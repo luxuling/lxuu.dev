@@ -1,9 +1,13 @@
 ---
+import { getCollection } from 'astro:content';
 import GitHubHome from '@components/pages/home/index.astro';
+import Highlights from '@components/pages/home/highlights.astro';
 import StatusPage from '@components/base/status-page.astro';
 import Layout from '@layouts/layout.astro';
 import { getGitHubEnv } from '@config/config';
 import { fetchGitHubHome } from '@lib/services/github.service';
+import type { ProjectListItem } from '@components/pages/projects/card';
+import type { PostListItem } from '@components/pages/posts/card';
 
 const env = getGitHubEnv();
 let data: Awaited<ReturnType<typeof fetchGitHubHome>> | null = null;
@@ -18,6 +22,41 @@ if (!env.ok) {
     loadError = e instanceof Error ? e.message : 'Failed to load GitHub data';
   }
 }
+
+const projectEntries = await getCollection('projects', (e) => e.data.highlight);
+const postEntries = await getCollection(
+  'posts',
+  (e) => e.data.status === 'posted' && e.data.highlight,
+);
+
+const highlightedProjects: ProjectListItem[] = [...projectEntries]
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((entry) => ({
+    slug: entry.id,
+    title: entry.data.title,
+    description: entry.data.description,
+    tags: entry.data.tags,
+    status: entry.data.status,
+    date: entry.data.date.toISOString().slice(0, 7),
+    links: entry.data.links
+      ? {
+          github: entry.data.links.github ?? undefined,
+          live: entry.data.links.live ?? undefined,
+        }
+      : undefined,
+    highlight: true,
+  }));
+
+const highlightedPosts: PostListItem[] = [...postEntries]
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((entry) => ({
+    slug: entry.id,
+    title: entry.data.title,
+    description: entry.data.description,
+    tags: entry.data.tags,
+    date: entry.data.date.toISOString().slice(0, 7),
+    highlight: true,
+  }));
 ---
 
 <Layout pageTitle='welcome — lxuu.dev'>
@@ -31,4 +70,5 @@ if (!env.ok) {
       />
     )
   }
+  <Highlights projects={highlightedProjects} posts={highlightedPosts} />
 </Layout>

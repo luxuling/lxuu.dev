@@ -38,3 +38,43 @@ export function monthLabelsForWeeks(weeks: ContributionWeek[]): string[] {
 }
 
 export const CONTRIBUTION_LEGEND_LEVELS = [0, 2, 5, 9, 12] as const;
+
+function parseGithubRepoFullName(href: string): string | null {
+  try {
+    const u = new URL(href);
+    const host = u.hostname.replace(/^www\./, '');
+    if (host !== 'github.com') return null;
+    const segments = u.pathname.split('/').filter(Boolean);
+    if (segments.length < 2) return null;
+    return `${segments[0]}/${segments[1]}`;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchGithubStarCount(
+  repoUrl: string,
+  token?: string,
+): Promise<number | undefined> {
+  const fullName = parseGithubRepoFullName(repoUrl);
+  if (!fullName) return undefined;
+
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${fullName}`, {
+      headers,
+    });
+    if (!res.ok) return undefined;
+    const json = (await res.json()) as { stargazers_count?: unknown };
+    return typeof json.stargazers_count === 'number'
+      ? json.stargazers_count
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}

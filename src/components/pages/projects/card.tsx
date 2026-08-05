@@ -6,15 +6,13 @@ export interface ProjectListItem {
   description: string;
   tags: string[];
   status: 'active' | 'wip' | 'archived';
-  year: number;
-  month: number;
+  date: string;
   links?: {
     github?: string;
     live?: string;
   };
-  /** Stargazers for `links.github`, when the loader could resolve it. */
   githubStars?: number;
-  featured?: boolean;
+  highlight?: boolean;
 }
 
 export const STATUS_LABEL: Record<ProjectListItem['status'], string> = {
@@ -29,7 +27,7 @@ export const STATUS_COLOR: Record<ProjectListItem['status'], string> = {
   archived: 'text-subtle',
 };
 
-export const MONTHS = [
+const MONTHS = [
   'Jan',
   'Feb',
   'Mar',
@@ -44,8 +42,10 @@ export const MONTHS = [
   'Dec',
 ];
 
-export function formatMonth(month: number) {
-  return MONTHS[(month - 1) % 12] ?? '';
+export function formatDisplayDate(dateStr: string) {
+  const d = new Date(`${dateStr}-01`);
+  if (isNaN(d.getTime())) return dateStr;
+  return `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 function ProjectStatus(props: { status: ProjectListItem['status'] }) {
@@ -57,14 +57,13 @@ function ProjectStatus(props: { status: ProjectListItem['status'] }) {
 }
 
 function ProjectMeta(props: {
-  month: number;
-  year: number;
+  date: string;
   status: ProjectListItem['status'];
 }) {
   return (
     <div class='flex shrink-0 items-center gap-2'>
       <span class='font-mono text-xs text-subtle'>
-        {formatMonth(props.month)} {props.year}
+        {formatDisplayDate(props.date)}
       </span>
       <ProjectStatus status={props.status} />
     </div>
@@ -84,14 +83,14 @@ export default function ProjectCard(props: { project: ProjectListItem }) {
           <h2 class='text-sm font-semibold text-foreground underline-offset-4 group-hover:underline'>
             {p().title}
           </h2>
-          <ProjectMeta month={p().month} year={p().year} status={p().status} />
+          <ProjectMeta date={p().date} status={p().status} />
         </div>
 
         <p class='text-sm leading-relaxed text-muted-foreground'>
           {p().description}
         </p>
 
-        <div class='flex flex-col md:flex-row  md:items-center justify-between gap-4'>
+        <div class='flex flex-col md:flex-row md:items-center justify-between gap-4'>
           <div class='flex flex-wrap gap-1.5'>
             <For each={p().tags}>
               {(tag) => (
@@ -104,10 +103,10 @@ export default function ProjectCard(props: { project: ProjectListItem }) {
 
           {(p().links?.github || p().links?.live) && (
             <div class='flex items-center gap-3 text-xs text-foreground'>
-              {p().links?.live && <span>↗ live</span>}
+              {p().links?.live && <span>live</span>}
               {p().links?.github && (
                 <>
-                  <span class='inline-flex items-center gap-1'>⌥ src</span>
+                  <span class='inline-flex items-center gap-1'>src</span>
                   <Show
                     when={
                       typeof p().githubStars === 'number'
@@ -117,7 +116,8 @@ export default function ProjectCard(props: { project: ProjectListItem }) {
                   >
                     {(o) => (
                       <span aria-label='GitHub stars'>
-                        ★ {o ? o()?.n?.toLocaleString() : '-'}
+                        {' '}
+                        {o ? o()?.n?.toLocaleString() : '-'}
                       </span>
                     )}
                   </Show>
