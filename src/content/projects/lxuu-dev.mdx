@@ -1,11 +1,11 @@
 ---
 title: lxuu-dev
-description: My personal website
+description: My personal corner of the web — blog, projects, and notes.
 tags:
   - astro
   - web
 status: active
-date: 2025-07-15
+date: 2025-07-15T00:00:00.000Z
 highlight: true
 thumbnail: >-
   https://res.cloudinary.com/lixuling/image/upload/v1777799253/projects/2026-05-01-214623_hyprshot_yhyk3d.png
@@ -16,4 +16,25 @@ links:
 
 # lxuu.dev
 
-Personal website built with Astro, NeonDB, Drizzle, and Keystatic.
+My personal corner of the web — a place to write, share projects, and document the journey instead of keeping it all in my head.
+
+## What it is
+
+A personal website that doubles as a blog and a project showcase. I built it by hand to own the full stack: content, design, and infrastructure. No templates, no themes — just the pieces I actually needed, kept as simple as possible.
+
+## Stack
+
+- **Astro 6** — SSR on the Vercel edge, with every route server-rendered
+- **SolidJS** — for the small bits of interactivity (theme toggle, engagement widgets)
+- **Keystatic CMS** — content lives in MDX files I edit in the admin UI at `/keystatic`
+- **Neon Postgres + Drizzle ORM** — for comments and likes on posts
+- **Arctic** — GitHub OAuth for signing in as the site owner
+- **View Transitions** — smooth, lightweight page transitions
+
+## Features
+
+- **Blog** — MDX posts with a table of contents and a comments/likes system backed by the database
+- **Projects** — a curated showcase of things I've built
+- **Minimal design** — solid color surfaces, no decorative background patterns, content first
+
+Building this site taught me more about the modern web stack than any tutorial — especially serverless SSR and content management. It's still a work in progress, and that's kind of the point.
