@@ -21,6 +21,7 @@ export interface PostListItem {
   description: string;
   tags: string[];
   date: string;
+  highlight?: boolean;
 }
 
 function formatDisplayDate(dateStr: string) {

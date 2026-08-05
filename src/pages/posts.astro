@@ -16,6 +16,7 @@ const postItems = sorted.map((entry) => ({
   description: entry.data.description,
   tags: entry.data.tags,
   date: entry.data.date.toISOString().slice(0, 7),
+  highlight: entry.data.highlight,
 }));
 ---
 
