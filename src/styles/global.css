@@ -44,6 +44,40 @@ body {
   color: var(--color-foreground);
 }
 
+.image-loading-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--color-subtle);
+  font-family: var(--font-maple-mono), monospace;
+  font-size: 0.875rem;
+}
+
+.image-loading-placeholder::after {
+  content: '[   ]';
+  animation: image-loading-frames 1s steps(1, end) infinite;
+}
+
+.image-loading.is-loaded .image-loading-placeholder {
+  display: none;
+}
+
+@keyframes image-loading-frames {
+  0% {
+    content: '[   ]';
+  }
+  25% {
+    content: '[.  ]';
+  }
+  50% {
+    content: '[.. ]';
+  }
+  75% {
+    content: '[...]';
+  }
+}
+
 /* Horizontal scroll for contribution graph — matches dark UI, no bright native track */
 .contrib-scroll {
   scrollbar-width: thin;

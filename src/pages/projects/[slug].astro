@@ -90,12 +90,16 @@ const statusColor: Record<typeof status, string> = {
 
       {
         thumbnail && (
-          <img
-            src={thumbnail}
-            alt={`${title} thumbnail`}
-            loading='lazy'
-            class='aspect-video w-full max-w-4xl rounded-md border border-edge object-cover'
-          />
+          <div class='image-loading relative aspect-video w-full max-w-4xl overflow-hidden rounded-md border border-edge bg-panel'>
+            <span class='image-loading-placeholder' aria-hidden='true' />
+            <img
+              src={thumbnail}
+              alt={`${title} thumbnail`}
+              loading='lazy'
+              class='relative z-10 size-full object-cover'
+              onload='this.parentElement?.classList.add("is-loaded")'
+            />
+          </div>
         )
       }
 
