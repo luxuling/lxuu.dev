@@ -34,12 +34,12 @@
     {
       "tone": "default",
       "segments": [
-        { "text": "Slowly working through " },
+        { "text": "Exploring " },
         {
-          "text": "new programming languages and competitive programming",
+          "text": "new things in the world of programming",
           "emphasis": true
         },
-        { "text": " — minimal crying, decent progress." }
+        { "text": " — learning, experimenting, and growing along the way." }
       ]
     },
     {
