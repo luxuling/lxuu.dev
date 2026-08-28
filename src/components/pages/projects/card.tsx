@@ -1,4 +1,8 @@
-import { For, Show } from 'solid-js';
+import { For, Show, createSignal, onMount } from 'solid-js';
+import {
+  getProjectStats,
+  type ProjectStats,
+} from '@lib/engagement/engagement-api';
 
 export interface ProjectListItem {
   slug: string;
@@ -59,38 +63,59 @@ function ProjectStatus(props: { status: ProjectListItem['status'] }) {
 function ProjectMeta(props: {
   date: string;
   status: ProjectListItem['status'];
+  stats: ProjectStats | null;
 }) {
   return (
-    <div class='flex shrink-0 items-center gap-2'>
-      <span class='font-mono text-xs text-subtle'>
-        {formatDisplayDate(props.date)}
-      </span>
+    <div class='flex shrink-0 flex-wrap items-center gap-2 sm:gap-3 font-mono text-xs'>
+      <span class='text-subtle'>{formatDisplayDate(props.date)}</span>
       <ProjectStatus status={props.status} />
+      <span class='text-subtle'>·</span>
+      <span class='text-subtle' title='Likes'>
+        <span class='text-foreground'>{props.stats?.like_count ?? 0}</span>{' '}
+        likes
+      </span>
+      <span class='text-subtle'>·</span>
+      <span class='text-subtle' title='Comments'>
+        <span class='text-foreground'>{props.stats?.comment_count ?? 0}</span>{' '}
+        comments
+      </span>
+      <span class='text-subtle'>·</span>
+      <span class='text-subtle' title='Views'>
+        <span class='text-foreground'>{props.stats?.view_count ?? 0}</span>{' '}
+        views
+      </span>
     </div>
   );
 }
 
 export default function ProjectCard(props: { project: ProjectListItem }) {
   const p = () => props.project;
+  const [stats, setStats] = createSignal<ProjectStats | null>(null);
+
+  onMount(() => {
+    void getProjectStats('/api', p().slug)
+      .then(setStats)
+      .catch(() => undefined);
+  });
 
   return (
     <a
       href={`/projects/${p().slug}`}
-      class='group block rounded-md border border-edge bg-panel p-4 transition-colors hover:border-muted sm:p-6'
+      class='group block rounded-md border border-edge bg-panel p-4 transition-colors hover:border-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:p-6'
     >
       <div class='flex flex-col gap-3'>
-        <div class='flex items-start justify-between gap-4'>
+        <div class='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4'>
           <h2 class='text-sm font-semibold text-foreground underline-offset-4 group-hover:underline'>
             {p().title}
           </h2>
-          <ProjectMeta date={p().date} status={p().status} />
+          <ProjectMeta date={p().date} status={p().status} stats={stats()} />
         </div>
 
         <p class='text-sm leading-relaxed text-muted-foreground'>
           {p().description}
         </p>
 
-        <div class='flex flex-col md:flex-row md:items-center justify-between gap-4'>
+        <div class='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
           <div class='flex flex-wrap gap-1.5'>
             <For each={p().tags}>
               {(tag) => (
@@ -102,7 +127,7 @@ export default function ProjectCard(props: { project: ProjectListItem }) {
           </div>
 
           {(p().links?.github || p().links?.live) && (
-            <div class='flex items-center gap-3 text-xs text-foreground'>
+            <div class='flex items-center gap-3 font-mono text-xs text-foreground'>
               {p().links?.live && <span>live</span>}
               {p().links?.github && (
                 <>
@@ -116,7 +141,6 @@ export default function ProjectCard(props: { project: ProjectListItem }) {
                   >
                     {(o) => (
                       <span aria-label='GitHub stars'>
-                        {' '}
                         {o ? o()?.n?.toLocaleString() : '-'}
                       </span>
                     )}

@@ -46,11 +46,16 @@ function createSpinner(frames: string[], ms: number) {
   return frame;
 }
 
-export function Spinner() {
+export function Spinner(props: { class?: string }) {
   const frame = createSpinner(sandFrames, 80);
 
   return (
-    <span class='flex items-center gap-2 font-mono text-base text-foreground sm:text-sm'>
+    <span
+      class={
+        props.class ??
+        'flex items-center gap-2 font-mono text-base text-foreground sm:text-sm'
+      }
+    >
       <span>{frame()}</span>
     </span>
   );

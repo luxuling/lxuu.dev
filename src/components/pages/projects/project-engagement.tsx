@@ -2,25 +2,25 @@ import { For, Show, createMemo, createSignal, onMount } from 'solid-js';
 import { Spinner } from '@components/icons/spinner';
 import {
   type CommentItem,
-  type PostStats,
+  type ProjectStats,
   type SessionResponse,
   buildLoginUrl,
   deleteComment,
-  deleteLike,
-  getCommentsPage,
-  getLikeMe,
+  deleteProjectLike,
+  getProjectCommentsPage,
+  getProjectLikeMe,
+  getProjectStats,
   getSession,
-  getStats,
   normalizeEngagementApiBase,
   patchComment,
-  postComment,
   postLogout,
-  postView,
-  putLike,
+  postProjectComment,
+  postProjectView,
+  putProjectLike,
 } from '@lib/engagement/engagement-api';
 
-export interface PostEngagementProps {
-  postSlug: string;
+export interface ProjectEngagementProps {
+  projectSlug: string;
   apiBase: string;
 }
 
@@ -28,10 +28,10 @@ function formatCount(n: number) {
   return n.toLocaleString();
 }
 
-export default function PostEngagement(props: PostEngagementProps) {
+export default function ProjectEngagement(props: ProjectEngagementProps) {
   const base = createMemo(() => normalizeEngagementApiBase(props.apiBase));
 
-  const [stats, setStats] = createSignal<PostStats | null>(null);
+  const [stats, setStats] = createSignal<ProjectStats | null>(null);
   const [session, setSession] = createSignal<SessionResponse>({
     authenticated: false,
     user: null,
@@ -53,11 +53,11 @@ export default function PostEngagement(props: PostEngagementProps) {
 
   async function refreshCore() {
     const b = base();
-    const slug = props.postSlug;
+    const slug = props.projectSlug;
     const [s, sess, lm] = await Promise.all([
-      getStats(b, slug),
+      getProjectStats(b, slug),
       getSession(b),
-      getLikeMe(b, slug).catch(() => ({ liked: false })),
+      getProjectLikeMe(b, slug).catch(() => ({ liked: false })),
     ]);
     setStats(s);
     setSession(sess);
@@ -66,11 +66,11 @@ export default function PostEngagement(props: PostEngagementProps) {
 
   async function loadComments(reset: boolean) {
     const b = base();
-    const slug = props.postSlug;
+    const slug = props.projectSlug;
     setCommentsLoading(true);
     try {
       const cursor = reset ? null : commentsCursor();
-      const page = await getCommentsPage(b, slug, cursor);
+      const page = await getProjectCommentsPage(b, slug, cursor);
       if (reset) {
         setComments(page.items);
       } else {
@@ -102,15 +102,12 @@ export default function PostEngagement(props: PostEngagementProps) {
       setLoading(false);
       return;
     }
-    void postView(b, props.postSlug);
+    void postProjectView(b, props.projectSlug);
     void refreshAll();
   });
 
   function oauthRedirectUri() {
     if (typeof window === 'undefined') return '';
-    // Return a path (not full href): the callback only honors returnTo values
-    // that start with '/' (open-redirect guard), so a full URL would drop you
-    // on the home page instead of back on this post.
     return window.location.pathname + window.location.search;
   }
 
@@ -121,9 +118,9 @@ export default function PostEngagement(props: PostEngagementProps) {
     setError(null);
     try {
       if (liked()) {
-        await deleteLike(b, props.postSlug);
+        await deleteProjectLike(b, props.projectSlug);
       } else {
-        await putLike(b, props.postSlug);
+        await putProjectLike(b, props.projectSlug);
       }
       await refreshCore();
     } catch (e) {
@@ -141,7 +138,7 @@ export default function PostEngagement(props: PostEngagementProps) {
     setBusyComment(true);
     setError(null);
     try {
-      const created = await postComment(b, props.postSlug, text);
+      const created = await postProjectComment(b, props.projectSlug, text);
       setNewBody('');
       setComments((prev) => [created, ...prev]);
       await refreshCore();
@@ -204,7 +201,7 @@ export default function PostEngagement(props: PostEngagementProps) {
   return (
     <section
       class='mt-10 rounded-md border border-edge bg-panel p-4 sm:p-6'
-      aria-label='Post engagement'
+      aria-label='Project engagement'
     >
       <Show
         when={base()}
@@ -277,7 +274,7 @@ export default function PostEngagement(props: PostEngagementProps) {
                     !liked(),
                 }}
                 aria-pressed={liked()}
-                aria-label={liked() ? 'Unlike post' : 'Like post'}
+                aria-label={liked() ? 'Unlike project' : 'Like project'}
               >
                 {liked() ? '♥ liked' : '♡ like'}
               </button>

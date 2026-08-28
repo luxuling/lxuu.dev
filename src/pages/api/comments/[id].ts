@@ -1,6 +1,11 @@
 export const prerender = false;
 import type { APIRoute } from 'astro';
-import { comments, postCounters } from '@lib/db/schema';
+import {
+  comments,
+  postCounters,
+  projectComments,
+  projectCounters,
+} from '@lib/db/schema';
 import { getSessionUser } from '@lib/auth/session';
 import { SESSION_SECRET } from '@lib/env';
 import { eq, and, isNull, sql } from 'drizzle-orm';
@@ -47,7 +52,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
     );
   }
 
-  const [updated] = await db
+  const [updatedPostComment] = await db
     .update(comments)
     .set({ body, editedAt: new Date() })
     .where(
@@ -59,28 +64,56 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
     )
     .returning();
 
-  if (!updated) {
-    return Response.json(
-      {
-        error: { code: 'NOT_FOUND', message: 'Comment not found or not yours' },
+  if (updatedPostComment) {
+    return Response.json({
+      id: updatedPostComment.id,
+      post_slug: updatedPostComment.postSlug,
+      body: updatedPostComment.body,
+      created_at: updatedPostComment.createdAt.toISOString(),
+      edited_at: updatedPostComment.editedAt?.toISOString() ?? null,
+      author: {
+        id: user.id,
+        display_name: user.displayName,
+        avatar_url: user.avatarUrl,
       },
-      { status: 404 },
-    );
+      mine: true,
+    });
   }
 
-  return Response.json({
-    id: updated.id,
-    post_slug: updated.postSlug,
-    body: updated.body,
-    created_at: updated.createdAt.toISOString(),
-    edited_at: updated.editedAt?.toISOString() ?? null,
-    author: {
-      id: user.id,
-      display_name: user.displayName,
-      avatar_url: user.avatarUrl,
+  const [updatedProjectComment] = await db
+    .update(projectComments)
+    .set({ body, editedAt: new Date() })
+    .where(
+      and(
+        eq(projectComments.id, id),
+        eq(projectComments.userId, user.id),
+        isNull(projectComments.deletedAt),
+      ),
+    )
+    .returning();
+
+  if (updatedProjectComment) {
+    return Response.json({
+      id: updatedProjectComment.id,
+      project_slug: updatedProjectComment.projectSlug,
+      body: updatedProjectComment.body,
+      created_at: updatedProjectComment.createdAt.toISOString(),
+      edited_at: updatedProjectComment.editedAt?.toISOString() ?? null,
+      author: {
+        id: user.id,
+        display_name: user.displayName,
+        avatar_url: user.avatarUrl,
+      },
+      mine: true,
+    });
+  }
+
+  return Response.json(
+    {
+      error: { code: 'NOT_FOUND', message: 'Comment not found or not yours' },
     },
-    mine: true,
-  });
+    { status: 404 },
+  );
 };
 
 export const DELETE: APIRoute = async ({ params, request, locals }) => {
@@ -100,7 +133,7 @@ export const DELETE: APIRoute = async ({ params, request, locals }) => {
     );
   }
 
-  const [deleted] = await db
+  const [deletedPostComment] = await db
     .update(comments)
     .set({ deletedAt: new Date() })
     .where(
@@ -112,22 +145,51 @@ export const DELETE: APIRoute = async ({ params, request, locals }) => {
     )
     .returning({ id: comments.id, postSlug: comments.postSlug });
 
-  if (!deleted) {
-    return Response.json(
-      {
-        error: { code: 'NOT_FOUND', message: 'Comment not found or not yours' },
-      },
-      { status: 404 },
-    );
+  if (deletedPostComment) {
+    await db
+      .update(postCounters)
+      .set({
+        commentCount: sql`GREATEST(${postCounters.commentCount} - 1, 0)`,
+        updatedAt: new Date(),
+      })
+      .where(eq(postCounters.postSlug, deletedPostComment.postSlug));
+
+    return new Response(null, { status: 204 });
   }
 
-  await db
-    .update(postCounters)
-    .set({
-      commentCount: sql`GREATEST(${postCounters.commentCount} - 1, 0)`,
-      updatedAt: new Date(),
-    })
-    .where(eq(postCounters.postSlug, deleted.postSlug));
+  const [deletedProjectComment] = await db
+    .update(projectComments)
+    .set({ deletedAt: new Date() })
+    .where(
+      and(
+        eq(projectComments.id, id),
+        eq(projectComments.userId, user.id),
+        isNull(projectComments.deletedAt),
+      ),
+    )
+    .returning({
+      id: projectComments.id,
+      projectSlug: projectComments.projectSlug,
+    });
 
-  return new Response(null, { status: 204 });
+  if (deletedProjectComment) {
+    await db
+      .update(projectCounters)
+      .set({
+        commentCount: sql`GREATEST(${projectCounters.commentCount} - 1, 0)`,
+        updatedAt: new Date(),
+      })
+      .where(
+        eq(projectCounters.projectSlug, deletedProjectComment.projectSlug),
+      );
+
+    return new Response(null, { status: 204 });
+  }
+
+  return Response.json(
+    {
+      error: { code: 'NOT_FOUND', message: 'Comment not found or not yours' },
+    },
+    { status: 404 },
+  );
 };
