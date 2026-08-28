@@ -34,7 +34,11 @@ export default defineConfig({
   adapter: vercel(),
   env: {
     schema: {
-      DATABASE_URL: envField.string({ context: 'server', access: 'secret' }),
+      DATABASE_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
       SESSION_SECRET: envField.string({
         context: 'server',
         access: 'secret',

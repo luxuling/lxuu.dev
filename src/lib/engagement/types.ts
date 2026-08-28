@@ -5,6 +5,13 @@ export interface PostStats {
   comment_count: number;
 }
 
+export interface ProjectStats {
+  project_slug: string;
+  view_count: number;
+  like_count: number;
+  comment_count: number;
+}
+
 export interface SessionUser {
   id: string;
   display_name: string;

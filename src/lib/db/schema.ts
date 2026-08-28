@@ -128,3 +128,77 @@ export const viewEvents = pgTable(
     index('view_events_post_slug_occurred_idx').on(t.postSlug, t.occurredAt),
   ],
 );
+
+export const projectCounters = pgTable('project_counters', {
+  projectSlug: text('project_slug').primaryKey(),
+  viewCount: bigint('view_count', { mode: 'number' }).default(0).notNull(),
+  likeCount: bigint('like_count', { mode: 'number' }).default(0).notNull(),
+  commentCount: bigint('comment_count', { mode: 'number' })
+    .default(0)
+    .notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const projectLikes = pgTable(
+  'project_likes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    projectSlug: text('project_slug')
+      .notNull()
+      .references(() => projectCounters.projectSlug, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [
+    uniqueIndex('project_likes_user_project_idx').on(t.userId, t.projectSlug),
+    index('project_likes_project_slug_idx').on(t.projectSlug),
+  ],
+);
+
+export const projectComments = pgTable(
+  'project_comments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    projectSlug: text('project_slug')
+      .notNull()
+      .references(() => projectCounters.projectSlug, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    body: text('body').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    editedAt: timestamp('edited_at', { withTimezone: true }),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  },
+  (t) => [
+    index('project_comments_slug_created_idx').on(t.projectSlug, t.createdAt),
+  ],
+);
+
+export const projectViewEvents = pgTable(
+  'project_view_events',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    projectSlug: text('project_slug')
+      .notNull()
+      .references(() => projectCounters.projectSlug, { onDelete: 'cascade' }),
+    occurredAt: timestamp('occurred_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    visitorHash: text('visitor_hash'),
+  },
+  (t) => [
+    index('project_view_events_slug_occurred_idx').on(
+      t.projectSlug,
+      t.occurredAt,
+    ),
+  ],
+);

@@ -1,6 +1,6 @@
 export const prerender = false;
 import type { APIRoute } from 'astro';
-import { postCounters, viewEvents } from '@lib/db/schema';
+import { projectCounters, projectViewEvents } from '@lib/db/schema';
 import { SESSION_SECRET } from '@lib/env';
 import { dailyViewHash, readVisitorKey } from '@lib/engagement/visitor-hash';
 import { eq, and, gte, sql } from 'drizzle-orm';
@@ -17,13 +17,13 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
   todayStart.setUTCHours(0, 0, 0, 0);
 
   const existing = await db
-    .select({ id: viewEvents.id })
-    .from(viewEvents)
+    .select({ id: projectViewEvents.id })
+    .from(projectViewEvents)
     .where(
       and(
-        eq(viewEvents.postSlug, slug),
-        eq(viewEvents.visitorHash, visitorHash),
-        gte(viewEvents.occurredAt, todayStart),
+        eq(projectViewEvents.projectSlug, slug),
+        eq(projectViewEvents.visitorHash, visitorHash),
+        gte(projectViewEvents.occurredAt, todayStart),
       ),
     )
     .limit(1);
@@ -31,17 +31,24 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
   if (existing.length === 0) {
     await db.transaction(async (tx) => {
       await tx
-        .insert(postCounters)
-        .values({ postSlug: slug, viewCount: 1, likeCount: 0, commentCount: 0 })
+        .insert(projectCounters)
+        .values({
+          projectSlug: slug,
+          viewCount: 1,
+          likeCount: 0,
+          commentCount: 0,
+        })
         .onConflictDoUpdate({
-          target: postCounters.postSlug,
+          target: projectCounters.projectSlug,
           set: {
-            viewCount: sql`${postCounters.viewCount} + 1`,
+            viewCount: sql`${projectCounters.viewCount} + 1`,
             updatedAt: new Date(),
           },
         });
 
-      await tx.insert(viewEvents).values({ postSlug: slug, visitorHash });
+      await tx
+        .insert(projectViewEvents)
+        .values({ projectSlug: slug, visitorHash });
     });
   }
 

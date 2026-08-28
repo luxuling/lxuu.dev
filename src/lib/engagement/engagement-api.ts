@@ -3,6 +3,7 @@ import type {
   CommentsPage,
   LikeMeResponse,
   PostStats,
+  ProjectStats,
   SessionResponse,
 } from './types';
 
@@ -11,6 +12,7 @@ export type {
   CommentsPage,
   LikeMeResponse,
   PostStats,
+  ProjectStats,
   SessionResponse,
 };
 
@@ -272,6 +274,137 @@ export async function deleteComment(
   if (!res.ok) {
     throw new EngagementApiError(await readErrorMessage(res), res.status);
   }
+}
+
+export async function postProjectView(
+  base: string,
+  projectSlug: string,
+): Promise<void> {
+  const body: { visitor_key?: string } = {};
+  const vk = getOrCreateVisitorKey();
+  if (vk) body.visitor_key = vk;
+
+  try {
+    await fetch(
+      joinUrl(base, `/projects/${encodeURIComponent(projectSlug)}/views`),
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(body),
+      },
+    );
+  } catch {
+    /* ignore network errors for view beacon */
+  }
+}
+
+export async function getProjectStats(
+  base: string,
+  projectSlug: string,
+): Promise<ProjectStats> {
+  const { data } = await engagementFetch<ProjectStats>(
+    base,
+    `/projects/${encodeURIComponent(projectSlug)}/stats`,
+  );
+  if (!data) {
+    throw new EngagementApiError('Empty stats response', 500);
+  }
+  return data;
+}
+
+export async function getProjectLikeMe(
+  base: string,
+  projectSlug: string,
+): Promise<LikeMeResponse> {
+  const { data } = await engagementFetch<LikeMeResponse>(
+    base,
+    `/projects/${encodeURIComponent(projectSlug)}/likes/me`,
+  );
+  if (!data) {
+    throw new EngagementApiError('Empty like state', 500);
+  }
+  return data;
+}
+
+export async function putProjectLike(
+  base: string,
+  projectSlug: string,
+): Promise<void> {
+  const res = await fetch(
+    joinUrl(base, `/projects/${encodeURIComponent(projectSlug)}/likes/me`),
+    {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Idempotency-Key': crypto.randomUUID(),
+      },
+    },
+  );
+
+  if (!res.ok) {
+    throw new EngagementApiError(await readErrorMessage(res), res.status);
+  }
+}
+
+export async function deleteProjectLike(
+  base: string,
+  projectSlug: string,
+): Promise<void> {
+  const res = await fetch(
+    joinUrl(base, `/projects/${encodeURIComponent(projectSlug)}/likes/me`),
+    {
+      method: 'DELETE',
+      credentials: 'include' as RequestCredentials,
+      headers: { Accept: 'application/json' },
+    },
+  );
+
+  if (!res.ok) {
+    throw new EngagementApiError(await readErrorMessage(res), res.status);
+  }
+}
+
+export async function getProjectCommentsPage(
+  base: string,
+  projectSlug: string,
+  cursor?: string | null,
+  limit = 20,
+): Promise<CommentsPage> {
+  const q = new URLSearchParams({ limit: String(limit) });
+  if (cursor) q.set('cursor', cursor);
+  const { data } = await engagementFetch<CommentsPage>(
+    base,
+    `/projects/${encodeURIComponent(projectSlug)}/comments?${q}`,
+  );
+  if (!data) {
+    throw new EngagementApiError('Empty comments response', 500);
+  }
+  return data;
+}
+
+export async function postProjectComment(
+  base: string,
+  projectSlug: string,
+  body: string,
+): Promise<CommentItem> {
+  const { data } = await engagementFetch<CommentItem>(
+    base,
+    `/projects/${encodeURIComponent(projectSlug)}/comments`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ body }),
+    },
+  );
+  if (!data) {
+    throw new EngagementApiError('Empty create-comment response', 500);
+  }
+  return data;
 }
 
 export async function postLogout(base: string): Promise<void> {

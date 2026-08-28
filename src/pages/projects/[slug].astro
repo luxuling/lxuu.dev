@@ -6,6 +6,7 @@ import Layout from '@layouts/layout.astro';
 import Container from '@components/base/container.astro';
 import Link from '@components/base/link.astro';
 import { fetchGithubStarCount } from '@lib/helpers/github.helper';
+import ProjectEngagement from '@components/pages/projects/project-engagement';
 
 const { slug } = Astro.params;
 const entry = await getEntry('projects', slug!);
@@ -132,6 +133,8 @@ const statusColor: Record<typeof status, string> = {
       <div class='prose-project'>
         <Content />
       </div>
+
+      <ProjectEngagement client:load projectSlug={slug!} apiBase='/api' />
     </Container>
   </section>
 </Layout>

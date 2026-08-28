@@ -44,7 +44,7 @@ export default function ProjectsExplorer(props: Props) {
 
   return (
     <section class='py-8 sm:py-12'>
-      <div class='mx-auto flex w-full max-w-269.5 flex-col gap-6 px-4 md:px-20'>
+      <div class='mx-auto flex w-full max-w-269.5 flex-col gap-8 px-4 md:px-20'>
         <div class='px-1'>
           <h1 class='text-xl font-semibold tracking-tight text-foreground'>
             projects<span class='text-muted-foreground'>.</span>
@@ -58,7 +58,7 @@ export default function ProjectsExplorer(props: Props) {
             value={query()}
             onInput={(e) => setQuery(e.currentTarget.value)}
             placeholder='search projects...'
-            class='w-full rounded-md border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-subtle focus:border-muted'
+            class='w-full rounded-sm border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-subtle transition-colors focus:border-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
             aria-label='Search projects'
           />
           <div class='flex flex-wrap gap-2'>
@@ -67,7 +67,7 @@ export default function ProjectsExplorer(props: Props) {
                 <button
                   type='button'
                   onClick={() => toggleTag(tag)}
-                  class='rounded-sm border px-2 py-1 font-mono text-xs transition-colors'
+                  class='rounded-sm border px-2 py-1 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.98]'
                   classList={{
                     'border-edge text-subtle hover:text-foreground':
                       !selectedTags().includes(tag),
