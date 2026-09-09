@@ -85,7 +85,7 @@ export default function TableOfContents(props: Props) {
         <TocList items={props.items} activeId={activeId()} />
       </nav>
 
-      {/* ── Mobile: fixed bottom bar + bottom sheet ── */}
+      {/* ── Mobile: fixed bottom button + right-side drawer ── */}
       <div class='xl:hidden'>
         {/* Backdrop */}
         <Show when={open()}>
@@ -96,58 +96,65 @@ export default function TableOfContents(props: Props) {
           />
         </Show>
 
-        {/* Bottom sheet */}
+        {/* Right-side drawer */}
         <div
-          class='fixed bottom-14 left-0 right-0 z-50 transition-transform duration-300 ease-in-out'
+          id='toc-drawer'
+          role='dialog'
+          aria-label='Table of contents'
+          class='fixed inset-y-0 right-0 z-50 flex w-72 max-w-[85vw] flex-col border-l border-edge bg-panel shadow-2xl transition-transform duration-300 ease-in-out'
           style={{
-            transform: open() ? 'translateY(0)' : 'translateY(110%)',
+            transform: open() ? 'translateX(0)' : 'translateX(110%)',
           }}
         >
-          <div class='mx-3 rounded-t-xl border border-edge bg-panel shadow-2xl'>
-            <div class='flex items-center justify-between border-b border-edge px-4 py-3'>
-              <p class='font-mono text-[0.65rem] uppercase tracking-widest text-subtle'>
-                [ contents ]
-              </p>
-              <button
-                type='button'
-                onClick={() => setOpen(false)}
-                class='font-mono text-xs text-subtle hover:text-foreground'
-                aria-label='Close table of contents'
-              >
-                ✕
-              </button>
-            </div>
-            <div class='max-h-[55vh] overflow-y-auto px-4 py-3'>
-              <TocList
-                items={props.items}
-                activeId={activeId()}
-                onNavigate={() => setOpen(false)}
-              />
-            </div>
+          <div class='flex items-center justify-between border-b border-edge px-4 py-3'>
+            <p class='font-mono text-[0.65rem] uppercase tracking-widest text-subtle'>
+              [ contents ]
+            </p>
+            <button
+              type='button'
+              onClick={() => setOpen(false)}
+              class='font-mono text-xs text-subtle hover:text-foreground'
+              aria-label='Close table of contents'
+            >
+              ✕
+            </button>
+          </div>
+          <div class='flex-1 overflow-y-auto px-4 py-3'>
+            <TocList
+              items={props.items}
+              activeId={activeId()}
+              onNavigate={() => setOpen(false)}
+            />
           </div>
         </div>
 
-        {/* Fixed bottom trigger bar */}
+        {/* Fixed bottom trigger button */}
         <button
           type='button'
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open()}
-          aria-controls='toc-sheet'
-          class='fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-3 border-t border-edge bg-panel/95 px-4 py-3 backdrop-blur-sm'
+          aria-controls='toc-drawer'
+          class='fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full border border-edge bg-panel/95 px-4 py-2.5 shadow-lg backdrop-blur-sm'
         >
-          <div class='flex min-w-0 items-center gap-2'>
-            <span class='shrink-0 font-mono text-[0.6rem] uppercase tracking-widest text-subtle'>
-              §
-            </span>
-            <span class='truncate font-mono text-xs text-muted-foreground'>
-              {activeItem()?.text ?? 'contents'}
-            </span>
-          </div>
-          <span
-            class='shrink-0 font-mono text-[0.65rem] text-subtle transition-transform duration-200'
-            style={{ transform: open() ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          <svg
+            class='size-3.5 shrink-0 text-subtle'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            aria-hidden='true'
           >
-            ↑
+            <line x1='8' y1='6' x2='21' y2='6' />
+            <line x1='8' y1='12' x2='21' y2='12' />
+            <line x1='8' y1='18' x2='21' y2='18' />
+            <line x1='3' y1='6' x2='3.01' y2='6' />
+            <line x1='3' y1='12' x2='3.01' y2='12' />
+            <line x1='3' y1='18' x2='3.01' y2='18' />
+          </svg>
+          <span class='max-w-[40vw] truncate font-mono text-xs text-muted-foreground'>
+            {activeItem()?.text ?? 'contents'}
           </span>
         </button>
       </div>

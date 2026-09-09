@@ -7,6 +7,8 @@ import Container from '@components/base/container.astro';
 import Link from '@components/base/link.astro';
 import { fetchGithubStarCount } from '@lib/helpers/github.helper';
 import ProjectEngagement from '@components/pages/projects/project-engagement';
+import TableOfContents from '@components/base/table-of-contents';
+import { headingsToTocItems } from '@lib/posts/toc';
 
 const { slug } = Astro.params;
 const entry = await getEntry('projects', slug!);
@@ -15,7 +17,8 @@ if (!entry) {
   return Astro.redirect('/projects');
 }
 
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
+const tocItems = headingsToTocItems(headings);
 const { title, description, tags, status, date, thumbnail, links } = entry.data;
 
 const githubStars = links?.github
@@ -54,7 +57,7 @@ const statusColor: Record<typeof status, string> = {
 ---
 
 <Layout pageTitle={`${title} — lxuu.dev`}>
-  <section class='py-8 sm:py-12'>
+  <section class='py-8 pb-20 sm:py-12 xl:pb-12'>
     <Container class='flex flex-col gap-8'>
       <div class='flex flex-col gap-4'>
         <Link href='/projects' class='font-mono text-xs text-subtle'>
@@ -130,11 +133,25 @@ const statusColor: Record<typeof status, string> = {
 
       <div class='h-px bg-edge'></div>
 
-      <div class='prose-project'>
-        <Content />
-      </div>
+      <div class='flex gap-12'>
+        <div class='min-w-0 flex-1'>
+          <div class='prose-project'>
+            <Content />
+          </div>
 
-      <ProjectEngagement client:load projectSlug={slug!} apiBase='/api' />
+          <ProjectEngagement client:load projectSlug={slug!} apiBase='/api' />
+        </div>
+
+        {
+          tocItems.length > 0 && (
+            <aside class='xl:w-48 xl:shrink-0'>
+              <div class='sticky top-10'>
+                <TableOfContents client:load items={tocItems} />
+              </div>
+            </aside>
+          )
+        }
+      </div>
     </Container>
   </section>
 </Layout>
