@@ -62,6 +62,8 @@ export async function fetchGithubStarCount(
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
+    // GitHub rejects requests without a User-Agent; workerd sends none by default
+    'User-Agent': 'lxuu.dev',
   };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 

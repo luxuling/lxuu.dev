@@ -10,6 +10,11 @@ import keystatic from '@keystatic/astro';
 
 import cloudflare from '@astrojs/cloudflare';
 
+// Prerender runs in workerd, which only reads vars from .env/.dev.vars. On
+// Cloudflare Workers Builds there is no .env, so pass the build variables in.
+if (process.env.WORKERS_CI)
+  process.env.CLOUDFLARE_INCLUDE_PROCESS_ENV ??= 'true';
+
 // https://astro.build/config
 export default defineConfig({
   vite: {

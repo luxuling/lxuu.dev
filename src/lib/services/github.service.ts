@@ -66,6 +66,8 @@ async function githubGraphqlRequest<TData>(
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
+      // GitHub rejects requests without a User-Agent; workerd sends none by default
+      'User-Agent': 'lxuu.dev',
     },
     body: JSON.stringify({ query, variables }),
   });

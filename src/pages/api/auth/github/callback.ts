@@ -50,6 +50,7 @@ export const GET: APIRoute = async ({ url, request, locals }) => {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       Accept: 'application/vnd.github+json',
+      'User-Agent': 'lxuu.dev',
     },
   });
 
