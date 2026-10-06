@@ -29,7 +29,10 @@ export default defineConfig({
     react({ include: ['**/keystatic/**/*'] }),
     markdoc(),
     mdx(),
-    ...(process.env.SKIP_KEYSTATIC ? [] : [keystatic()]),
+    // WORKERS_CI is set by Cloudflare Workers Builds; Keystatic can't bundle for workerd
+    ...(process.env.SKIP_KEYSTATIC || process.env.WORKERS_CI
+      ? []
+      : [keystatic()]),
   ],
 
   env: {
