@@ -3,12 +3,12 @@ import { defineConfig, fontProviders, envField } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import solidJs from '@astrojs/solid-js';
 
-import vercel from '@astrojs/vercel';
-
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
 import mdx from '@astrojs/mdx';
 import keystatic from '@keystatic/astro';
+
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
@@ -31,7 +31,7 @@ export default defineConfig({
     mdx(),
     ...(process.env.SKIP_KEYSTATIC ? [] : [keystatic()]),
   ],
-  adapter: vercel(),
+
   env: {
     schema: {
       DATABASE_URL: envField.string({
@@ -66,4 +66,6 @@ export default defineConfig({
       }),
     },
   },
+
+  adapter: cloudflare(),
 });
