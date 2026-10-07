@@ -11,9 +11,9 @@ This project uses the following development rules:
    - Example: `hero-section.astro`
    - Example: `theme-toggle.tsx`
 
-3. Use only Astro and SolidJS:
+3. Use only Astro and React:
    - Astro for pages/layout structure.
-   - SolidJS for interactive components.
+   - React for interactive components.
    - Do not introduce other UI frameworks.
 
 4. No unnecessary comments in code:
@@ -33,7 +33,7 @@ This project uses the following development rules:
 
 7. Stack:
    - **Astro 6** (SSR via Vercel adapter, `prerender = false` on all routes)
-   - **SolidJS** for interactive components
+   - **React** for interactive components
    - **Keystatic CMS** (local storage mode) — content lives in `content/posts/*.mdx` and `content/projects/*.mdx`; admin UI at `/keystatic`
    - **Astro Content Collections** (`src/content.config.ts`) with `glob` loader reading MDX files
    - **Neon PostgreSQL** via `@neondatabase/serverless` HTTP driver (required for Vercel serverless)

@@ -1,21 +1,24 @@
-import { For, createMemo, createSignal } from 'solid-js';
+import { useMemo, useState } from 'react';
 import ProjectCard, { type ProjectListItem } from './card';
 
 interface Props {
   projects: ProjectListItem[];
 }
 
-export default function ProjectsExplorer(props: Props) {
-  const [query, setQuery] = createSignal('');
-  const [selectedTags, setSelectedTags] = createSignal<string[]>([]);
+const SECTION_LABEL_CLASS =
+  'px-1 font-mono text-xs uppercase tracking-widest text-subtle';
 
-  const allTags = createMemo<string[]>(() =>
-    [...new Set(props.projects.flatMap((project) => project.tags))].sort(
-      (a, b) => a.localeCompare(b),
-    ),
+export default function ProjectsExplorer({ projects }: Props) {
+  const [query, setQuery] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const allTags = useMemo<string[]>(
+    () =>
+      [...new Set(projects.flatMap((project) => project.tags))].sort((a, b) =>
+        a.localeCompare(b),
+      ),
+    [projects],
   );
-
-  const selectedTagSet = createMemo(() => new Set(selectedTags()));
 
   const toggleTag = (tag: string) =>
     setSelectedTags((prev) =>
@@ -24,92 +27,79 @@ export default function ProjectsExplorer(props: Props) {
         : [...prev, tag],
     );
 
-  const filtered = createMemo(() => {
-    const normalizedQuery = query().trim().toLowerCase();
-    return props.projects.filter((project) => {
+  const filtered = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    return projects.filter((project) => {
       const searchPool = [project.title, project.description, ...project.tags]
         .join(' ')
         .toLowerCase();
       const matchesQuery =
         normalizedQuery.length === 0 || searchPool.includes(normalizedQuery);
-      const matchesTags = [...selectedTagSet()].every((tag) =>
+      const matchesTags = selectedTags.every((tag) =>
         project.tags.includes(tag),
       );
       return matchesQuery && matchesTags;
     });
-  });
+  }, [projects, query, selectedTags]);
 
-  const highlighted = createMemo(() => filtered().filter((p) => p.highlight));
-  const rest = createMemo(() => filtered().filter((p) => !p.highlight));
+  const highlighted = filtered.filter((p) => p.highlight);
+  const rest = filtered.filter((p) => !p.highlight);
 
   return (
-    <section class='py-8 sm:py-12'>
-      <div class='mx-auto flex w-full max-w-269.5 flex-col gap-8 px-4 md:px-20'>
-        <div class='px-1'>
-          <h1 class='text-xl font-semibold tracking-tight text-foreground'>
-            projects<span class='text-muted-foreground'>.</span>
+    <section className='py-8 sm:py-12'>
+      <div className='mx-auto flex w-full max-w-269.5 flex-col gap-8 px-4 md:px-20'>
+        <div className='px-1'>
+          <h1 className='text-xl font-semibold tracking-tight text-foreground'>
+            projects<span className='text-muted-foreground'>.</span>
           </h1>
-          <p class='mt-1 text-sm text-subtle'>things i built or am building</p>
+          <p className='mt-1 text-sm text-subtle'>
+            things i built or am building
+          </p>
         </div>
 
-        <div class='flex flex-col gap-3 rounded-md border border-edge bg-panel p-4 sm:p-6'>
+        <div className='flex flex-col gap-3 rounded-md border border-edge bg-panel p-4 sm:p-6'>
           <input
             type='text'
-            value={query()}
-            onInput={(e) => setQuery(e.currentTarget.value)}
+            value={query}
+            onChange={(e) => setQuery(e.currentTarget.value)}
             placeholder='search projects...'
-            class='w-full rounded-sm border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-subtle transition-colors focus:border-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
+            className='w-full rounded-sm border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-subtle transition-colors focus:border-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
             aria-label='Search projects'
           />
-          <div class='flex flex-wrap gap-2'>
-            <For each={allTags()}>
-              {(tag) => (
-                <button
-                  type='button'
-                  onClick={() => toggleTag(tag)}
-                  class='rounded-sm border px-2 py-1 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.98]'
-                  classList={{
-                    'border-edge text-subtle hover:text-foreground':
-                      !selectedTags().includes(tag),
-                    'border-foreground text-foreground':
-                      selectedTags().includes(tag),
-                  }}
-                >
-                  {tag}
-                </button>
-              )}
-            </For>
+          <div className='flex flex-wrap gap-2'>
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                type='button'
+                onClick={() => toggleTag(tag)}
+                className={`rounded-sm border px-2 py-1 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.98] ${
+                  selectedTags.includes(tag)
+                    ? 'border-foreground text-foreground'
+                    : 'border-edge text-subtle hover:text-foreground'
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
           </div>
         </div>
 
-        <For each={highlighted()}>
-          {(project, index) => (
-            <>
-              {index() === 0 && (
-                <span class='px-1 font-mono text-xs uppercase tracking-widest text-subtle'>
-                  [ highlighted ]
-                </span>
-              )}
-              <ProjectCard project={project} />
-            </>
-          )}
-        </For>
+        {highlighted.length > 0 && (
+          <span className={SECTION_LABEL_CLASS}>[ highlighted ]</span>
+        )}
+        {highlighted.map((project) => (
+          <ProjectCard key={project.slug} project={project} />
+        ))}
 
-        <For each={rest()}>
-          {(project, index) => (
-            <>
-              {index() === 0 && highlighted().length > 0 && (
-                <span class='px-1 font-mono text-xs uppercase tracking-widest text-subtle'>
-                  [ other ]
-                </span>
-              )}
-              <ProjectCard project={project} />
-            </>
-          )}
-        </For>
+        {rest.length > 0 && highlighted.length > 0 && (
+          <span className={SECTION_LABEL_CLASS}>[ other ]</span>
+        )}
+        {rest.map((project) => (
+          <ProjectCard key={project.slug} project={project} />
+        ))}
 
-        {filtered().length === 0 && (
-          <div class='rounded-md border border-edge bg-panel p-4 text-sm text-subtle sm:p-6'>
+        {filtered.length === 0 && (
+          <div className='rounded-md border border-edge bg-panel p-4 text-sm text-subtle sm:p-6'>
             no projects match search/filter.
           </div>
         )}

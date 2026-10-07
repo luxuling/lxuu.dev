@@ -1,4 +1,4 @@
-import { createMemo, createSignal, onCleanup } from 'solid-js';
+import { useEffect, useState } from 'react';
 
 const sandFrames = [
   '⠁',
@@ -38,25 +38,26 @@ const sandFrames = [
   '⢁',
 ];
 
-function createSpinner(frames: string[], ms: number) {
-  const [i, setI] = createSignal(0);
-  const t = setInterval(() => setI((p) => (p + 1) % frames.length), ms);
-  onCleanup(() => clearInterval(t));
-  const frame = createMemo(() => frames[i()]);
-  return frame;
+function useSpinner(frames: string[], ms: number) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((p) => (p + 1) % frames.length), ms);
+    return () => clearInterval(t);
+  }, [frames, ms]);
+  return frames[i];
 }
 
-export function Spinner(props: { class?: string }) {
-  const frame = createSpinner(sandFrames, 80);
+export function Spinner({ className }: { className?: string }) {
+  const frame = useSpinner(sandFrames, 80);
 
   return (
     <span
-      class={
-        props.class ??
+      className={
+        className ??
         'flex items-center gap-2 font-mono text-base text-foreground sm:text-sm'
       }
     >
-      <span>{frame()}</span>
+      <span>{frame}</span>
     </span>
   );
 }

@@ -1,5 +1,5 @@
 ---
-description: Enforce clean simple architecture, kebab-case naming, and Astro + SolidJS stack
+description: Enforce clean simple architecture, kebab-case naming, and Astro + React stack
 alwaysApply: true
 ---
 
@@ -19,9 +19,9 @@ alwaysApply: true
 
 ## Framework And Language Constraints
 - Use Astro for app/page/layout structure.
-- Use SolidJS for interactive UI components.
-- Do not introduce React, Vue, Svelte, Angular, or other UI frameworks.
-- Do not add non-essential runtime libraries when Astro/SolidJS native patterns are enough.
+- Use React for interactive UI components.
+- Do not introduce SolidJS, Vue, Svelte, Angular, or other UI frameworks.
+- Do not add non-essential runtime libraries when Astro/React native patterns are enough.
 
 ## Examples
 - Good file names: `hero-section.astro`, `site-header.tsx`, `contact-form.tsx`, `theme-toggle.ts`.

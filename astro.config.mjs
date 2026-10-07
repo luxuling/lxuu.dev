@@ -1,8 +1,6 @@
 // @ts-check
 import { defineConfig, fontProviders, envField } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
-import solidJs from '@astrojs/solid-js';
-
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
 import mdx from '@astrojs/mdx';
@@ -30,8 +28,7 @@ export default defineConfig({
   ],
 
   integrations: [
-    solidJs({ include: ['src/**/*'] }),
-    react({ include: ['**/keystatic/**/*'] }),
+    react(),
     markdoc(),
     mdx(),
     // WORKERS_CI is set by Cloudflare Workers Builds; Keystatic can't bundle for workerd
