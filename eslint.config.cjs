@@ -1,6 +1,5 @@
 const js = require('@eslint/js');
 const eslintPluginAstro = require('eslint-plugin-astro');
-const eslintPluginSolid = require('eslint-plugin-solid');
 const tsParser = require('@typescript-eslint/parser');
 const globals = require('globals');
 
@@ -24,7 +23,6 @@ module.exports = [
   },
   {
     files: ['**/*.{tsx,jsx}'],
-    ...eslintPluginSolid.configs['flat/typescript'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {

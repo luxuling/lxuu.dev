@@ -1,4 +1,4 @@
-import { For, Show, createMemo, createSignal, onMount } from 'solid-js';
+import { useEffect, useState } from 'react';
 import { Spinner } from '@components/icons/spinner';
 import {
   type CommentItem,
@@ -28,36 +28,37 @@ function formatCount(n: number) {
   return n.toLocaleString();
 }
 
-export default function PostEngagement(props: PostEngagementProps) {
-  const base = createMemo(() => normalizeEngagementApiBase(props.apiBase));
+export default function PostEngagement({
+  postSlug,
+  apiBase,
+}: PostEngagementProps) {
+  const base = normalizeEngagementApiBase(apiBase);
 
-  const [stats, setStats] = createSignal<PostStats | null>(null);
-  const [session, setSession] = createSignal<SessionResponse>({
+  const [stats, setStats] = useState<PostStats | null>(null);
+  const [session, setSession] = useState<SessionResponse>({
     authenticated: false,
     user: null,
   });
-  const [liked, setLiked] = createSignal(false);
-  const [comments, setComments] = createSignal<CommentItem[]>([]);
-  const [commentsCursor, setCommentsCursor] = createSignal<string | null>(null);
-  const [loading, setLoading] = createSignal(true);
-  const [commentsLoading, setCommentsLoading] = createSignal(false);
-  const [error, setError] = createSignal<string | null>(null);
-  const [busyLike, setBusyLike] = createSignal(false);
-  const [busyComment, setBusyComment] = createSignal(false);
-  const [newBody, setNewBody] = createSignal('');
-  const [editingId, setEditingId] = createSignal<string | null>(null);
-  const [editDraft, setEditDraft] = createSignal('');
+  const [liked, setLiked] = useState(false);
+  const [comments, setComments] = useState<CommentItem[]>([]);
+  const [commentsCursor, setCommentsCursor] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [commentsLoading, setCommentsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [busyLike, setBusyLike] = useState(false);
+  const [busyComment, setBusyComment] = useState(false);
+  const [newBody, setNewBody] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState('');
 
-  const authed = () =>
-    session().authenticated === true && session().user !== null;
+  const user = session.authenticated ? session.user : null;
+  const authed = user !== null;
 
   async function refreshCore() {
-    const b = base();
-    const slug = props.postSlug;
     const [s, sess, lm] = await Promise.all([
-      getStats(b, slug),
-      getSession(b),
-      getLikeMe(b, slug).catch(() => ({ liked: false })),
+      getStats(base, postSlug),
+      getSession(base),
+      getLikeMe(base, postSlug).catch(() => ({ liked: false })),
     ]);
     setStats(s);
     setSession(sess);
@@ -65,12 +66,10 @@ export default function PostEngagement(props: PostEngagementProps) {
   }
 
   async function loadComments(reset: boolean) {
-    const b = base();
-    const slug = props.postSlug;
     setCommentsLoading(true);
     try {
-      const cursor = reset ? null : commentsCursor();
-      const page = await getCommentsPage(b, slug, cursor);
+      const cursor = reset ? null : commentsCursor;
+      const page = await getCommentsPage(base, postSlug, cursor);
       if (reset) {
         setComments(page.items);
       } else {
@@ -83,8 +82,7 @@ export default function PostEngagement(props: PostEngagementProps) {
   }
 
   async function refreshAll() {
-    const b = base();
-    if (!b) return;
+    if (!base) return;
     setError(null);
     setLoading(true);
     try {
@@ -96,15 +94,14 @@ export default function PostEngagement(props: PostEngagementProps) {
     }
   }
 
-  onMount(() => {
-    const b = base();
-    if (!b) {
+  useEffect(() => {
+    if (!base) {
       setLoading(false);
       return;
     }
-    void postView(b, props.postSlug);
+    void postView(base, postSlug);
     void refreshAll();
-  });
+  }, [base, postSlug]);
 
   function oauthRedirectUri() {
     if (typeof window === 'undefined') return '';
@@ -115,15 +112,14 @@ export default function PostEngagement(props: PostEngagementProps) {
   }
 
   async function onToggleLike() {
-    const b = base();
-    if (!b || !authed()) return;
+    if (!base || !authed) return;
     setBusyLike(true);
     setError(null);
     try {
-      if (liked()) {
-        await deleteLike(b, props.postSlug);
+      if (liked) {
+        await deleteLike(base, postSlug);
       } else {
-        await putLike(b, props.postSlug);
+        await putLike(base, postSlug);
       }
       await refreshCore();
     } catch (e) {
@@ -133,15 +129,13 @@ export default function PostEngagement(props: PostEngagementProps) {
     }
   }
 
-  async function onSubmitNew(e: Event) {
-    e.preventDefault();
-    const b = base();
-    const text = newBody().trim();
-    if (!b || !authed() || text.length === 0) return;
+  async function onSubmitNew() {
+    const text = newBody.trim();
+    if (!base || !authed || text.length === 0) return;
     setBusyComment(true);
     setError(null);
     try {
-      const created = await postComment(b, props.postSlug, text);
+      const created = await postComment(base, postSlug, text);
       setNewBody('');
       setComments((prev) => [created, ...prev]);
       await refreshCore();
@@ -153,13 +147,12 @@ export default function PostEngagement(props: PostEngagementProps) {
   }
 
   async function onSaveEdit(id: string) {
-    const b = base();
-    const text = editDraft().trim();
-    if (!b || text.length === 0) return;
+    const text = editDraft.trim();
+    if (!base || text.length === 0) return;
     setBusyComment(true);
     setError(null);
     try {
-      const updated = await patchComment(b, id, text);
+      const updated = await patchComment(base, id, text);
       setComments((prev) =>
         prev.map((c) => (c.id === id ? { ...updated, mine: true } : c)),
       );
@@ -174,12 +167,11 @@ export default function PostEngagement(props: PostEngagementProps) {
 
   async function onDelete(id: string) {
     if (!confirm('Delete this comment?')) return;
-    const b = base();
-    if (!b) return;
+    if (!base) return;
     setBusyComment(true);
     setError(null);
     try {
-      await deleteComment(b, id);
+      await deleteComment(base, id);
       setComments((prev) => prev.filter((c) => c.id !== id));
       await refreshCore();
     } catch (err) {
@@ -190,303 +182,306 @@ export default function PostEngagement(props: PostEngagementProps) {
   }
 
   async function onLogout() {
-    const b = base();
-    if (!b) return;
+    if (!base) return;
     setError(null);
     try {
-      await postLogout(b);
+      await postLogout(base);
       await refreshAll();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Logout failed.');
     }
   }
 
-  return (
-    <section
-      class='mt-10 rounded-md border border-edge bg-panel p-4 sm:p-6'
-      aria-label='Post engagement'
-    >
-      <Show
-        when={base()}
-        fallback={
-          <p class='text-xs text-subtle'>
-            Engagement is disabled. Set{' '}
-            <code class='rounded border border-edge bg-background px-1 py-0.5 text-[0.7rem]'>
-              PUBLIC_ENGAGEMENT_API_URL
-            </code>{' '}
-            to your API base URL.
-          </p>
-        }
-      >
-        <Show
-          when={!loading()}
-          fallback={
-            <div class='py-2'>
-              <div
-                class='h-1 w-full overflow-hidden rounded-full bg-background'
-                role='progressbar'
-                aria-label='Loading engagement'
-              >
-                <div class='h-full w-1/3 animate-indeterminate rounded-full bg-foreground' />
-              </div>
-            </div>
-          }
-        >
-          <Show when={error()}>
-            {(msg) => (
-              <p
-                class='mb-4 rounded-sm border border-edge bg-background px-3 py-2 font-mono text-xs text-muted-foreground'
-                role='alert'
-              >
-                {msg()}
-              </p>
-            )}
-          </Show>
+  function renderBody() {
+    if (!base) {
+      return (
+        <p className='text-xs text-subtle'>
+          Engagement is disabled. Set{' '}
+          <code className='rounded border border-edge bg-background px-1 py-0.5 text-[0.7rem]'>
+            PUBLIC_ENGAGEMENT_API_URL
+          </code>{' '}
+          to your API base URL.
+        </p>
+      );
+    }
 
-          <div class='mb-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-edge pb-4 font-mono text-xs text-subtle'>
-            <span title='Views'>
-              views{' '}
-              <span class='text-foreground'>
-                {formatCount(stats()?.view_count ?? 0)}
-              </span>
+    if (loading) {
+      return (
+        <div className='py-2'>
+          <div
+            className='h-1 w-full overflow-hidden rounded-full bg-background'
+            role='progressbar'
+            aria-label='Loading engagement'
+          >
+            <div className='h-full w-1/3 animate-indeterminate rounded-full bg-foreground' />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        {error && (
+          <p
+            className='mb-4 rounded-sm border border-edge bg-background px-3 py-2 font-mono text-xs text-muted-foreground'
+            role='alert'
+          >
+            {error}
+          </p>
+        )}
+
+        <div className='mb-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-edge pb-4 font-mono text-xs text-subtle'>
+          <span title='Views'>
+            views{' '}
+            <span className='text-foreground'>
+              {formatCount(stats?.view_count ?? 0)}
             </span>
-            <span title='Likes'>
-              likes{' '}
-              <span class='text-foreground'>
-                {formatCount(stats()?.like_count ?? 0)}
-              </span>
+          </span>
+          <span title='Likes'>
+            likes{' '}
+            <span className='text-foreground'>
+              {formatCount(stats?.like_count ?? 0)}
             </span>
-            <span title='Comments'>
-              comments{' '}
-              <span class='text-foreground'>
-                {formatCount(stats()?.comment_count ?? 0)}
-              </span>
+          </span>
+          <span title='Comments'>
+            comments{' '}
+            <span className='text-foreground'>
+              {formatCount(stats?.comment_count ?? 0)}
             </span>
+          </span>
+        </div>
+
+        <div className='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+          <div className='flex flex-wrap items-center gap-2'>
+            <button
+              type='button'
+              disabled={!authed || busyLike}
+              onClick={() => void onToggleLike()}
+              className={`rounded-sm border px-3 py-2 font-mono text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                liked
+                  ? 'border-foreground text-foreground'
+                  : 'border-edge text-subtle hover:border-muted hover:text-foreground'
+              }`}
+              aria-pressed={liked}
+              aria-label={liked ? 'Unlike post' : 'Like post'}
+            >
+              {liked ? '♥ liked' : '♡ like'}
+            </button>
+            {!authed && (
+              <span className='text-xs text-subtle'>sign in to like</span>
+            )}
           </div>
 
-          <div class='mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-            <div class='flex flex-wrap items-center gap-2'>
+          {user ? (
+            <div className='flex flex-wrap items-center gap-3'>
+              {user.avatar_url ? (
+                <img
+                  src={user.avatar_url}
+                  alt=''
+                  className='h-8 w-8 rounded-full border border-edge'
+                  width={32}
+                  height={32}
+                />
+              ) : null}
+              <span className='text-sm text-muted-foreground'>
+                {user.display_name}
+              </span>
               <button
                 type='button'
-                disabled={!authed() || busyLike()}
-                onClick={() => void onToggleLike()}
-                class='rounded-sm border px-3 py-2 font-mono text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40'
-                classList={{
-                  'border-foreground text-foreground': liked(),
-                  'border-edge text-subtle hover:border-muted hover:text-foreground':
-                    !liked(),
-                }}
-                aria-pressed={liked()}
-                aria-label={liked() ? 'Unlike post' : 'Like post'}
+                onClick={() => void onLogout()}
+                className='rounded-sm border border-edge px-2 py-1 font-mono text-xs text-subtle hover:text-foreground'
               >
-                {liked() ? '♥ liked' : '♡ like'}
+                log out
               </button>
-              <Show when={!authed()}>
-                <span class='text-xs text-subtle'>sign in to like</span>
-              </Show>
             </div>
-
-            <Show
-              when={authed() ? session().user : false}
-              fallback={
-                <button
-                  type='button'
-                  class='rounded-sm border border-edge px-3 py-2 font-mono text-xs text-foreground transition-colors hover:border-muted'
-                  onClick={() => {
-                    const u = buildLoginUrl(base(), oauthRedirectUri());
-                    window.location.href = u;
-                  }}
-                >
-                  sign in with GitHub
-                </button>
-              }
+          ) : (
+            <button
+              type='button'
+              className='rounded-sm border border-edge px-3 py-2 font-mono text-xs text-foreground transition-colors hover:border-muted'
+              onClick={() => {
+                window.location.href = buildLoginUrl(base, oauthRedirectUri());
+              }}
             >
-              {(u) => (
-                <div class='flex flex-wrap items-center gap-3'>
-                  {u.avatar_url ? (
-                    <img
-                      src={u.avatar_url}
-                      alt=''
-                      class='h-8 w-8 rounded-full border border-edge'
-                      width={32}
-                      height={32}
-                    />
-                  ) : null}
-                  <span class='text-sm text-muted-foreground'>
-                    {u.display_name}
-                  </span>
-                  <button
-                    type='button'
-                    onClick={() => void onLogout()}
-                    class='rounded-sm border border-edge px-2 py-1 font-mono text-xs text-subtle hover:text-foreground'
-                  >
-                    log out
-                  </button>
-                </div>
-              )}
-            </Show>
-          </div>
+              sign in with GitHub
+            </button>
+          )}
+        </div>
 
-          <h2 class='mb-3 font-mono text-xs uppercase tracking-widest text-subtle'>
-            [ comments ]
-          </h2>
+        <h2 className='mb-3 font-mono text-xs uppercase tracking-widest text-subtle'>
+          [ comments ]
+        </h2>
 
-          <Show when={authed()}>
-            <form onSubmit={onSubmitNew} class='mb-6 flex flex-col gap-2'>
-              <label class='font-mono text-xs text-subtle' for='new-comment'>
-                add a comment
-              </label>
-              <textarea
-                id='new-comment'
-                name='body'
-                rows={3}
-                value={newBody()}
-                onInput={(e) => setNewBody(e.currentTarget.value)}
-                placeholder='Plain text...'
-                class='w-full resize-y rounded-md border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-subtle focus:border-muted'
-                maxLength={4000}
-                disabled={busyComment()}
-              />
-              <div class='flex justify-end'>
-                <button
-                  type='submit'
-                  disabled={busyComment() || newBody().trim().length === 0}
-                  class='rounded-sm border border-edge px-3 py-2 font-mono text-xs text-foreground transition-colors hover:border-muted disabled:cursor-not-allowed disabled:opacity-40'
-                >
-                  post
-                </button>
-              </div>
-            </form>
-          </Show>
+        {authed ? (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void onSubmitNew();
+            }}
+            className='mb-6 flex flex-col gap-2'
+          >
+            <label
+              className='font-mono text-xs text-subtle'
+              htmlFor='new-comment'
+            >
+              add a comment
+            </label>
+            <textarea
+              id='new-comment'
+              name='body'
+              rows={3}
+              value={newBody}
+              onChange={(e) => setNewBody(e.currentTarget.value)}
+              placeholder='Plain text...'
+              className='w-full resize-y rounded-md border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-subtle focus:border-muted'
+              maxLength={4000}
+              disabled={busyComment}
+            />
+            <div className='flex justify-end'>
+              <button
+                type='submit'
+                disabled={busyComment || newBody.trim().length === 0}
+                className='rounded-sm border border-edge px-3 py-2 font-mono text-xs text-foreground transition-colors hover:border-muted disabled:cursor-not-allowed disabled:opacity-40'
+              >
+                post
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p className='mb-6 text-xs text-subtle'>
+            Sign in with GitHub to comment.
+          </p>
+        )}
 
-          <Show when={!authed()}>
-            <p class='mb-6 text-xs text-subtle'>
-              Sign in with GitHub to comment.
-            </p>
-          </Show>
-
-          <ul class='flex flex-col gap-4'>
-            <For each={comments()}>
-              {(c) => (
-                <li class='rounded-md border border-edge bg-background/40 px-3 py-3 sm:px-4'>
-                  <div class='mb-2 flex flex-wrap items-center justify-between gap-2'>
-                    <div class='flex items-center gap-2'>
-                      {c.author.avatar_url ? (
-                        <img
-                          src={c.author.avatar_url}
-                          alt=''
-                          class='h-6 w-6 rounded-full border border-edge'
-                          width={24}
-                          height={24}
-                        />
-                      ) : null}
-                      <span class='text-xs font-medium text-foreground'>
-                        {c.author.display_name}
+        <ul className='flex flex-col gap-4'>
+          {comments.map((c) => {
+            const editing = editingId === c.id;
+            return (
+              <li
+                key={c.id}
+                className='rounded-md border border-edge bg-background/40 px-3 py-3 sm:px-4'
+              >
+                <div className='mb-2 flex flex-wrap items-center justify-between gap-2'>
+                  <div className='flex items-center gap-2'>
+                    {c.author.avatar_url ? (
+                      <img
+                        src={c.author.avatar_url}
+                        alt=''
+                        className='h-6 w-6 rounded-full border border-edge'
+                        width={24}
+                        height={24}
+                      />
+                    ) : null}
+                    <span className='text-xs font-medium text-foreground'>
+                      {c.author.display_name}
+                    </span>
+                    <span className='font-mono text-[0.65rem] text-subtle'>
+                      {new Date(c.created_at).toLocaleString()}
+                    </span>
+                    {c.edited_at && (
+                      <span className='font-mono text-[0.65rem] text-subtle'>
+                        (edited)
                       </span>
-                      <span class='font-mono text-[0.65rem] text-subtle'>
-                        {new Date(c.created_at).toLocaleString()}
-                      </span>
-                      <Show when={c.edited_at}>
-                        <span class='font-mono text-[0.65rem] text-subtle'>
-                          (edited)
-                        </span>
-                      </Show>
-                    </div>
-                    <Show when={c.mine}>
-                      <div class='flex gap-2'>
-                        <Show
-                          when={editingId() === c.id}
-                          fallback={
-                            <>
-                              <button
-                                type='button'
-                                class='font-mono text-[0.65rem] text-subtle hover:text-foreground'
-                                onClick={() => {
-                                  setEditingId(c.id);
-                                  setEditDraft(c.body);
-                                }}
-                              >
-                                edit
-                              </button>
-                              <button
-                                type='button'
-                                class='font-mono text-[0.65rem] text-subtle hover:text-foreground'
-                                onClick={() => void onDelete(c.id)}
-                              >
-                                delete
-                              </button>
-                            </>
-                          }
-                        >
+                    )}
+                  </div>
+                  {c.mine && (
+                    <div className='flex gap-2'>
+                      {editing ? (
+                        <>
                           <button
                             type='button'
-                            class='font-mono text-[0.65rem] text-subtle hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40'
+                            className='font-mono text-[0.65rem] text-subtle hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40'
                             onClick={() => {
                               setEditingId(null);
                               setEditDraft('');
                             }}
-                            disabled={busyComment()}
+                            disabled={busyComment}
                           >
                             cancel
                           </button>
                           <button
                             type='button'
-                            class='font-mono text-[0.65rem] text-foreground hover:underline disabled:cursor-not-allowed disabled:opacity-40'
+                            className='font-mono text-[0.65rem] text-foreground hover:underline disabled:cursor-not-allowed disabled:opacity-40'
                             onClick={() => void onSaveEdit(c.id)}
                             disabled={
-                              busyComment() || editDraft().trim().length === 0
+                              busyComment || editDraft.trim().length === 0
                             }
                           >
-                            {busyComment() ? (
-                              <Spinner class='font-mono text-[0.65rem] text-foreground' />
+                            {busyComment ? (
+                              <Spinner className='font-mono text-[0.65rem] text-foreground' />
                             ) : (
                               'save'
                             )}
                           </button>
-                        </Show>
-                      </div>
-                    </Show>
-                  </div>
-                  <Show
-                    when={editingId() === c.id}
-                    fallback={
-                      <p class='whitespace-pre-wrap text-xs text-muted-foreground'>
-                        {c.body}
-                      </p>
-                    }
-                  >
-                    <textarea
-                      rows={3}
-                      value={editDraft()}
-                      onInput={(e) => setEditDraft(e.currentTarget.value)}
-                      class='w-full resize-y rounded-md border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-muted'
-                      maxLength={4000}
-                      disabled={busyComment()}
-                    />
-                  </Show>
-                </li>
-              )}
-            </For>
-          </ul>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            type='button'
+                            className='font-mono text-[0.65rem] text-subtle hover:text-foreground'
+                            onClick={() => {
+                              setEditingId(c.id);
+                              setEditDraft(c.body);
+                            }}
+                          >
+                            edit
+                          </button>
+                          <button
+                            type='button'
+                            className='font-mono text-[0.65rem] text-subtle hover:text-foreground'
+                            onClick={() => void onDelete(c.id)}
+                          >
+                            delete
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+                {editing ? (
+                  <textarea
+                    rows={3}
+                    value={editDraft}
+                    onChange={(e) => setEditDraft(e.currentTarget.value)}
+                    className='w-full resize-y rounded-md border border-edge bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-muted'
+                    maxLength={4000}
+                    disabled={busyComment}
+                  />
+                ) : (
+                  <p className='whitespace-pre-wrap text-xs text-muted-foreground'>
+                    {c.body}
+                  </p>
+                )}
+              </li>
+            );
+          })}
+        </ul>
 
-          <Show when={comments().length === 0 && !commentsLoading()}>
-            <p class='mt-2 text-xs text-subtle'>no comments yet.</p>
-          </Show>
+        {comments.length === 0 && !commentsLoading && (
+          <p className='mt-2 text-xs text-subtle'>no comments yet.</p>
+        )}
 
-          <Show when={commentsCursor()}>
-            <div class='mt-4 flex justify-center'>
-              <button
-                type='button'
-                disabled={commentsLoading()}
-                onClick={() => void loadComments(false)}
-                class='rounded-sm border border-edge px-4 py-2 font-mono text-xs text-subtle hover:text-foreground disabled:opacity-50'
-              >
-                {commentsLoading() ? <Spinner /> : 'load more'}
-              </button>
-            </div>
-          </Show>
-        </Show>
-      </Show>
+        {commentsCursor && (
+          <div className='mt-4 flex justify-center'>
+            <button
+              type='button'
+              disabled={commentsLoading}
+              onClick={() => void loadComments(false)}
+              className='rounded-sm border border-edge px-4 py-2 font-mono text-xs text-subtle hover:text-foreground disabled:opacity-50'
+            >
+              {commentsLoading ? <Spinner /> : 'load more'}
+            </button>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <section
+      className='mt-10 rounded-md border border-edge bg-panel p-4 sm:p-6'
+      aria-label='Post engagement'
+    >
+      {renderBody()}
     </section>
   );
 }

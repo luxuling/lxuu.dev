@@ -21,7 +21,6 @@
     "@astrojs/markdoc": "^1.0.6",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/react": "^5.0.7",
-    "@astrojs/solid-js": "^6.0.1",
     "@keystatic/astro": "^5.2.0",
     "@keystatic/core": "^0.6.4",
     "@neondatabase/serverless": "^1.1.0",
@@ -34,7 +33,6 @@
     "drizzle-orm": "1.0.0-rc.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "solid-js": "^1.9.12",
     "tailwindcss": "^4.2.2",
     "wrangler": "^4.147.0"
   },
@@ -46,7 +44,6 @@
     "drizzle-kit": "1.0.0-rc.4",
     "eslint": "^10.2.1",
     "eslint-plugin-astro": "^1.7.0",
-    "eslint-plugin-solid": "^0.14.5",
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "install": "^0.13.0",

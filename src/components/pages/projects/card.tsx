@@ -1,4 +1,4 @@
-import { For, Show, createSignal, onMount } from 'solid-js';
+import { useEffect, useState } from 'react';
 import {
   getProjectStats,
   type ProjectStats,
@@ -49,102 +49,100 @@ const MONTHS = [
 export function formatDisplayDate(dateStr: string) {
   const d = new Date(`${dateStr}-01`);
   if (isNaN(d.getTime())) return dateStr;
-  return `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
 
-function ProjectStatus(props: { status: ProjectListItem['status'] }) {
+function ProjectStatus({ status }: { status: ProjectListItem['status'] }) {
   return (
-    <span class={`font-mono text-xs ${STATUS_COLOR[props.status]}`}>
-      {STATUS_LABEL[props.status]}
+    <span className={`font-mono text-xs ${STATUS_COLOR[status]}`}>
+      {STATUS_LABEL[status]}
     </span>
   );
 }
 
-function ProjectMeta(props: {
+function ProjectMeta({
+  date,
+  status,
+  stats,
+}: {
   date: string;
   status: ProjectListItem['status'];
   stats: ProjectStats | null;
 }) {
   return (
-    <div class='flex shrink-0 flex-wrap items-center gap-2 sm:gap-3 font-mono text-xs'>
-      <span class='text-subtle'>{formatDisplayDate(props.date)}</span>
-      <ProjectStatus status={props.status} />
-      <span class='text-subtle'>·</span>
-      <span class='text-subtle' title='Likes'>
-        <span class='text-foreground'>{props.stats?.like_count ?? 0}</span>{' '}
-        likes
+    <div className='flex shrink-0 flex-wrap items-center gap-2 sm:gap-3 font-mono text-xs'>
+      <span className='text-subtle'>{formatDisplayDate(date)}</span>
+      <ProjectStatus status={status} />
+      <span className='text-subtle'>·</span>
+      <span className='text-subtle' title='Likes'>
+        <span className='text-foreground'>{stats?.like_count ?? 0}</span> likes
       </span>
-      <span class='text-subtle'>·</span>
-      <span class='text-subtle' title='Comments'>
-        <span class='text-foreground'>{props.stats?.comment_count ?? 0}</span>{' '}
+      <span className='text-subtle'>·</span>
+      <span className='text-subtle' title='Comments'>
+        <span className='text-foreground'>{stats?.comment_count ?? 0}</span>{' '}
         comments
       </span>
-      <span class='text-subtle'>·</span>
-      <span class='text-subtle' title='Views'>
-        <span class='text-foreground'>{props.stats?.view_count ?? 0}</span>{' '}
-        views
+      <span className='text-subtle'>·</span>
+      <span className='text-subtle' title='Views'>
+        <span className='text-foreground'>{stats?.view_count ?? 0}</span> views
       </span>
     </div>
   );
 }
 
-export default function ProjectCard(props: { project: ProjectListItem }) {
-  const p = () => props.project;
-  const [stats, setStats] = createSignal<ProjectStats | null>(null);
+export default function ProjectCard({
+  project: p,
+}: {
+  project: ProjectListItem;
+}) {
+  const [stats, setStats] = useState<ProjectStats | null>(null);
 
-  onMount(() => {
-    void getProjectStats('/api', p().slug)
+  useEffect(() => {
+    void getProjectStats('/api', p.slug)
       .then(setStats)
       .catch(() => undefined);
-  });
+  }, [p.slug]);
 
   return (
     <a
-      href={`/projects/${p().slug}`}
-      class='group block rounded-md border border-edge bg-panel p-4 transition-colors hover:border-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:p-6'
+      href={`/projects/${p.slug}`}
+      className='group block rounded-md border border-edge bg-panel p-4 transition-colors hover:border-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:p-6'
     >
-      <div class='flex flex-col gap-3'>
-        <div class='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4'>
-          <h2 class='text-sm font-semibold text-foreground underline-offset-4 group-hover:underline'>
-            {p().title}
+      <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4'>
+          <h2 className='text-sm font-semibold text-foreground underline-offset-4 group-hover:underline'>
+            {p.title}
           </h2>
-          <ProjectMeta date={p().date} status={p().status} stats={stats()} />
+          <ProjectMeta date={p.date} status={p.status} stats={stats} />
         </div>
 
-        <p class='text-sm leading-relaxed text-muted-foreground'>
-          {p().description}
+        <p className='text-sm leading-relaxed text-muted-foreground'>
+          {p.description}
         </p>
 
-        <div class='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-          <div class='flex flex-wrap gap-1.5'>
-            <For each={p().tags}>
-              {(tag) => (
-                <span class='rounded-sm border border-edge px-2 py-0.5 font-mono text-xs text-subtle'>
-                  {tag}
-                </span>
-              )}
-            </For>
+        <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+          <div className='flex flex-wrap gap-1.5'>
+            {p.tags.map((tag) => (
+              <span
+                key={tag}
+                className='rounded-sm border border-edge px-2 py-0.5 font-mono text-xs text-subtle'
+              >
+                {tag}
+              </span>
+            ))}
           </div>
 
-          {(p().links?.github || p().links?.live) && (
-            <div class='flex items-center gap-3 font-mono text-xs text-foreground'>
-              {p().links?.live && <span>live</span>}
-              {p().links?.github && (
+          {(p.links?.github || p.links?.live) && (
+            <div className='flex items-center gap-3 font-mono text-xs text-foreground'>
+              {p.links?.live && <span>live</span>}
+              {p.links?.github && (
                 <>
-                  <span class='inline-flex items-center gap-1'>src</span>
-                  <Show
-                    when={
-                      typeof p().githubStars === 'number'
-                        ? { n: p().githubStars }
-                        : false
-                    }
-                  >
-                    {(o) => (
-                      <span aria-label='GitHub stars'>
-                        {o ? o()?.n?.toLocaleString() : '-'}
-                      </span>
-                    )}
-                  </Show>
+                  <span className='inline-flex items-center gap-1'>src</span>
+                  {typeof p.githubStars === 'number' && (
+                    <span aria-label='GitHub stars'>
+                      {p.githubStars.toLocaleString('en-US')}
+                    </span>
+                  )}
                 </>
               )}
             </div>

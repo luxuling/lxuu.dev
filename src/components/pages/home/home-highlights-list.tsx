@@ -1,4 +1,3 @@
-import { For, Show } from 'solid-js';
 import ProjectCard, { type ProjectListItem } from '../projects/card';
 import PostCard, { type PostListItem } from '../posts/card';
 
@@ -10,26 +9,30 @@ interface Props {
 const SECTION_LABEL_CLASS =
   'px-1 font-mono text-xs uppercase tracking-widest text-subtle';
 
-export default function HomeHighlightsList(props: Props) {
-  const hasProjects = () => props.projects.length > 0;
-  const hasPosts = () => props.posts.length > 0;
+export default function HomeHighlightsList({ projects, posts }: Props) {
+  const hasProjects = projects.length > 0;
+  const hasPosts = posts.length > 0;
 
   return (
-    <div class='flex flex-col gap-6'>
-      <Show when={hasProjects()}>
-        <span class={SECTION_LABEL_CLASS}>[ highlighted projects ]</span>
-        <For each={props.projects}>
-          {(project) => <ProjectCard project={project} />}
-        </For>
-      </Show>
+    <div className='flex flex-col gap-6'>
+      {hasProjects && (
+        <>
+          <span className={SECTION_LABEL_CLASS}>[ highlighted projects ]</span>
+          {projects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </>
+      )}
 
-      <Show when={hasPosts()}>
-        <Show when={hasProjects()}>
-          <div class='h-2' />
-        </Show>
-        <span class={SECTION_LABEL_CLASS}>[ highlighted posts ]</span>
-        <For each={props.posts}>{(post) => <PostCard post={post} />}</For>
-      </Show>
+      {hasPosts && (
+        <>
+          {hasProjects && <div className='h-2' />}
+          <span className={SECTION_LABEL_CLASS}>[ highlighted posts ]</span>
+          {posts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </>
+      )}
     </div>
   );
 }
