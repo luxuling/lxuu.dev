@@ -8,10 +8,13 @@ import keystatic from '@keystatic/astro';
 
 import cloudflare from '@astrojs/cloudflare';
 
-// Prerender runs in workerd, which only reads vars from .env/.dev.vars. On
-// Cloudflare Workers Builds there is no .env, so pass the build variables in.
+// NOTE: prerender runs in workerd, which reads vars only from .env files, and Workers Builds has none
 if (process.env.WORKERS_CI)
   process.env.CLOUDFLARE_INCLUDE_PROCESS_ENV ??= 'true';
+
+// NOTE: Keystatic needs Node's filesystem, so the dev server skips the workerd adapter to run it
+const useKeystatic =
+  process.argv.includes('dev') && !process.env.SKIP_KEYSTATIC;
 
 // https://astro.build/config
 export default defineConfig({
@@ -31,10 +34,7 @@ export default defineConfig({
     react(),
     markdoc(),
     mdx(),
-    // WORKERS_CI is set by Cloudflare Workers Builds; Keystatic can't bundle for workerd
-    ...(process.env.SKIP_KEYSTATIC || process.env.WORKERS_CI
-      ? []
-      : [keystatic()]),
+    ...(useKeystatic ? [keystatic()] : []),
   ],
 
   env: {
@@ -72,5 +72,5 @@ export default defineConfig({
     },
   },
 
-  adapter: cloudflare(),
+  adapter: useKeystatic ? undefined : cloudflare(),
 });

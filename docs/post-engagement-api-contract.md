@@ -332,7 +332,7 @@ Server-side authorization code flow via Arctic. Only GitHub is supported.
 
 5. **`302`** redirect to `return_to` from `oauth_return` cookie or `/`.
 
-**Error:** `400` JSON `{ "error": "..." }`.
+**Error:** `400` with the standard error envelope.
 
 ---
 

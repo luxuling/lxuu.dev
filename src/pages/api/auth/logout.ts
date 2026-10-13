@@ -1,14 +1,13 @@
-export const prerender = false;
 import type { APIRoute } from 'astro';
-import { invalidateSession, makeExpiredSessionCookie } from '@lib/auth/session';
-import { SESSION_SECRET } from '@lib/env';
+import {
+  invalidateSession,
+  makeExpiredSessionCookie,
+} from '@/services/session';
+
+export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  await invalidateSession(
-    locals.db,
-    request.headers.get('cookie'),
-    SESSION_SECRET ?? '',
-  );
+  await invalidateSession(locals, request);
 
   return new Response(null, {
     status: 204,

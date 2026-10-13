@@ -1,17 +1,6 @@
 @import 'tailwindcss';
 
 @theme {
-  --animate-indeterminate: indeterminate 1.4s ease-in-out infinite;
-
-  @keyframes indeterminate {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(300%);
-    }
-  }
-
   --color-foreground: #f9f8f8;
   --color-background: #0b0b0d;
   --color-panel: #111115;
@@ -20,6 +9,9 @@
   --color-border: #2a2a31;
   --color-edge: #2f2f37;
   --color-subtle: #8c8c94;
+  /* Prompt green and failure red of the owner's Catppuccin Macchiato terminal */
+  --color-prompt: #a6da95;
+  --color-failure: #ed8796;
   /* Contribution heatmap: same palette as the app (neutral ramp from panel → foreground) */
   /* Empty days: pull toward border so cells read on bg-panel/30; still below contrib-1 */
   --color-contrib-0: color-mix(
@@ -55,6 +47,25 @@ body {
   color: var(--color-foreground);
 }
 
+@layer components {
+  .image-loading {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    container-type: inline-size;
+    background: var(--color-panel);
+  }
+
+  /* Holds room until the image reports its own height */
+  .image-loading:not(.is-loaded) {
+    aspect-ratio: 16 / 9;
+  }
+
+  .image-loading > img {
+    position: relative;
+  }
+}
+
 .image-loading-placeholder {
   position: absolute;
   inset: 0;
@@ -62,11 +73,12 @@ body {
   place-items: center;
   color: var(--color-subtle);
   font-family: var(--font-maple-mono), monospace;
-  font-size: 0.875rem;
+  font-size: clamp(0.3rem, 18cqi, 0.875rem);
 }
 
 .image-loading-placeholder::after {
   content: '[   ]';
+  white-space: pre;
   animation: image-loading-frames 1s steps(1, end) infinite;
 }
 
@@ -86,6 +98,13 @@ body {
   }
   75% {
     content: '[...]';
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-loading-placeholder::after {
+    content: '[...]';
+    animation: none;
   }
 }
 
@@ -170,14 +189,16 @@ body {
   text-underline-offset: 4px;
 }
 
-.prose-project img {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
+.prose-project .image-loading {
   border: 1px solid var(--color-edge);
   border-radius: 0.375rem;
   margin: 1rem 0;
+}
+
+.prose-project img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .prose-project ul,

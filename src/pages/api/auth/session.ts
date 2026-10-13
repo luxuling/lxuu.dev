@@ -1,23 +1,13 @@
-export const prerender = false;
 import type { APIRoute } from 'astro';
-import { getSessionUser } from '@lib/auth/session';
-import { SESSION_SECRET } from '@lib/env';
+import { getSessionUser, serializeUser } from '@/services/session';
+
+export const prerender = false;
 
 export const GET: APIRoute = async ({ request, locals }) => {
-  const user = await getSessionUser(
-    locals.db,
-    request.headers.get('cookie'),
-    SESSION_SECRET ?? '',
-  );
+  const user = await getSessionUser(locals, request);
 
   return Response.json({
-    authenticated: !!user,
-    user: user
-      ? {
-          id: user.id,
-          display_name: user.displayName,
-          avatar_url: user.avatarUrl,
-        }
-      : null,
+    authenticated: user !== null,
+    user: user && serializeUser(user),
   });
 };
