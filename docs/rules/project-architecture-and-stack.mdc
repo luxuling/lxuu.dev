@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Architecture
 - Keep architecture simple and clean with clear separation of concerns.
-- Organize by feature and keep modules small, focused, and reusable.
+- Organize by layer (`components/`, `hooks/`, `services/`, `utils/`, `types/`) and keep modules small, focused, and reusable.
 - Prefer composition over deep inheritance and avoid unnecessary abstraction.
 - Keep UI, state/business logic, and data/integration concerns separated.
 - Refactor when complexity grows; do not add patterns unless they solve a real problem.

@@ -1,0 +1,121 @@
+---
+import BaseCard from '@/components/base-card.astro';
+import Container from '@/components/container.astro';
+import Link from '@/components/link.astro';
+import me from '@/data/me.json';
+
+const data = me;
+---
+
+<section class='py-8 sm:py-12'>
+  <Container class='flex flex-col gap-6'>
+    <div class='px-1'>
+      <h1 class='text-xl font-semibold tracking-tight text-foreground'>
+        me<span class='text-muted-foreground'>.</span>
+      </h1>
+      <p class='mt-1 text-sm text-subtle'>{data.tagline}</p>
+    </div>
+
+    <BaseCard title='[ summary ]'>
+      <div class='flex flex-col gap-5'>
+        <div class='flex flex-col gap-3 text-sm/relaxed text-muted-foreground'>
+          {data.summaryParagraphs.map((p) => <p>{p}</p>)}
+        </div>
+
+        <blockquote
+          class='border-l-2 border-edge pl-4 text-sm text-subtle italic'
+        >
+          <p>&ldquo;{data.quote.body}&rdquo;</p>
+          <footer class='mt-2 text-muted not-italic'>
+            {data.quote.attribution}{' '}
+            <cite>{data.quote.citation}</cite>
+          </footer>
+        </blockquote>
+      </div>
+    </BaseCard>
+
+    <BaseCard title='[ now ]'>
+      <ul class='flex flex-col gap-3'>
+        {
+          data.nowItems.map((item) => {
+            const outer =
+              item.tone === 'subtle' ? 'text-subtle' : 'text-muted-foreground';
+            const marker =
+              item.tone === 'subtle' ? 'text-subtle' : 'text-foreground';
+            return (
+              <li class='flex items-center gap-3 text-sm'>
+                <span class:list={['shrink-0', 'font-mono', marker]}>[o]</span>
+                <span class={outer}>
+                  {item.segments.map((seg) => {
+                    if (seg.href) {
+                      return (
+                        <Link href={seg.href} target='_blank'>
+                          {seg.text}
+                        </Link>
+                      );
+                    }
+                    if (seg.emphasis) {
+                      return <span class='text-foreground'>{seg.text}</span>;
+                    }
+                    return seg.text;
+                  })}
+                </span>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </BaseCard>
+
+    <BaseCard title='[ experiences ]'>
+      <div class='flex flex-col space-y-6 divide-y divide-edge'>
+        {
+          data.experiences.map((exp) => (
+            <div class='flex flex-col gap-3 pb-6'>
+              <div class='flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between'>
+                <div class='flex items-center gap-2'>
+                  <span
+                    class:list={[
+                      'font-mono',
+                      'text-sm',
+                      exp.period.includes('present')
+                        ? 'text-foreground'
+                        : 'text-subtle',
+                    ]}
+                  >
+                    [o]
+                  </span>
+                  <span class='text-sm font-medium text-foreground'>
+                    {exp.role}
+                  </span>
+                  <Link href={exp.companyUrl} target='_blank'>
+                    <span class='text-sm text-subtle'>@</span>
+                    <span class='text-sm text-foreground'>{exp.company}</span>
+                  </Link>
+                </div>
+                <span class='ml-5 font-mono text-sm text-subtle sm:ml-0'>
+                  {exp.period}
+                </span>
+              </div>
+              <ul class='ml-5 flex flex-col gap-1.5'>
+                {exp.bullets.map((b) => (
+                  <li class='flex items-start gap-2 text-sm text-muted-foreground'>
+                    <span class='mt-1.5 size-1 shrink-0 rounded-full bg-subtle' />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <div class='ml-5 flex flex-wrap gap-2'>
+                {exp.tags.map((tag) => (
+                  <span class='rounded-sm border border-edge px-2 py-0.5 font-mono text-xs text-subtle'>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </BaseCard>
+  </Container>
+</section>

@@ -1,15 +1,16 @@
 ---
-import '@styles/global.css';
+import '@/styles/global.css';
 import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
-import Navbar from '@components/layout/navbar.astro';
-import Footer from '@components/layout/footer.astro';
+import Navbar from '@/components/navbar.astro';
+import Footer from '@/components/footer.astro';
+import { Toaster } from '@/components/toaster';
 
 interface Props {
   pageTitle?: string;
 }
 
-const { pageTitle } = Astro.props as Props;
+const { pageTitle } = Astro.props;
 ---
 
 <!doctype html>
@@ -33,5 +34,6 @@ const { pageTitle } = Astro.props as Props;
       </section>
     </main>
     <Footer />
+    <Toaster client:idle transition:persist />
   </body>
 </html>

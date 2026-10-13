@@ -10,7 +10,12 @@ module.exports = [
   js.configs.recommended,
   ...eslintPluginAstro.configs['flat/recommended'],
   {
-    files: ['astro.config.mjs', 'drizzle.config.ts', 'keystatic.config.ts'],
+    files: [
+      'astro.config.mjs',
+      'drizzle.config.ts',
+      'keystatic.config.ts',
+      'vitest.config.ts',
+    ],
     languageOptions: {
       parser: tsParser,
       parserOptions: {

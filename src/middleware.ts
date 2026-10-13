@@ -1,24 +1,34 @@
+import { DATABASE_URL, SESSION_SECRET } from 'astro:env/server';
 import { defineMiddleware } from 'astro:middleware';
-import { createDb } from '@lib/db/client';
-import { DATABASE_URL } from '@lib/env';
+import { createDb } from '@/db/client';
+import { ServiceUnavailableError, toErrorResponse } from '@/utils/http-error';
 
-export const onRequest = defineMiddleware((context, next) => {
+const provideApiLocals = (locals: App.Locals) => {
   if (!DATABASE_URL) {
-    if (new URL(context.request.url).pathname.startsWith('/api/')) {
-      return Response.json(
-        {
-          error: {
-            code: 'DATABASE_UNAVAILABLE',
-            message: 'Database is not configured for this deployment.',
-          },
-        },
-        { status: 503 },
-      );
-    }
-
-    return next();
+    throw new ServiceUnavailableError(
+      'DATABASE_UNAVAILABLE',
+      'Database is not configured for this deployment.',
+    );
+  }
+  if (!SESSION_SECRET) {
+    throw new ServiceUnavailableError(
+      'SESSION_UNAVAILABLE',
+      'Session secret is not configured for this deployment.',
+    );
   }
 
-  context.locals.db = createDb(DATABASE_URL);
-  return next();
+  locals.db = createDb(DATABASE_URL);
+  locals.sessionSecret = SESSION_SECRET;
+};
+
+export const onRequest = defineMiddleware(async (context, next) => {
+  if (!context.url.pathname.startsWith('/api/')) return next();
+
+  try {
+    provideApiLocals(context.locals);
+
+    return await next();
+  } catch (error) {
+    return toErrorResponse(error);
+  }
 });

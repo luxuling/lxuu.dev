@@ -37,6 +37,17 @@ This project uses the following development rules:
    - **Keystatic CMS** (local storage mode) — content lives in `content/posts/*.mdx` and `content/projects/*.mdx`; admin UI at `/keystatic`
    - **Astro Content Collections** (`src/content.config.ts`) with `glob` loader reading MDX files
    - **Neon PostgreSQL** via `@neondatabase/serverless` HTTP driver (required for Vercel serverless)
-   - **Drizzle ORM** — schema at `src/lib/db/schema.ts`, migrations at `src/lib/db/migrations/`
+   - **Drizzle ORM** — schema at `src/db/schema.ts`, migrations at `src/db/migrations/`
    - **Arctic** for GitHub OAuth (server-side auth code flow, httpOnly session cookies)
-   - Engagement API routes at `src/pages/api/` (same-origin, no external service)
+   - Engagement API routes at `src/pages/api/` (same-origin, no external service); posts and projects share `src/pages/api/[target]/[slug]/`
+   - **Vitest** for tests — `pnpm test`, files in `tests/` mirroring `src/`
+
+8. Source layout (by layer, not by feature):
+   - `src/components/` — Astro and React components; they only render
+   - `src/hooks/` — React state, effects, and data fetching
+   - `src/services/` — API calls, Zod parsing, database and business logic
+   - `src/utils/` — pure helpers
+   - `src/types/` — shared types
+   - `src/db/` — Drizzle client and schema
+   - Import with the `@/` alias, for example `@/services/github`
+9. Notify with `showToast()` from `@/utils/toast` and confirm destructive actions with `ConfirmDialog`; do not use `alert()` or `confirm()`
