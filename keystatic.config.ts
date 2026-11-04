@@ -1,4 +1,5 @@
 import { config, collection, fields } from '@keystatic/core';
+import { contentImageOptions } from './src/utils/content-images';
 
 export default config({
   storage: { kind: 'local' },
@@ -32,7 +33,10 @@ export default config({
           defaultValue: false,
         }),
         thumbnail: fields.url({ label: 'Thumbnail URL' }),
-        content: fields.mdx({ label: 'Content' }),
+        content: fields.mdx({
+          label: 'Content',
+          options: { image: contentImageOptions('posts') },
+        }),
       },
     }),
     projects: collection({
@@ -69,7 +73,10 @@ export default config({
           github: fields.url({ label: 'GitHub URL' }),
           live: fields.url({ label: 'Live URL' }),
         }),
-        content: fields.mdx({ label: 'Content' }),
+        content: fields.mdx({
+          label: 'Content',
+          options: { image: contentImageOptions('projects') },
+        }),
       },
     }),
   },

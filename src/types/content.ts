@@ -8,7 +8,6 @@ export interface PostListItem {
   description: string;
   tags: string[];
   dateLabel: string;
-  highlight: boolean;
 }
 
 export interface ProjectListItem extends PostListItem {

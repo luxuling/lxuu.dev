@@ -2,9 +2,10 @@
 import { getEntry, render } from 'astro:content';
 import { z } from 'astro/zod';
 import Container from '@/components/container.astro';
+import ContentLink from '@/components/content-link.astro';
 import { Engagement } from '@/components/engagement';
 import Link from '@/components/link.astro';
-import LoadingImage from '@/components/loading-image.astro';
+import ZoomImage from '@/components/zoom-image.astro';
 import { TableOfContents } from '@/components/table-of-contents';
 import { TagList } from '@/components/tag-list';
 import Layout from '@/layouts/layout.astro';
@@ -61,7 +62,7 @@ const githubStars = links?.github
 
       {
         thumbnail && (
-          <LoadingImage
+          <ZoomImage
             src={thumbnail}
             alt={`${title} thumbnail`}
             frameClass='aspect-video w-full max-w-4xl rounded-md border border-edge'
@@ -99,7 +100,7 @@ const githubStars = links?.github
       <div class='flex gap-12'>
         <div class='min-w-0 flex-1'>
           <div class='prose-project'>
-            <Content components={{ img: LoadingImage }} />
+            <Content components={{ a: ContentLink, img: ZoomImage }} />
           </div>
 
           <Engagement client:load target='projects' slug={entry.id} />

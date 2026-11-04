@@ -15,7 +15,6 @@ export const toPostListItem = (entry: PostEntry): PostListItem => ({
   description: entry.data.description,
   tags: entry.data.tags,
   dateLabel: formatMonthYear(entry.data.date),
-  highlight: entry.data.highlight,
 });
 
 export const toProjectListItem = (entry: ProjectEntry): ProjectListItem => ({
@@ -24,7 +23,6 @@ export const toProjectListItem = (entry: ProjectEntry): ProjectListItem => ({
   description: entry.data.description,
   tags: entry.data.tags,
   dateLabel: formatMonthYear(entry.data.date),
-  highlight: entry.data.highlight,
   status: entry.data.status,
   hasLiveLink: Boolean(entry.data.links?.live),
   hasGithubLink: Boolean(entry.data.links?.github),
