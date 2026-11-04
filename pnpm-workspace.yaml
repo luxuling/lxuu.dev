@@ -5,3 +5,6 @@ allowBuilds:
   esbuild: false
   sharp: false
   workerd: true
+
+overrides:
+  vite: ^7
