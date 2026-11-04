@@ -37,7 +37,6 @@ describe('toPostListItem', () => {
       description: 'Description',
       tags: ['astro'],
       dateLabel: 'Jul 2026',
-      highlight: false,
     });
   });
 });

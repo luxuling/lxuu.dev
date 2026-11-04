@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { ImageZoom } from '@/components/image-zoom';
+
+interface Props extends HTMLAttributes<'img'> {
+  frameClass?: string;
+}
+
+const { frameClass = '', class: className, src, alt = '' } = Astro.props;
+const imageAlt = typeof alt === 'string' ? alt : '';
+const imageClass = typeof className === 'string' ? className : undefined;
+---
+
+{
+  typeof src === 'string' && (
+    <ImageZoom
+      client:load
+      src={src}
+      alt={imageAlt}
+      frameClassName={frameClass}
+      className={imageClass}
+    />
+  )
+}

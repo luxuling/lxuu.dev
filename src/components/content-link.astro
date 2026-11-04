@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { opensInNewTab } from '@/utils/content-link';
+
+interface Props extends HTMLAttributes<'a'> {}
+
+const { href, ...attrs } = Astro.props;
+const url = typeof href === 'string' ? href : '';
+const external = opensInNewTab(url);
+---
+
+<a
+  {...attrs}
+  href={href}
+  target={external ? '_blank' : attrs.target}
+  rel={external ? 'noopener noreferrer' : attrs.rel}
+>
+  <slot />
+</a>

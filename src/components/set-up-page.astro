@@ -2,7 +2,7 @@
 import BaseCard from '@/components/base-card.astro';
 import Container from '@/components/container.astro';
 import Link from '@/components/link.astro';
-import LoadingImage from '@/components/loading-image.astro';
+import ZoomImage from '@/components/zoom-image.astro';
 import tools from '@/data/tools.json';
 
 const data = tools;
@@ -18,7 +18,7 @@ const data = tools;
     </div>
 
     <BaseCard>
-      <LoadingImage
+      <ZoomImage
         src={data.screenshot.src}
         alt={data.screenshot.alt}
         frameClass='rounded-sm'
