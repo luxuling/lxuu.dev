@@ -14,12 +14,12 @@
     {
       "tone": "default",
       "segments": [
-        { "text": "Working as a " },
-        { "text": "Front-End Engineer", "emphasis": true },
+        { "text": "Working as " },
+        { "text": "Founder", "emphasis": true },
         { "text": " at " },
-        { "text": "Logika Data", "href": "https://logikadata.co.id/" },
+        { "text": "Flex Studio ID", "href": "https://flexstudio.id/" },
         {
-          "text": " — building UIs, integrating the APIs, and tuning SEO and performance."
+          "text": " — designing and shipping client websites and web apps."
         }
       ]
     },
@@ -49,68 +49,76 @@
   ],
   "experiences": [
     {
-      "role": "Frontend Engineer",
-      "company": "LOGIKA DATA",
+      "role": "Full Stack Developer",
+      "company": "Logika Data",
       "companyUrl": "https://logikadata.co.id/",
-      "period": "11/2024 — present",
+      "location": "Remote",
+      "period": "November 2024 — October 2026",
       "bullets": [
-        "Build and maintain client-facing web applications, owning both UI structure and interaction logic.",
-        "Improved system reliability through better observability and cleaner error handling.",
-        "Collaborated closely with backend teams to align API contracts with UI requirements.",
-        "Set up CI/CD pipelines with Docker and GitHub Actions to automate front-end deployments."
+        "Built and maintained features across Logika Data's products, including POS and ERP systems, with Zenenta (zenenta.com) as one of them, using React.js, Next.js and TypeScript.",
+        "Implemented pixel-perfect, responsive interfaces from Figma designs.",
+        "Managed client state with Zustand and server state with TanStack Query, covering data fetching, caching, mutations and loading/error handling.",
+        "Integrated REST APIs and translated complex business workflows into clean, typed, maintainable components.",
+        "Contributed to the marketplace project across the frontend and backend.",
+        "Managed VPS servers and CI/CD pipelines, deploying containerized services with Docker.",
+        "Worked in a team using Git feature branching, pull requests and code review."
       ],
       "tags": [
         "TypeScript",
-        "ReactJS",
+        "React.js",
+        "Next.js",
         "Zustand",
-        "NextJS",
-        "Node.js",
-        "Docker",
-        "GH Actions"
+        "TanStack Query",
+        "Docker"
       ]
     },
     {
-      "role": "Frontend Engineer",
-      "company": "APP SOLUTIVE",
+      "role": "Front End Developer",
+      "company": "App Solutive",
       "companyUrl": "https://solutive.app/",
-      "period": "10/2024 — 12/2024",
+      "location": "Remote",
+      "period": "October 2024 — December 2024",
       "bullets": [
-        "Built and maintained front-end interfaces, handling UI logic across multiple product areas.",
-        "Worked with backend teams to bridge API contracts and translate them into reliable UI behavior."
+        "Built the frontend of a paid WiFi sales platform with Next.js, using responsive design and modern React patterns.",
+        "Migrated the application to the latest Next.js version, improving SSR/SSG compatibility, performance and maintainability."
       ],
-      "tags": ["TypeScript", "ReactJS", "VueJS", "Zustand", "NextJS", "Node.js"]
+      "tags": ["Next.js", "React"]
     },
     {
-      "role": "Full Stack Developer",
-      "company": "FLEX STUDIO ID",
+      "role": "Founder / Full Stack Developer",
+      "company": "Flex Studio ID",
       "companyUrl": "https://flexstudio.id/",
-      "period": "01/2024 — present",
+      "location": "Yogyakarta",
+      "period": "January 2024 — present",
       "bullets": [
-        "Designed and built REST APIs alongside React-based front ends for various client projects.",
-        "Handled end-to-end integration, from database queries to polished UI."
+        "Design and develop responsive client websites and web applications with React, Next.js and Vue.js/Nuxt.",
+        "Handle state with Zustand (React) and Pinia (Vue), and manage API and server data with TanStack Query.",
+        "Integrate frontends with Supabase backend services, handling asynchronous data and API calls.",
+        "Own the full project lifecycle from design to deployment, following clean code standards and collaborative Git workflows."
       ],
-      "tags": ["TypeScript", "ReactJS", "Zustand", "NextJS", "Node.js"]
+      "tags": [
+        "React",
+        "Next.js",
+        "Vue.js",
+        "Nuxt",
+        "Zustand",
+        "Pinia",
+        "TanStack Query",
+        "Supabase"
+      ]
     },
     {
-      "role": "Software Engineer Intern",
+      "role": "Software Engineer Developer Intern",
       "company": "Refactory",
       "companyUrl": "https://refactory.id/",
-      "period": "08/2023 — 11/2023",
+      "location": "Yogyakarta",
+      "period": "August 2023 — November 2023",
       "bullets": [
-        "Learned the full software development lifecycle in a structured engineering environment.",
-        "Contributed to several production projects across different tech stacks."
+        "Contributed to a marketplace project with Next.js (frontend) and Golang (backend), implementing features across the stack.",
+        "Resolved issues on a procurement system in a team environment using Git-based workflows.",
+        "Gained hands-on experience with the SDLC, asynchronous data handling and professional engineering practices."
       ],
-      "tags": [
-        "TypeScript",
-        "Golang",
-        "ReactJS",
-        "VueJS",
-        "Supabase",
-        "Zustand",
-        "NextJS",
-        "NuxtJS",
-        "Node.js"
-      ]
+      "tags": ["Next.js", "Golang"]
     }
   ]
 }
