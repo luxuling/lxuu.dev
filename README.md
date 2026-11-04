@@ -1,49 +1,28 @@
-# Web Portofolio
+# lxuu.dev
 
-##### REFERENCES
+[![site](https://img.shields.io/badge/site-lxuu.dev-111111?style=flat-square)](https://lxuu.dev)
+[![Astro](https://img.shields.io/badge/Astro-6-BC52EE?style=flat-square&logo=astro&logoColor=white)](https://astro.build)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react&logoColor=white)](https://react.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
-[OPEN CODE AS UI REF](https://opencode.ai/)
-[CONTENT IDEAS 01](https://elianiva.my.id/)
-[CONTENT IDEAS 02](https://theodorusclarence.com/)
+Personal site. The home page shows the GitHub profile, then projects, posts, the setup, and a page about me.
 
----
+Astro and React, styled with Tailwind, deployed on Cloudflare. Writing lives in MDX through Keystatic. Comments and likes use Neon.
 
-##### TECH STACK
+## Develop
 
-- ASTRO JS
-- TYPESCRIPT
-- GITHUB API
-- TAILWIND CSS
+Node 22.12 or newer, and pnpm.
 
----
+```sh
+pnpm install
+cp .env.example .env
+pnpm dev
+```
 
-##### TODO LIST
+Copy values from `.env.example`. The home page needs `GITHUB_USERNAME` and `GITHUB_TOKEN`. Comments and likes also need `DATABASE_URL`, `SESSION_SECRET`, and the GitHub OAuth pair.
 
-- [x] Buy Domain
-- [x] Set Up Repository
-- [x] Init Project With Framework (don't use NextJS!!)
-- [ ] Home Page
-  - [x] Hero section (show the github contributions activities)
-  - [x] Show PFP
-  - [ ] Latest posts
-  - [ ] ads card for my own product
-- [ ] Post
-- [x] Project
-  - [x] List Projects
-  - [x] Detail Project
-- [x] Tools
-  - [x] Thumbnail image [use this](https://raw.githubusercontent.com/luxuling/dotfiles/refs/heads/main/assets/ss.png)
-  - [x] List of the tools that i used in this pc, use the reference on my github repository of [dotfiles](https://github.com/luxuling/dotfiles)
-- [x] Me
-  - [x] **_Summary_** : just write some shit to tell the reader who i am and maybe add some quotes from someone so it look cool :>
-  - [x] **_What I'm up to now_** : the current job i had, and what i want to do, or what i'm trying to do
-  - [x] **_Experiences_** : carrer path, summary from the intern and current job
-
----
-
-###### RULES
-
-1. _FINISH THE STATIC SHIT FIRST_
-2. _DON'T SPEND MUCH TIME ON THE SECONDARY FEATURE_
-
-> should live in MAY 18 (the project time should only take one month)
+```sh
+pnpm test
+pnpm lint
+```
