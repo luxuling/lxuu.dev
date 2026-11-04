@@ -1,14 +1,22 @@
 {
-	"$schema": "./node_modules/wrangler/config-schema.json",
-	"compatibility_date": "2026-10-06",
-	"compatibility_flags": ["global_fetch_strictly_public"],
-	"name": "lxuu-dev",
-	"main": "@astrojs/cloudflare/entrypoints/server",
-	"assets": {
-		"directory": "./dist",
-		"binding": "ASSETS"
-	},
-	"observability": {
-		"enabled": true
-	}
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "compatibility_date": "2026-10-06",
+  "compatibility_flags": [
+    "global_fetch_strictly_public"
+  ],
+  "name": "lxuu-dev",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "previews": {
+    "vars": {
+      "GITHUB_USERNAME": "luxuling",
+      "PUBLIC_SITE_URL": "https://www.lxuu.dev"
+    },
+  }
 }
