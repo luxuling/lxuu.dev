@@ -12,6 +12,8 @@ import {
   toProjectListItem,
 } from '@/utils/content-items';
 
+export const prerender = false;
+
 const credentials = getGithubProfileCredentials();
 let data: GithubHome | null = null;
 let loadError =

@@ -8,6 +8,7 @@ import Link from '@/components/link.astro';
 import ZoomImage from '@/components/zoom-image.astro';
 import { TableOfContents } from '@/components/table-of-contents';
 import { TagList } from '@/components/tag-list';
+import { getGithubProfileCredentials } from '@/config/env';
 import Layout from '@/layouts/layout.astro';
 import { fetchGithubStarCount } from '@/services/github';
 import { formatMonthYear } from '@/utils/format-date';
@@ -28,7 +29,10 @@ const tocItems = headingsToTocItems(headings);
 const { title, description, tags, status, date, thumbnail, links } = entry.data;
 
 const githubStars = links?.github
-  ? await fetchGithubStarCount(links.github, import.meta.env.GITHUB_TOKEN)
+  ? await fetchGithubStarCount(
+      links.github,
+      getGithubProfileCredentials()?.token,
+    )
   : null;
 ---
 
