@@ -1,4 +1,5 @@
 import { config, collection, fields } from '@keystatic/core';
+import { tagsField } from './src/components/tag-field';
 import { contentImageOptions } from './src/utils/content-images';
 
 export default config({
@@ -12,10 +13,7 @@ export default config({
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
         description: fields.text({ label: 'Description', multiline: true }),
-        tags: fields.array(fields.text({ label: 'Tag' }), {
-          label: 'Tags',
-          itemLabel: (p) => p.value,
-        }),
+        tags: tagsField,
         status: fields.select({
           label: 'Status',
           options: [
@@ -32,7 +30,10 @@ export default config({
           label: 'Highlight on homepage',
           defaultValue: false,
         }),
-        thumbnail: fields.url({ label: 'Thumbnail URL' }),
+        thumbnail: fields.image({
+          label: 'Thumbnail',
+          ...contentImageOptions('posts'),
+        }),
         content: fields.mdx({
           label: 'Content',
           options: { image: contentImageOptions('posts') },
@@ -47,10 +48,7 @@ export default config({
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
         description: fields.text({ label: 'Description', multiline: true }),
-        tags: fields.array(fields.text({ label: 'Tag' }), {
-          label: 'Tags',
-          itemLabel: (p) => p.value,
-        }),
+        tags: tagsField,
         status: fields.select({
           label: 'Status',
           options: [
@@ -68,7 +66,10 @@ export default config({
           label: 'Highlight on homepage',
           defaultValue: false,
         }),
-        thumbnail: fields.url({ label: 'Thumbnail URL' }),
+        thumbnail: fields.image({
+          label: 'Thumbnail',
+          ...contentImageOptions('projects'),
+        }),
         links: fields.object({
           github: fields.url({ label: 'GitHub URL' }),
           live: fields.url({ label: 'Live URL' }),
