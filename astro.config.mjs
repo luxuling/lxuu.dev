@@ -18,8 +18,16 @@ const useKeystatic =
 
 // https://astro.build/config
 export default defineConfig({
+  // Astro 7 defaults this to 'jsx', which drops spaces between inline elements
+  compressHTML: true,
   vite: {
     plugins: [tailwindcss()],
+    // HACK: Vite 8 answers /@id/astro/runtime/client/dev-toolbar/entrypoint.js
+    // with 504 after that module is prebundled. The file is current; only the
+    // hash on the cached module id is stale.
+    optimizeDeps: {
+      ignoreOutdatedRequests: true,
+    },
   },
 
   fonts: [

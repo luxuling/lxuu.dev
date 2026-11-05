@@ -1,9 +1,9 @@
-const js = require('@eslint/js');
-const eslintPluginAstro = require('eslint-plugin-astro');
-const tsParser = require('@typescript-eslint/parser');
-const globals = require('globals');
+import js from '@eslint/js';
+import eslintPluginAstro from 'eslint-plugin-astro';
+import tsParser from '@typescript-eslint/parser';
+import globals from 'globals';
 
-module.exports = [
+export default [
   {
     ignores: ['dist/**', 'node_modules/**', '.astro/**', '.vercel/**'],
   },

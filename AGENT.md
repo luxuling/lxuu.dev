@@ -32,11 +32,11 @@ This project uses the following development rules:
    - Prefer reusable layout and base components for consistency.
 
 7. Stack:
-   - **Astro 6** (SSR via Vercel adapter, `prerender = false` on all routes)
+   - **Astro 7** (SSR via the Cloudflare adapter, `prerender = false` on all routes)
    - **React** for interactive components
    - **Keystatic CMS** (local storage mode) — content lives in `content/posts/*.mdx` and `content/projects/*.mdx`; admin UI at `/keystatic`
    - **Astro Content Collections** (`src/content.config.ts`) with `glob` loader reading MDX files
-   - **Neon PostgreSQL** via `@neondatabase/serverless` HTTP driver (required for Vercel serverless)
+   - **Neon PostgreSQL** via `@neondatabase/serverless` HTTP driver (required for Cloudflare Workers)
    - **Drizzle ORM** — schema at `src/db/schema.ts`, migrations at `src/db/migrations/`
    - **Arctic** for GitHub OAuth (server-side auth code flow, httpOnly session cookies)
    - Engagement API routes at `src/pages/api/` (same-origin, no external service); posts and projects share `src/pages/api/[target]/[slug]/`
