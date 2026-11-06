@@ -1,9 +1,25 @@
-import { config, collection, fields } from '@keystatic/core';
+import { config, collection, fields, singleton } from '@keystatic/core';
 import { tagsField } from './src/components/tag-field';
 import { contentImageOptions } from './src/utils/content-images';
 
 export default config({
   storage: { kind: 'local' },
+  singletons: {
+    nowBuilding: singleton({
+      label: 'Now Building',
+      path: 'src/data/now-building',
+      format: { data: 'json' },
+      schema: {
+        projects: fields.array(
+          fields.relationship({ label: 'Project', collection: 'projects' }),
+          {
+            label: 'Projects',
+            itemLabel: (props) => props.value ?? 'Select a project',
+          },
+        ),
+      },
+    }),
+  },
   collections: {
     posts: collection({
       label: 'Posts',

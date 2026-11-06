@@ -24,7 +24,10 @@ const { items } = Astro.props;
             href={`/projects/${item.slug}`}
             class='text-body font-semibold text-fg hover:underline'
           >
-            <span class='text-fg-subtle'>[*]</span> {item.title}
+            <span class='animate-pulse text-fg motion-reduce:animate-none'>
+              [*]
+            </span>{' '}
+            {item.title}
           </a>
           {item.live ? (
             <a
