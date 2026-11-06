@@ -45,9 +45,8 @@ const { variant } = Astro.props;
     const el = document.querySelector<HTMLElement>('[data-hero-bg]');
     if (!el || reducedMotion.matches) return;
 
-    const rect = el.getBoundingClientRect();
-    target = { x: event.clientX - rect.left, y: event.clientY - rect.top };
-    current ??= { x: rect.width / 2, y: 0 };
+    target = { x: event.clientX, y: event.clientY };
+    current ??= { x: window.innerWidth / 2, y: 0 };
     if (!frame) frame = requestAnimationFrame(step);
   });
 
