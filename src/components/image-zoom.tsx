@@ -59,7 +59,7 @@ export const ImageZoom = ({
           onClose={zoom.close}
           onClick={closeIfBackdrop}
           aria-label={alt || 'Enlarged image'}
-          className='image-zoom-dialog fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col gap-4 border-0 bg-transparent p-4 backdrop:bg-bg/85 md:px-8'
+          className='image-zoom-dialog fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col gap-6 border-0 bg-transparent p-4 backdrop:bg-bg/85 md:p-8'
         >
           <form method='dialog' className='flex shrink-0 justify-end'>
             <button
@@ -77,7 +77,7 @@ export const ImageZoom = ({
             <img
               src={src}
               alt={alt}
-              className='max-h-full max-w-full cursor-zoom-out border border-line object-contain'
+              className='max-h-[calc(100%-2rem)] max-w-full cursor-zoom-out border border-line object-contain'
               onClick={closeFromImage}
             />
             <p className='text-micro text-fg-subtle'>
