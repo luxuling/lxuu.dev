@@ -23,14 +23,14 @@ export const SOCIAL_LINKS = [
   {
     key: 'ig',
     label: 'instagram',
-    handle: '@lxuuu.ling',
-    href: 'https://www.instagram.com/lxuuu.ling/',
+    handle: '@lxuu.dev',
+    href: 'https://www.instagram.com/lxuu.dev/',
   },
   {
-    key: 'dc',
-    label: 'discord',
-    handle: 'dm on discord',
-    href: 'https://discord.com/users/520879989537898496',
+    key: 'th',
+    label: 'threads',
+    handle: 'yap on threads',
+    href: 'https://www.threads.com/@lxuu.dev',
   },
 ];
 
