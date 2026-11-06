@@ -4,17 +4,14 @@ import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import Navbar from '@/components/navbar.astro';
 import Footer from '@/components/footer.astro';
-import HeroBackground, {
-  type HeroVariant,
-} from '@/components/hero-background.astro';
+import HeroBackground from '@/components/hero-background.astro';
 import { Toaster } from '@/components/toaster';
 
 interface Props {
   pageTitle?: string;
-  hero?: HeroVariant;
 }
 
-const { pageTitle, hero = 'page' } = Astro.props;
+const { pageTitle } = Astro.props;
 ---
 
 <!doctype html>
@@ -31,7 +28,7 @@ const { pageTitle, hero = 'page' } = Astro.props;
   </head>
   <body class='text-fg'>
     <div class='relative isolate flex min-h-screen flex-col'>
-      <HeroBackground variant={hero} />
+      <HeroBackground />
       <Navbar />
       <main class='flex-1' transition:animate='fade'>
         <slot />

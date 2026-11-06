@@ -281,10 +281,6 @@ body::after {
   pointer-events: none;
 }
 
-.hero-bg[data-variant='page'] {
-  height: 27.5rem;
-}
-
 .hero-glow {
   position: fixed;
   inset: 0;
@@ -299,44 +295,25 @@ body::after {
 .hero-cat {
   position: absolute;
   color: var(--color-fg);
-  animation: cat-bob 0.96s ease-in-out infinite;
-}
-
-.hero-bg[data-variant='home'] .hero-cat {
+  animation: cat-bob 3s ease-in-out infinite;
   left: 0.375rem;
-  top: 34.375rem;
+  top: 20rem;
   font-size: 7px;
   line-height: 8px;
-  opacity: 0.6;
-}
-
-.hero-bg[data-variant='page'] .hero-cat {
-  left: 10.25rem;
-  top: 10.625rem;
-  font-size: 7px;
-  line-height: 8px;
-  opacity: 0.32;
+  opacity: 0.25;
 }
 
 @media (width >= 48rem) {
-  .hero-bg,
-  .hero-bg[data-variant='page'] {
+  .hero-bg {
     height: 40rem;
   }
 
-  .hero-bg[data-variant='home'] .hero-cat {
+  .hero-cat {
     left: calc(50% + 5.5rem);
     top: 4.3125rem;
     font-size: 10px;
     line-height: 11px;
     opacity: 0.5;
-  }
-
-  .hero-bg[data-variant='page'] .hero-cat {
-    left: calc(50% + 30.25rem);
-    top: 11.25rem;
-    font-size: 9px;
-    line-height: 10px;
   }
 }
 
@@ -353,10 +330,6 @@ body::after {
   0%,
   100% {
     transform: translateY(0);
-  }
-  25%,
-  75% {
-    transform: translateY(-8px);
   }
   50% {
     transform: translateY(-12px);
