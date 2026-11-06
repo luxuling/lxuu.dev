@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import { PostsExplorer } from '@/components/posts-explorer';
 import Layout from '@/layouts/layout.astro';
-import { sortByNewest, toPostListItem } from '@/utils/content-items';
+import { sortEntries, toPostListItem } from '@/utils/content-items';
 
 export const prerender = false;
 
@@ -10,7 +10,7 @@ const entries = await getCollection(
   'posts',
   (entry) => entry.data.status === 'posted',
 );
-const posts = sortByNewest(entries).map(toPostListItem);
+const posts = sortEntries(entries).map(toPostListItem);
 ---
 
 <Layout pageTitle='posts — lxuu.dev'>

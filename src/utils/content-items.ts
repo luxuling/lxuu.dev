@@ -9,9 +9,16 @@ import { formatMonthYear } from '@/utils/format-date';
 type PostEntry = Pick<CollectionEntry<'posts'>, 'id' | 'data'>;
 type ProjectEntry = Pick<CollectionEntry<'projects'>, 'id' | 'data'>;
 
-export const sortByNewest = <Entry extends PostEntry | ProjectEntry>(
+export const sortEntries = <Entry extends PostEntry | ProjectEntry>(
   entries: Entry[],
-) => entries.toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime());
+) =>
+  entries.toSorted((a, b) => {
+    const aOrder = a.data.order ?? Infinity;
+    const bOrder = b.data.order ?? Infinity;
+    if (aOrder !== bOrder) return aOrder - bOrder;
+
+    return b.data.date.getTime() - a.data.date.getTime();
+  });
 
 export const toPostListItem = (entry: PostEntry): PostListItem => ({
   slug: entry.id,

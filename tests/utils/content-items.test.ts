@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   logoInitials,
-  sortByNewest,
+  sortEntries,
   toPostListItem,
   toProjectListItem,
 } from '@/utils/content-items';
 
-const post = (id: string, date: string) => ({
+const post = (id: string, date: string, order?: number | null) => ({
   id,
   data: {
     title: `Title ${id}`,
@@ -15,18 +15,35 @@ const post = (id: string, date: string) => ({
     status: 'posted' as const,
     date: new Date(date),
     highlight: false,
+    order,
   },
 });
 
-describe('sortByNewest', () => {
+describe('sortEntries', () => {
   it('orders entries from newest to oldest without mutating the input', () => {
     const entries = [post('old', '2025-01-01'), post('new', '2026-01-01')];
 
-    expect(sortByNewest(entries).map((entry) => entry.id)).toEqual([
+    expect(sortEntries(entries).map((entry) => entry.id)).toEqual([
       'new',
       'old',
     ]);
     expect(entries.map((entry) => entry.id)).toEqual(['old', 'new']);
+  });
+
+  it('puts ordered entries first, then the rest by newest date', () => {
+    const sorted = sortEntries([
+      post('old', '2024-01-01'),
+      post('second', '2020-01-01', 2),
+      post('new', '2026-01-01', null),
+      post('first', '2019-01-01', 1),
+    ]);
+
+    expect(sorted.map((entry) => entry.id)).toEqual([
+      'first',
+      'second',
+      'new',
+      'old',
+    ]);
   });
 });
 

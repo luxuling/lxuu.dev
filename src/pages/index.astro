@@ -10,7 +10,7 @@ import nowBuilding from '@/data/now-building.json';
 import Layout from '@/layouts/layout.astro';
 import { fetchGithubHome, type GithubHome } from '@/services/github';
 import {
-  sortByNewest,
+  sortEntries,
   toBuildingItem,
   toPostListItem,
   toProjectListItem,
@@ -41,8 +41,8 @@ const postEntries = await getCollection(
   (entry) => entry.data.status === 'posted' && entry.data.highlight,
 );
 
-const highlightedProjects = sortByNewest(projectEntries).map(toProjectListItem);
-const highlightedPosts = sortByNewest(postEntries).map(toPostListItem);
+const highlightedProjects = sortEntries(projectEntries).map(toProjectListItem);
+const highlightedPosts = sortEntries(postEntries).map(toPostListItem);
 const buildingEntries = await Promise.all(
   nowBuilding.projects
     .filter(Boolean)

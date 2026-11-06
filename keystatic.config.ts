@@ -46,6 +46,10 @@ export default config({
           label: 'Highlight on homepage',
           defaultValue: false,
         }),
+        order: fields.integer({
+          label: 'Sort order',
+          description: 'Lower shows first. Leave empty to sort by date.',
+        }),
         thumbnail: fields.image({
           label: 'Thumbnail',
           ...contentImageOptions('posts'),
@@ -81,6 +85,10 @@ export default config({
         highlight: fields.checkbox({
           label: 'Highlight on homepage',
           defaultValue: false,
+        }),
+        order: fields.integer({
+          label: 'Sort order',
+          description: 'Lower shows first. Leave empty to sort by date.',
         }),
         thumbnail: fields.image({
           label: 'Thumbnail',
