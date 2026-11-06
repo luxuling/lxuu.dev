@@ -47,9 +47,12 @@ const indexLabel = (index: number) => String(index + 1).padStart(2, '0');
             href={tool.href}
             target='_blank'
             rel='noreferrer'
-            class='text-body font-semibold text-fg hover:underline md:w-50 md:shrink-0'
+            class='group text-body font-semibold text-fg hover:underline md:w-50 md:shrink-0'
           >
-            {tool.name} <span class='font-normal text-fg-subtle'>[↗]</span>
+            {tool.name}{' '}
+            <span class='font-normal text-fg-subtle transition-colors group-hover:text-fg'>
+              [↗]
+            </span>
           </a>
           <p class='text-body text-fg-muted'>{tool.description}</p>
         </li>

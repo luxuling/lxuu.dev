@@ -34,13 +34,15 @@ import { FOOTER_CAT } from '@/utils/ascii-art';
             href={link.href}
             target='_blank'
             rel='noreferrer'
-            class='flex flex-col gap-1 border border-line bg-surface/40 p-4 transition-colors hover:bg-surface-2'
+            class='group flex flex-col gap-1 border border-line bg-surface/40 p-4 transition-colors hover:bg-surface-2'
           >
             <span class='flex justify-between text-small'>
               <span class='text-fg'>
                 [{link.key}] {link.label}
               </span>
-              <span class='text-fg-subtle'>[↗]</span>
+              <span class='text-fg-subtle transition-colors group-hover:text-fg'>
+                [↗]
+              </span>
             </span>
             <span class='text-micro text-fg-subtle'>{link.handle}</span>
           </a>
@@ -48,7 +50,12 @@ import { FOOTER_CAT } from '@/utils/ascii-art';
       ))}
     </ul>
 
-    <div class='flex flex-col gap-2 text-micro text-fg-subtle md:flex-row md:justify-between'>
+    <div class='relative flex justify-center' aria-hidden='true'>
+      <div class='footer-glow absolute inset-x-[-50vw] -top-14 bottom-0'></div>
+      <pre class='ascii relative text-[9px]/[10px] text-fg opacity-22 md:text-sm/4'>{FOOTER_CAT}</pre>
+    </div>
+
+    <div class='flex flex-col items-center gap-2 pb-6 text-micro text-fg-subtle md:flex-row md:justify-between'>
       <p>© 2026 lixu ling · yogyakarta</p>
       <nav aria-label='Footer'>
         {NAV_ITEMS.map((item, index) => (
@@ -60,11 +67,6 @@ import { FOOTER_CAT } from '@/utils/ascii-art';
           </>
         ))}
       </nav>
-    </div>
-
-    <div class='relative flex justify-center' aria-hidden='true'>
-      <div class='footer-glow absolute inset-x-[-50vw] -top-14 bottom-0'></div>
-      <pre class='ascii relative text-[9px]/[10px] text-fg opacity-22 md:text-sm/4'>{FOOTER_CAT}</pre>
     </div>
   </Container>
 </footer>
