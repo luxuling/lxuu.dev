@@ -19,7 +19,7 @@ if (!entry || entry.data.status === 'draft') {
 }
 
 const { Content, headings } = await render(entry);
-const { title, description, tags, date } = entry.data;
+const { title, description, tags, date, thumbnail } = entry.data;
 ---
 
 <Layout pageTitle={`${title} — lxuu.dev`}>
@@ -29,6 +29,7 @@ const { title, description, tags, date } = entry.data;
     title={title}
     description={description}
     tags={tags}
+    thumbnail={thumbnail}
     tocItems={headingsToTocItems(headings)}
   >
     <Fragment slot='meta'>
