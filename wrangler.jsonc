@@ -13,6 +13,10 @@
   "observability": {
     "enabled": true
   },
+  "vars": {
+    "GITHUB_USERNAME": "luxuling",
+    "PUBLIC_SITE_URL": "https://www.lxuu.dev"
+  },
   "previews": {
     "vars": {
       "GITHUB_USERNAME": "luxuling",
