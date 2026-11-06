@@ -8,7 +8,10 @@ import { EMAIL, NAV_ITEMS, isActivePath } from '@/data/site';
 const { pathname } = Astro.url;
 ---
 
-<header class='relative z-50 border-b border-line'>
+<header
+  class='sticky top-0 z-50 border-b border-line transition-colors data-scrolled:bg-bg/70 data-scrolled:backdrop-blur-md'
+  data-navbar
+>
   <Container class='flex h-14 items-center justify-between md:h-16'>
     <Logo />
 
@@ -44,3 +47,13 @@ const { pathname } = Astro.url;
     <MobileNav currentPath={pathname} client:load />
   </Container>
 </header>
+
+<script>
+  const syncScrolled = () =>
+    document
+      .querySelector('[data-navbar]')
+      ?.toggleAttribute('data-scrolled', window.scrollY > 0);
+
+  window.addEventListener('scroll', syncScrolled, { passive: true });
+  document.addEventListener('astro:page-load', syncScrolled);
+</script>
