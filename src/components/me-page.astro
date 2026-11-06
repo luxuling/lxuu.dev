@@ -1,124 +1,146 @@
 ---
-import BaseCard from '@/components/base-card.astro';
-import Container from '@/components/container.astro';
-import Link from '@/components/link.astro';
+import Page from '@/components/page.astro';
+import { PageHeader } from '@/components/page-header';
+import { SectionLabel } from '@/components/section-label';
+import { TagLine } from '@/components/tag-list';
 import me from '@/data/me.json';
+import { formatMonthYear } from '@/utils/format-date';
 
-const data = me;
+const isCurrent = (period: string) => period.endsWith('present');
+
+const shortPeriod = (period: string) =>
+  period.replace(/\b([A-Z][a-z]{2})[a-z]+/g, '$1').toLowerCase();
+
+const placeLabel = (location: string, period: string) =>
+  [location.toLowerCase(), isCurrent(period) && 'current']
+    .filter(Boolean)
+    .join(' · ');
+
+const countLabel = String(me.experiences.length).padStart(2, '0');
 ---
 
-<section class='py-8 sm:py-12'>
-  <Container class='flex flex-col gap-6'>
-    <div class='px-1'>
-      <h1 class='text-xl font-semibold tracking-tight text-foreground'>
-        me<span class='text-muted-foreground'>.</span>
-      </h1>
-      <p class='mt-1 text-sm text-subtle'>{data.tagline}</p>
+<Page>
+  <PageHeader path='~/me' title='me' subtitle={me.tagline} />
+
+  <section class='flex flex-col gap-4'>
+    <SectionLabel>summary</SectionLabel>
+    <div class='flex max-w-174 flex-col gap-4 text-body text-fg-muted'>
+      {me.summaryParagraphs.map((segments) => (
+        <p>
+          {segments.map((seg) =>
+            seg.emphasis ? (
+              <strong class='font-semibold text-fg'>{seg.text}</strong>
+            ) : (
+              seg.text
+            ),
+          )}
+        </p>
+      ))}
+      <blockquote class='mt-2 flex flex-col gap-2 border-l border-line-strong py-1 pl-4 md:pl-6'>
+        <p class='text-fg'>&ldquo;{me.quote.body}&rdquo;</p>
+        <footer class='text-small text-fg-subtle'>
+          {me.quote.attribution}{' '}
+          <cite class='not-italic'>{me.quote.citation}</cite>
+        </footer>
+      </blockquote>
     </div>
+  </section>
 
-    <BaseCard title='[ summary ]'>
-      <div class='flex flex-col gap-5'>
-        <div class='flex flex-col gap-3 text-sm/relaxed text-muted-foreground'>
-          {data.summaryParagraphs.map((p) => <p>{p}</p>)}
-        </div>
+  <section class='flex flex-col gap-4'>
+    <SectionLabel meta={formatMonthYear(new Date()).toLowerCase()}>
+      now
+    </SectionLabel>
+    <ul class='flex max-w-174 flex-col gap-3 text-body'>
+      {me.nowItems.map((item) => {
+        const isDone = item.tone === 'subtle';
 
-        <blockquote
-          class='border-l-2 border-edge pl-4 text-sm text-subtle italic'
-        >
-          <p>&ldquo;{data.quote.body}&rdquo;</p>
-          <footer class='mt-2 text-muted not-italic'>
-            {data.quote.attribution}{' '}
-            <cite>{data.quote.citation}</cite>
-          </footer>
-        </blockquote>
-      </div>
-    </BaseCard>
+        return (
+          <li class='flex gap-3'>
+            <span
+              class:list={['shrink-0', isDone ? 'text-fg-subtle' : 'text-fg']}
+            >
+              {isDone ? '[ ]' : '[o]'}
+            </span>
+            <span class:list={[isDone ? 'text-fg-subtle' : 'text-fg-muted']}>
+              {item.segments.map((seg) => {
+                if (seg.href)
+                  return (
+                    <a
+                      href={seg.href}
+                      target='_blank'
+                      rel='noreferrer'
+                      class='text-fg underline underline-offset-4'
+                      set:text={seg.text}
+                    />
+                  );
+                if (seg.emphasis)
+                  return (
+                    <strong class='font-semibold text-fg'>{seg.text}</strong>
+                  );
 
-    <BaseCard title='[ now ]'>
-      <ul class='flex flex-col gap-3'>
-        {
-          data.nowItems.map((item) => {
-            const outer =
-              item.tone === 'subtle' ? 'text-subtle' : 'text-muted-foreground';
-            const marker =
-              item.tone === 'subtle' ? 'text-subtle' : 'text-foreground';
-            return (
-              <li class='flex items-center gap-3 text-sm'>
-                <span class:list={['shrink-0', 'font-mono', marker]}>[o]</span>
-                <span class={outer}>
-                  {item.segments.map((seg) => {
-                    if (seg.href) {
-                      return (
-                        <Link href={seg.href} target='_blank'>
-                          {seg.text}
-                        </Link>
-                      );
-                    }
-                    if (seg.emphasis) {
-                      return <span class='text-foreground'>{seg.text}</span>;
-                    }
-                    return seg.text;
-                  })}
+                return seg.text;
+              })}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <section class='flex flex-col'>
+    <SectionLabel meta={countLabel}>experiences</SectionLabel>
+    <div class='flex flex-col'>
+      {me.experiences.map((exp) => {
+        const current = isCurrent(exp.period);
+
+        return (
+          <article class='flex flex-col gap-2 border-b border-line py-6 last:border-b-0 md:gap-3 md:py-8'>
+            <header class='flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-6'>
+              <h3 class='text-body text-fg-muted'>
+                <span class:list={[current ? 'text-fg' : 'text-fg-subtle']}>
+                  {current ? '[*]' : '[o]'}
+                </span>{' '}
+                <span class='font-semibold text-fg'>{exp.role}</span>{' '}
+                <a
+                  href={exp.companyUrl}
+                  target='_blank'
+                  rel='noreferrer'
+                  class='underline underline-offset-4 hover:text-fg'
+                >
+                  @{exp.company}
+                </a>
+              </h3>
+              <p
+                class:list={[
+                  'shrink-0 text-small',
+                  current ? 'text-fg' : 'text-fg-subtle',
+                ]}
+              >
+                <span class='hidden md:inline'>{exp.period.toLowerCase()}</span>
+                <span class='md:hidden'>
+                  {shortPeriod(exp.period)} ·{' '}
+                  {placeLabel(exp.location, exp.period)}
                 </span>
-              </li>
-            );
-          })
-        }
-      </ul>
-    </BaseCard>
+              </p>
+            </header>
 
-    <BaseCard title='[ experiences ]'>
-      <div class='flex flex-col space-y-6 divide-y divide-edge'>
-        {
-          data.experiences.map((exp) => (
-            <div class='flex flex-col gap-3 pb-6'>
-              <div class='flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between'>
-                <div class='flex flex-wrap items-baseline gap-x-2 gap-y-1'>
-                  <span
-                    class:list={[
-                      'font-mono',
-                      'text-sm',
-                      exp.period.includes('present')
-                        ? 'text-foreground'
-                        : 'text-subtle',
-                    ]}
-                  >
-                    [o]
-                  </span>
-                  <span class='text-sm font-medium text-foreground'>
-                    {exp.role}
-                  </span>
-                  <Link href={exp.companyUrl} target='_blank'>
-                    <span class='text-sm text-subtle'>@</span>
-                    <span class='text-sm text-foreground'>{exp.company}</span>
-                  </Link>
-                  <span class='font-mono text-sm text-subtle'>
-                    · {exp.location}
-                  </span>
-                </div>
-                <span class='ml-5 font-mono text-sm text-subtle sm:ml-0'>
-                  {exp.period}
-                </span>
-              </div>
-              <ul class='ml-5 flex flex-col gap-1.5'>
-                {exp.bullets.map((b) => (
-                  <li class='flex items-start gap-2 text-sm text-muted-foreground'>
-                    <span class='mt-1.5 size-1 shrink-0 rounded-full bg-subtle' />
-                    <span>{b}</span>
+            <div class='flex flex-col gap-3 md:pl-8'>
+              <p class='hidden text-small text-fg-subtle md:block'>
+                {placeLabel(exp.location, exp.period)}
+              </p>
+              <ul class='flex flex-col gap-2 pt-2 text-body text-fg-muted md:pt-0'>
+                {exp.bullets.map((bullet) => (
+                  <li class='flex gap-3'>
+                    <span class='shrink-0 text-fg-subtle'>-</span>
+                    <span>{bullet}</span>
                   </li>
                 ))}
               </ul>
-              <div class='ml-5 flex flex-wrap gap-2'>
-                {exp.tags.map((tag) => (
-                  <span class='rounded-sm border border-edge px-2 py-0.5 font-mono text-xs text-subtle'>
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              <TagLine tags={exp.tags} />
             </div>
-          ))
-        }
-      </div>
-    </BaseCard>
-  </Container>
-</section>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+</Page>

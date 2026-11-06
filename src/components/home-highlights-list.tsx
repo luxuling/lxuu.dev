@@ -1,6 +1,7 @@
-import { SectionLabel } from '@/components/explorer-shell';
+import { ExplorerList } from '@/components/explorer-shell';
 import { PostCard } from '@/components/post-card';
 import { ProjectCard } from '@/components/project-card';
+import { SectionLabel } from '@/components/section-label';
 import type { PostListItem, ProjectListItem } from '@/types/content';
 
 interface Props {
@@ -8,23 +9,34 @@ interface Props {
   posts: PostListItem[];
 }
 
-export const HomeHighlightsList = ({ projects, posts }: Props) => {
-  const hasProjects = projects.length > 0;
-  const hasPosts = posts.length > 0;
+const countLabel = (count: number) => String(count).padStart(2, '0');
 
-  return (
-    <div className='flex flex-col gap-6'>
-      {hasProjects && <SectionLabel>[ highlighted projects ]</SectionLabel>}
-      {projects.map((project) => (
-        <ProjectCard key={project.slug} project={project} />
-      ))}
+export const HomeHighlightsList = ({ projects, posts }: Props) => (
+  <>
+    {projects.length > 0 && (
+      <section className='flex flex-col gap-4'>
+        <SectionLabel meta={countLabel(projects.length)}>
+          highlighted projects
+        </SectionLabel>
+        <ExplorerList>
+          {projects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </ExplorerList>
+      </section>
+    )}
 
-      {hasProjects && hasPosts && <div className='h-2' />}
-
-      {hasPosts && <SectionLabel>[ highlighted posts ]</SectionLabel>}
-      {posts.map((post) => (
-        <PostCard key={post.slug} post={post} />
-      ))}
-    </div>
-  );
-};
+    {posts.length > 0 && (
+      <section className='flex flex-col gap-4'>
+        <SectionLabel meta={countLabel(posts.length)}>
+          highlighted posts
+        </SectionLabel>
+        <ExplorerList>
+          {posts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </ExplorerList>
+      </section>
+    )}
+  </>
+);

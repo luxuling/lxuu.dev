@@ -21,6 +21,7 @@ query ($userName: String!) {
     name
     avatarUrl
     bio
+    location
     url
     followers { totalCount }
     following { totalCount }
@@ -74,6 +75,7 @@ const homeSchema = z
       name: z.string().nullable(),
       avatarUrl: z.string(),
       bio: z.string().nullable(),
+      location: z.string().nullable(),
       url: z.string(),
       followers: countSchema,
       following: countSchema,
@@ -91,6 +93,7 @@ const homeSchema = z
     name: user.name,
     avatarUrl: user.avatarUrl,
     bio: user.bio,
+    location: user.location,
     profileUrl: user.url,
     followers: user.followers.totalCount,
     following: user.following.totalCount,

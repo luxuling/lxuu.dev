@@ -1,13 +1,17 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+import GitHubContribution from '@/components/github-contribution.astro';
 import GitHubHome from '@/components/github-home.astro';
+import Page from '@/components/page.astro';
 import HomeHighlights from '@/components/home-highlights.astro';
 import StatusPage from '@/components/status-page.astro';
 import { getGithubProfileCredentials } from '@/config/env';
+import nowBuilding from '@/data/now-building.json';
 import Layout from '@/layouts/layout.astro';
 import { fetchGithubHome, type GithubHome } from '@/services/github';
 import {
-  sortByNewest,
+  sortEntries,
+  toBuildingItem,
   toPostListItem,
   toProjectListItem,
 } from '@/utils/content-items';
@@ -37,17 +41,28 @@ const postEntries = await getCollection(
   (entry) => entry.data.status === 'posted' && entry.data.highlight,
 );
 
-const highlightedProjects = sortByNewest(projectEntries).map(toProjectListItem);
-const highlightedPosts = sortByNewest(postEntries).map(toPostListItem);
+const highlightedProjects = sortEntries(projectEntries).map(toProjectListItem);
+const highlightedPosts = sortEntries(postEntries).map(toPostListItem);
+const buildingEntries = await Promise.all(
+  nowBuilding.projects
+    .filter(Boolean)
+    .map((slug) => getEntry('projects', slug)),
+);
+const building = buildingEntries
+  .filter((entry) => entry !== undefined)
+  .map(toBuildingItem);
 ---
 
 <Layout pageTitle='welcome — lxuu.dev'>
-  {
-    data ? (
-      <GitHubHome data={data} />
+  <Page>
+    {data ? (
+      <>
+        <GitHubHome data={data} building={building} />
+        <GitHubContribution data={data} />
+      </>
     ) : (
       <StatusPage title='Could not load GitHub profile' message={loadError} />
-    )
-  }
-  <HomeHighlights projects={highlightedProjects} posts={highlightedPosts} />
+    )}
+    <HomeHighlights projects={highlightedProjects} posts={highlightedPosts} />
+  </Page>
 </Layout>

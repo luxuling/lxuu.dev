@@ -56,6 +56,7 @@ export const useEngagement = (target: EngagementTarget, slug: string) => {
   const [isLoadingComments, setIsLoadingComments] = useState(false);
   const [isHelpShown, setIsHelpShown] = useState(false);
   const [isCommentBusy, setIsCommentBusy] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const run = async (
     setBusy: SetBusy,
@@ -180,7 +181,7 @@ export const useEngagement = (target: EngagementTarget, slug: string) => {
     );
 
   const commandActions: Record<PromptCommand, () => void> = {
-    '/login': signIn,
+    '/login': () => setIsLoginOpen(true),
     '/logout': () => (user ? void signOut() : setError(LOGIN_REQUIRED)),
     '/like': () => void saveLike(true),
     '/unlike': () => void saveLike(false),
@@ -213,6 +214,9 @@ export const useEngagement = (target: EngagementTarget, slug: string) => {
     isLoadingComments,
     isHelpShown,
     isCommentBusy,
+    isLoginOpen,
+    closeLogin: () => setIsLoginOpen(false),
+    signIn,
     loadMoreComments,
     submitPrompt,
     editComment,

@@ -1,59 +1,62 @@
 ---
-import BaseCard from '@/components/base-card.astro';
-import Container from '@/components/container.astro';
-import Link from '@/components/link.astro';
+import Page from '@/components/page.astro';
+import { PageHeader } from '@/components/page-header';
+import { SectionLabel } from '@/components/section-label';
 import ZoomImage from '@/components/zoom-image.astro';
 import tools from '@/data/tools.json';
 
-const data = tools;
+const indexLabel = (index: number) => String(index + 1).padStart(2, '0');
 ---
 
-<section class='py-8 sm:py-12'>
-  <Container class='flex flex-col gap-6'>
-    <div class='px-1'>
-      <h1 class='text-xl font-semibold tracking-tight text-foreground'>
-        set up<span class='text-muted-foreground'>.</span>
-      </h1>
-      <p class='mt-1 text-sm text-subtle'>{data.tagline}</p>
+<Page>
+  <PageHeader path='~/set-up' title='set up' subtitle={tools.tagline} />
+
+  <figure class='flex flex-col gap-2'>
+    <ZoomImage
+      src={tools.screenshot.src}
+      alt={tools.screenshot.alt}
+      frameClass='border border-line bg-surface'
+      class='w-full object-cover'
+    />
+    <figcaption class='text-micro text-fg-subtle'>
+      {tools.screenshot.caption} ·
+      <span class='hidden md:inline'>click to zoom</span>
+      <span class='md:hidden'>tap to zoom</span>
+    </figcaption>
+  </figure>
+
+  <section class='flex flex-col gap-4'>
+    <SectionLabel>why linux</SectionLabel>
+    <div class='flex max-w-174 flex-col gap-4 text-body text-fg-muted'>
+      {tools.whyLinux.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
     </div>
+  </section>
 
-    <BaseCard>
-      <ZoomImage
-        src={data.screenshot.src}
-        alt={data.screenshot.alt}
-        frameClass='rounded-sm'
-        class='w-full object-cover'
-      />
-    </BaseCard>
-
-    <BaseCard title='[ why linux ]'>
-      <div class='flex flex-col gap-3 text-sm/relaxed text-muted-foreground'>
-        {data.whyLinux.map((p) => <p>{p}</p>)}
-      </div>
-    </BaseCard>
-
-    <BaseCard title='[ setup ]'>
-      <div class='flex flex-col divide-y divide-edge'>
-        {
-          data.tools.map((tool) => (
-            <div class='flex flex-col gap-1 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-baseline sm:gap-0'>
-              <span class='w-44 shrink-0 font-mono text-xs text-subtle'>
-                {tool.category}
-              </span>
-              <div class='flex flex-col gap-0.5'>
-                <Link
-                  href={tool.href}
-                  target='_blank'
-                  class='text-sm font-medium'
-                >
-                  {tool.name}
-                </Link>
-                <p class='text-sm text-muted-foreground'>{tool.description}</p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </BaseCard>
-  </Container>
-</section>
+  <section class='flex flex-col gap-4'>
+    <SectionLabel meta={`${tools.tools.length} tools`}>setup</SectionLabel>
+    <ul class='flex flex-col'>
+      {tools.tools.map((tool, index) => (
+        <li class='flex flex-col gap-1 border-b border-line py-4 md:flex-row md:gap-6'>
+          <span class='text-small text-fg-muted md:w-60 md:shrink-0 md:text-body'>
+            <span class='text-fg-subtle'>{indexLabel(index)}</span>
+            <span class='whitespace-pre'>{`  ${tool.category.toLowerCase()}`}</span>
+          </span>
+          <a
+            href={tool.href}
+            target='_blank'
+            rel='noreferrer'
+            class='group text-body font-semibold text-fg hover:underline md:w-50 md:shrink-0'
+          >
+            {tool.name}{' '}
+            <span class='font-normal text-fg-subtle transition-colors group-hover:text-fg'>
+              [↗]
+            </span>
+          </a>
+          <p class='text-body text-fg-muted'>{tool.description}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Page>

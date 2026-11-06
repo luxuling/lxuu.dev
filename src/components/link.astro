@@ -9,7 +9,7 @@ interface Props {
 
 const { href, label, class: className = '', target, rel } = Astro.props;
 
-const baseClass = 'text-foreground underline-offset-4 hover:underline';
+const baseClass = 'text-fg underline-offset-4 hover:underline';
 ---
 
 <a href={href} class:list={[baseClass, className]} target={target} rel={rel}>

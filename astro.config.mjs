@@ -35,6 +35,12 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: 'Maple Mono',
       cssVariable: '--font-maple-mono',
+      weights: [400, 600, 700],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'JetBrains Mono',
+      cssVariable: '--font-jetbrains-mono',
     },
   ],
 

@@ -1,40 +1,59 @@
 ---
 import Container from '@/components/container.astro';
-import Link from '@/components/link.astro';
 import Button from '@/components/button.astro';
+import Logo from '@/components/logo.astro';
 import { MobileNav } from '@/components/mobile-nav';
+import { EMAIL, NAV_ITEMS, isActivePath } from '@/data/site';
 
-const navItems = [
-  { href: '/projects', label: 'Projects' },
-  { href: '/posts', label: 'Posts' },
-  { href: '/set-up', label: 'Set up' },
-  { href: '/me', label: 'Me' },
-];
+const { pathname } = Astro.url;
 ---
 
-<header class='relative z-50 border-b border-edge bg-background'>
-  <Container class='relative flex items-center justify-between gap-4 p-6'>
-    <Link
-      href='/'
-      class='text-2xl font-black tracking-tight lowercase no-underline'
-    >
-      lxuu.dev
-    </Link>
+<header
+  class='sticky top-0 z-50 border-b border-line transition-colors data-scrolled:bg-bg/70 data-scrolled:backdrop-blur-md'
+  data-navbar
+>
+  <Container class='flex h-14 items-center justify-between md:h-16'>
+    <Logo />
 
-    <nav
-      class='hidden items-center gap-6 text-sm text-muted-foreground md:flex'
-    >
-      {navItems.map((item) => <Link href={item.href}>{item.label}</Link>)}
+    <nav class='hidden items-center gap-4 text-body md:flex'>
+      {NAV_ITEMS.map((item) => {
+        const isActive = isActivePath(pathname, item.href);
+
+        return (
+          <a
+            href={item.href}
+            class:list={[
+              'flex transition-colors hover:text-fg',
+              isActive ? 'text-fg' : 'text-fg-muted',
+            ]}
+            aria-current={isActive ? 'page' : undefined}
+          >
+            <span class:list={[!isActive && 'invisible']} aria-hidden='true'>
+              [
+            </span>
+            {item.label}
+            <span class:list={[!isActive && 'invisible']} aria-hidden='true'>
+              ]
+            </span>
+          </a>
+        );
+      })}
     </nav>
 
-    <Button
-      class='hidden! md:inline-flex!'
-      onclick="window.location.href='mailto:antonisaputra049@gmail.com'"
-      aria-label='Hire me via email'
-    >
-      Hire Me
+    <Button href={`mailto:${EMAIL}`} class='max-md:hidden'>
+      [@] hire me
     </Button>
 
-    <MobileNav navItems={navItems} client:load />
+    <MobileNav currentPath={pathname} client:load />
   </Container>
 </header>
+
+<script>
+  const syncScrolled = () =>
+    document
+      .querySelector('[data-navbar]')
+      ?.toggleAttribute('data-scrolled', window.scrollY > 0);
+
+  window.addEventListener('scroll', syncScrolled, { passive: true });
+  document.addEventListener('astro:page-load', syncScrolled);
+</script>

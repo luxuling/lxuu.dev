@@ -10,6 +10,7 @@ const posts = defineCollection({
     status: z.enum(['draft', 'posted']).default('draft'),
     date: z.coerce.date(),
     highlight: z.boolean().optional().default(false),
+    order: z.number().int().nullable().optional(),
     thumbnail: z.string().nullable().optional(),
   }),
 });
@@ -23,7 +24,9 @@ const projects = defineCollection({
     status: z.enum(['active', 'wip', 'archived']),
     date: z.coerce.date(),
     highlight: z.boolean().optional().default(false),
+    order: z.number().int().nullable().optional(),
     thumbnail: z.string().nullable().optional(),
+    logo: z.string().nullable().optional(),
     links: z
       .object({
         github: z.string().nullable().optional(),

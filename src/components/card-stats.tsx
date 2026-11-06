@@ -4,35 +4,25 @@ import type { EngagementTarget } from '@/services/engagement-targets';
 interface Props {
   target: EngagementTarget;
   slug: string;
+  separator?: string;
 }
 
-interface StatProps {
-  title: string;
-  label: string;
-  count: number;
-}
-
-const Stat = ({ title, label, count }: StatProps) => (
-  <>
-    <span className='text-subtle'>·</span>
-    <span className='text-subtle' title={title}>
-      <span className='text-foreground'>{count}</span> {label}
-    </span>
-  </>
-);
-
-export const CardStats = ({ target, slug }: Props) => {
+export const CardStats = ({ target, slug, separator = '  ' }: Props) => {
   const stats = useStats(target, slug);
+  if (!stats)
+    return (
+      <span className='whitespace-pre' aria-hidden='true'>
+        {['<3 -', '[..] -', '(o) -'].join(separator)}
+      </span>
+    );
 
   return (
-    <>
-      <Stat title='Likes' label='likes' count={stats?.like_count ?? 0} />
-      <Stat
-        title='Comments'
-        label='comments'
-        count={stats?.comment_count ?? 0}
-      />
-      <Stat title='Views' label='views' count={stats?.view_count ?? 0} />
-    </>
+    <span className='whitespace-pre'>
+      <span title='Likes'>{`<3 ${stats.like_count}`}</span>
+      {separator}
+      <span title='Comments'>{`[..] ${stats.comment_count}`}</span>
+      {separator}
+      <span title='Views'>{`(o) ${stats.view_count}`}</span>
+    </span>
   );
 };

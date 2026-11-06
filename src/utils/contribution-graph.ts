@@ -18,6 +18,8 @@ export const fillForCount = (count: number) => {
   return 'var(--color-contrib-4)';
 };
 
+export const glyphForCount = (count: number) => (count === 0 ? '·' : '■');
+
 export const columnCells = (
   week: ContributionWeek,
 ): (ContributionDay | null)[] => {

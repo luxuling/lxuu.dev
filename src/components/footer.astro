@@ -1,45 +1,72 @@
 ---
 import Container from '@/components/container.astro';
-import Link from '@/components/link.astro';
-
-const links = [
-  { href: 'https://github.com/luxuling', label: 'GitHub' },
-  {
-    href: 'https://www.linkedin.com/in/antoni-saputra-3b1869241/',
-    label: 'LinkedIn',
-  },
-  { href: 'https://www.instagram.com/lxuuu.ling/', label: 'Instagram' },
-  { href: 'https://discord.com/users/520879989537898496', label: 'Discord' },
-];
+import Button from '@/components/button.astro';
+import { EMAIL, NAV_ITEMS, SOCIAL_LINKS } from '@/data/site';
+import { FOOTER_CAT } from '@/utils/ascii-art';
 ---
 
-<footer class='mx-auto w-full max-w-260'>
-  <Container
-    class='grid grid-cols-2 divide-x divide-y divide-edge border border-edge px-0! md:grid-cols-4 md:divide-y-0'
-  >
-    {
-      links.map((link) => (
-        <Link
-          href={link.href}
-          class='flex w-full items-center justify-center px-2 py-4 text-center text-sm md:px-3 md:py-6'
+<footer class='relative overflow-hidden border-t border-line'>
+  <Container class='flex flex-col gap-8 pt-16 md:gap-12 md:pt-24'>
+    <div class='flex flex-col gap-6 md:flex-row md:items-end md:justify-between'>
+      <div class='flex flex-col gap-3'>
+        <p class='text-label font-semibold text-fg-muted uppercase'>
+          [ contact ]
+        </p>
+        <h2 class='text-h1 font-bold text-fg'>
+          have an idea? let's build it<span class='text-fg-subtle'>.</span>
+        </h2>
+        <a
+          href={`mailto:${EMAIL}`}
+          class='text-body text-fg-muted hover:text-fg'
         >
-          {link.label}
-        </Link>
-      ))
-    }
-  </Container>
+          {EMAIL}
+        </a>
+      </div>
+      <Button href={`mailto:${EMAIL}`} class='self-start md:self-auto'>
+        [@] hire me
+      </Button>
+    </div>
 
-  <Container
-    class='flex flex-col items-center justify-between gap-4 px-4 py-6 text-center text-xs text-subtle md:flex-row md:py-10 md:text-left'
-  >
-    <p class='shrink-0'>©2026 Lixu Ling</p>
-    <nav
-      class='flex flex-wrap items-center justify-center gap-x-5 gap-y-1 md:justify-end'
-      aria-label='Footer'
-    >
-      <Link href='/projects' class='hover:text-foreground'>Projects</Link>
-      <Link href='/posts' class='hover:text-foreground'>Posts</Link>
-      <Link href='/me' class='hover:text-foreground'>Me</Link>
-    </nav>
+    <ul class='grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4'>
+      {SOCIAL_LINKS.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            target='_blank'
+            rel='noreferrer'
+            class='group flex flex-col gap-1 border border-line bg-surface/40 p-4 transition-colors hover:bg-surface-2'
+          >
+            <span class='flex justify-between text-small'>
+              <span class='text-fg'>
+                [{link.key}] {link.label}
+              </span>
+              <span class='text-fg-subtle transition-colors group-hover:text-fg'>
+                [↗]
+              </span>
+            </span>
+            <span class='text-micro text-fg-subtle'>{link.handle}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class='relative flex justify-center' aria-hidden='true'>
+      <div class='footer-glow absolute inset-x-[-50vw] -top-14 bottom-0'></div>
+      <pre class='ascii relative text-[9px]/[10px] text-fg opacity-22 md:text-sm/4'>{FOOTER_CAT}</pre>
+    </div>
+
+    <div class='flex flex-col items-center gap-2 pb-6 text-micro text-fg-subtle md:flex-row md:justify-between'>
+      <p>© 2026 lixu ling · yogyakarta</p>
+      <nav aria-label='Footer'>
+        {NAV_ITEMS.map((item, index) => (
+          <>
+            {index > 0 && ' · '}
+            <a href={item.href} class='hover:text-fg'>
+              {item.label}
+            </a>
+          </>
+        ))}
+      </nav>
+    </div>
   </Container>
 </footer>

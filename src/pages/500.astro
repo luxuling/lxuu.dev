@@ -1,11 +1,15 @@
 ---
 import StatusPage from '@/components/status-page.astro';
+import Page from '@/components/page.astro';
 import Layout from '@/layouts/layout.astro';
 ---
 
-<Layout>
-  <StatusPage
-    title='500: server error (>_<)'
-    message='something went wrong on our side (x_x). please try again soon.'
-  />
+<Layout pageTitle='500 — lxuu.dev'>
+  <Page>
+    <StatusPage
+      code={500}
+      title='500: server error (>_<)'
+      message='something went wrong on our side (x_x). please try again soon.'
+    />
+  </Page>
 </Layout>

@@ -2,12 +2,12 @@
 import { getCollection } from 'astro:content';
 import { ProjectsExplorer } from '@/components/projects-explorer';
 import Layout from '@/layouts/layout.astro';
-import { sortByNewest, toProjectListItem } from '@/utils/content-items';
+import { sortEntries, toProjectListItem } from '@/utils/content-items';
 
 export const prerender = false;
 
 const entries = await getCollection('projects');
-const projects = sortByNewest(entries).map(toProjectListItem);
+const projects = sortEntries(entries).map(toProjectListItem);
 ---
 
 <Layout pageTitle='projects — lxuu.dev'>

@@ -1,18 +1,15 @@
 ---
 import { getEntry, render } from 'astro:content';
 import { z } from 'astro/zod';
-import Container from '@/components/container.astro';
+import ArticleLayout from '@/components/article-layout.astro';
+import { CardStats } from '@/components/card-stats';
 import ContentLink from '@/components/content-link.astro';
-import { Engagement } from '@/components/engagement';
-import Link from '@/components/link.astro';
 import ZoomImage from '@/components/zoom-image.astro';
-import { TableOfContents } from '@/components/table-of-contents';
-import { TagList } from '@/components/tag-list';
 import { getGithubProfileCredentials } from '@/config/env';
 import Layout from '@/layouts/layout.astro';
 import { fetchGithubStarCount } from '@/services/github';
 import { formatMonthYear } from '@/utils/format-date';
-import { STATUS_COLOR, STATUS_LABEL } from '@/utils/project-status';
+import { STATUS_LABEL } from '@/utils/project-status';
 import { headingsToTocItems } from '@/utils/toc';
 
 export const prerender = false;
@@ -25,7 +22,6 @@ if (!entry) {
 }
 
 const { Content, headings } = await render(entry);
-const tocItems = headingsToTocItems(headings);
 const { title, description, tags, status, date, thumbnail, links } = entry.data;
 
 const githubStars = links?.github
@@ -37,89 +33,56 @@ const githubStars = links?.github
 ---
 
 <Layout pageTitle={`${title} — lxuu.dev`}>
-  <section class='py-8 pb-20 sm:py-12 xl:pb-12'>
-    <Container class='flex flex-col gap-8'>
-      <div class='flex flex-col gap-4'>
-        <Link href='/projects' class='font-mono text-xs text-subtle'>
-          ← projects
-        </Link>
+  <ArticleLayout
+    target='projects'
+    slug={entry.id}
+    title={title}
+    description={description}
+    tags={tags}
+    thumbnail={thumbnail}
+    tocItems={headingsToTocItems(headings)}
+  >
+    <Fragment slot='meta'>
+      <span class='text-fg-muted'>{STATUS_LABEL[status]}</span> ·
+      <span class='lowercase'>{formatMonthYear(date)}</span> ·
+      <CardStats
+        client:load
+        target='projects'
+        slug={entry.id}
+        separator=' · '
+      />
+    </Fragment>
 
-        <div class='flex flex-col gap-2'>
-          <div class='flex flex-wrap items-center gap-3'>
-            <h1 class='text-xl font-semibold tracking-tight text-foreground'>
-              {title}
-            </h1>
-            <span class:list={['font-mono text-xs', STATUS_COLOR[status]]}>
-              {STATUS_LABEL[status]}
-            </span>
-            <span class='font-mono text-xs text-subtle'
-              >{formatMonthYear(date)}</span
-            >
-          </div>
-          <p class='text-sm text-muted-foreground'>{description}</p>
-        </div>
+    {(links?.live || links?.github) && (
+      <p slot='links' class='mt-1 flex flex-wrap gap-6 text-small'>
+        {links?.live && (
+          <a
+            href={links.live}
+            target='_blank'
+            rel='noreferrer'
+            class='text-fg hover:underline'
+          >
+            [↗] live site
+          </a>
+        )}
+        {links?.github && (
+          <a
+            href={links.github}
+            target='_blank'
+            rel='noreferrer'
+            class='text-fg hover:underline'
+          >
+            &lt;/&gt; source
+          </a>
+        )}
+        {githubStars !== null && (
+          <span class='text-fg-muted' aria-label='GitHub stars'>
+            [*] {githubStars.toLocaleString()}
+          </span>
+        )}
+      </p>
+    )}
 
-        <div class='flex flex-wrap items-center gap-4'>
-          <TagList tags={tags} />
-        </div>
-      </div>
-
-      {
-        thumbnail && (
-          <ZoomImage
-            src={thumbnail}
-            alt={`${title} thumbnail`}
-            frameClass='aspect-video w-full max-w-4xl rounded-md border border-edge'
-            class='size-full object-cover'
-          />
-        )
-      }
-
-      {
-        (links?.github || links?.live) && (
-          <div class='flex items-center gap-4 text-sm'>
-            {links?.live && (
-              <Link href={links.live} target='_blank'>
-                ↗ live site
-              </Link>
-            )}
-            {links?.github && (
-              <>
-                <Link href={links.github} target='_blank'>
-                  ⌥ source
-                </Link>
-                {githubStars !== null && (
-                  <span class='text' aria-label='GitHub stars'>
-                    ★ {githubStars.toLocaleString()}
-                  </span>
-                )}
-              </>
-            )}
-          </div>
-        )
-      }
-
-      <div class='h-px bg-edge'></div>
-
-      <div class='flex gap-12'>
-        <div class='min-w-0 flex-1'>
-          <div class='prose-project'>
-            <Content components={{ a: ContentLink, img: ZoomImage }} />
-          </div>
-
-          <Engagement client:load target='projects' slug={entry.id} />
-        </div>
-
-        {
-          tocItems.length > 0 && (
-            <aside class='xl:w-48 xl:shrink-0'>
-              <div class='sticky top-10'>
-                <TableOfContents client:load items={tocItems} />
-              </div>
-            </aside>
-          )
-        }
-      </div>
-    </Container>
-  </section>
+    <Content components={{ a: ContentLink, img: ZoomImage }} />
+  </ArticleLayout>
 </Layout>

@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react';
 import { LoadingImage } from '@/components/loading-image';
 import { useToggle } from '@/hooks/use-toggle';
+import { buttonClass } from '@/utils/button-class';
 
 interface Props {
   src: string;
@@ -42,7 +43,7 @@ export const ImageZoom = ({
         type='button'
         onClick={zoom.open}
         aria-label={label}
-        className='block w-full cursor-zoom-in border-0 bg-transparent p-0 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
+        className='block w-full cursor-zoom-in border-0 bg-transparent p-0 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg'
       >
         <LoadingImage
           src={src}
@@ -58,27 +59,30 @@ export const ImageZoom = ({
           onClose={zoom.close}
           onClick={closeIfBackdrop}
           aria-label={alt || 'Enlarged image'}
-          className='image-zoom-dialog fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col border-0 bg-transparent p-4 backdrop:bg-background/80 backdrop:backdrop-blur-sm'
+          className='image-zoom-dialog fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col gap-6 border-0 bg-transparent p-4 backdrop:bg-bg/85 md:p-8'
         >
-          <form method='dialog' className='mb-3 flex shrink-0 justify-end'>
+          <form method='dialog' className='flex shrink-0 justify-end'>
             <button
               type='submit'
               autoFocus
-              className='rounded-sm border border-edge bg-panel px-3 py-1 font-mono text-xs text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
+              className={`${buttonClass('ghost')} bg-surface`}
             >
-              close
+              [x] close
             </button>
           </form>
           <div
-            className='flex min-h-0 flex-1 items-center justify-center'
+            className='flex min-h-0 flex-1 flex-col items-center justify-center gap-2'
             onClick={closeIfBackdrop}
           >
             <img
               src={src}
               alt={alt}
-              className='max-h-full max-w-full cursor-zoom-out object-contain'
+              className='max-h-[calc(100%-2rem)] max-w-full cursor-zoom-out border border-line object-contain'
               onClick={closeFromImage}
             />
+            <p className='text-micro text-fg-subtle'>
+              {alt ? `${alt} · ` : ''}click outside or esc to close
+            </p>
           </div>
         </dialog>
       )}

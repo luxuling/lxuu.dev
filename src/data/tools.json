@@ -2,7 +2,8 @@
   "tagline": "What runs under the hood.",
   "screenshot": {
     "src": "https://raw.githubusercontent.com/luxuling/dotfiles/refs/heads/main/assets/ss.png",
-    "alt": "My Linux desktop setup"
+    "alt": "My Linux desktop setup",
+    "caption": "arch + hyprland, monochrome groknight"
   },
   "whyLinux": [
     "I switched to Linux because I wanted to actually understand my environment — not just use it. The ability to configure everything from the window manager to the font rendering without hitting invisible walls is something I can't go back from.",

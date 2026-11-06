@@ -1,0 +1,13 @@
+---
+import { PAGE_CLASS } from '@/utils/layout-class';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={[PAGE_CLASS, className]}>
+  <slot />
+</div>

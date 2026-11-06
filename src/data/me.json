@@ -1,9 +1,28 @@
 {
   "tagline": "A developer, occasionally a human being.",
   "summaryParagraphs": [
-    "Hey — I'm Antoni Saputra, though most people know me as Lixu :). By day I work as a front-end engineer; outside of that I build things for fun and try to document the journey here.",
-    "Most of my time goes into the React ecosystem — shipping product, integrating APIs, and keeping the front end from falling apart.",
-    "I'm drawn to software that's built with genuine care for the people who use it."
+    [
+      {
+        "text": "Hey — I'm "
+      },
+      {
+        "text": "Antoni Saputra",
+        "emphasis": true
+      },
+      {
+        "text": ", though most people know me as Lixu :). By day I work as a front-end engineer; outside of that I build things for fun and try to document the journey here."
+      }
+    ],
+    [
+      {
+        "text": "Most of my time goes into the React ecosystem — shipping product, integrating APIs, and keeping the front end from falling apart."
+      }
+    ],
+    [
+      {
+        "text": "I'm drawn to software that's built with genuine care for the people who use it."
+      }
+    ]
   ],
   "quote": {
     "body": "Programs must be written for people to read, and only incidentally for machines to execute.",
@@ -14,10 +33,20 @@
     {
       "tone": "default",
       "segments": [
-        { "text": "Working as " },
-        { "text": "Founder", "emphasis": true },
-        { "text": " at " },
-        { "text": "Flex Studio ID", "href": "https://flexstudio.id/" },
+        {
+          "text": "Working as "
+        },
+        {
+          "text": "Founder",
+          "emphasis": true
+        },
+        {
+          "text": " at "
+        },
+        {
+          "text": "Flex Studio ID",
+          "href": "https://flexstudio.id/"
+        },
         {
           "text": " — designing and shipping client websites and web apps."
         }
@@ -26,25 +55,40 @@
     {
       "tone": "default",
       "segments": [
-        { "text": "Getting sharper at " },
-        { "text": "web and API development", "emphasis": true },
-        { "text": " — reading more, thinking more, shipping more." }
+        {
+          "text": "Getting sharper at "
+        },
+        {
+          "text": "web and API development",
+          "emphasis": true
+        },
+        {
+          "text": " — reading more, thinking more, shipping more."
+        }
       ]
     },
     {
       "tone": "default",
       "segments": [
-        { "text": "Exploring " },
+        {
+          "text": "Exploring "
+        },
         {
           "text": "new things in the world of programming",
           "emphasis": true
         },
-        { "text": " — learning, experimenting, and growing along the way." }
+        {
+          "text": " — learning, experimenting, and growing along the way."
+        }
       ]
     },
     {
       "tone": "subtle",
-      "segments": [{ "text": "Writing it all down as I go." }]
+      "segments": [
+        {
+          "text": "Writing it all down as I go."
+        }
+      ]
     }
   ],
   "experiences": [

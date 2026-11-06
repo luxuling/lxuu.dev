@@ -4,6 +4,7 @@ import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import Navbar from '@/components/navbar.astro';
 import Footer from '@/components/footer.astro';
+import HeroBackground from '@/components/hero-background.astro';
 import { Toaster } from '@/components/toaster';
 
 interface Props {
@@ -18,22 +19,22 @@ const { pageTitle } = Astro.props;
   <head>
     <meta charset='UTF-8' />
     <Font cssVariable='--font-maple-mono' />
+    <Font cssVariable='--font-jetbrains-mono' />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <meta name='generator' content={Astro.generator} />
     <title>{pageTitle}</title>
     <ClientRouter />
   </head>
-  <body class='bg-background'>
-    <main
-      class='mx-auto flex min-h-screen w-full max-w-260 flex-col border-x border-edge bg-background text-foreground'
-    >
-      <Navbar transition:persist />
-      <section class='flex-1' transition:animate='fade'>
+  <body class='text-fg'>
+    <div class='relative isolate flex min-h-screen flex-col'>
+      <HeroBackground />
+      <Navbar />
+      <main class='flex-1' transition:animate='fade'>
         <slot />
-      </section>
-    </main>
-    <Footer />
+      </main>
+      <Footer />
+    </div>
     <Toaster client:idle transition:persist />
   </body>
 </html>

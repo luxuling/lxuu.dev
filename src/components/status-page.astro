@@ -1,34 +1,35 @@
 ---
+import Button from '@/components/button.astro';
+import PixelArt from '@/components/pixel-art.astro';
 import { Spinner } from '@/components/spinner';
+import { STATUS_CODE_ART } from '@/utils/ascii-art';
 
 interface Props {
   title: string;
   message: string;
+  code?: number;
   showSpinner?: boolean;
 }
 
-const { title, message, showSpinner = false } = Astro.props;
+const { title, message, code, showSpinner = false } = Astro.props;
+const art = code ? STATUS_CODE_ART[code] : undefined;
+const curlLine = `$ curl -I lxuu.dev/this-page  →  HTTP/2 ${code}`;
 ---
 
-<section
-  class='flex min-h-[52vh] w-full flex-col items-center justify-center gap-5 px-4 py-10 sm:min-h-[60vh] sm:gap-6 sm:py-14'
->
-  <div
-    class='mx-auto w-full max-w-xl border border-border px-4 py-3 sm:px-8 sm:py-3.5'
-  >
-    <h1
-      class='text-center text-base/snug tracking-tight text-pretty text-foreground sm:text-lg md:text-xl'
-    >
-      {title}
-    </h1>
+<section class='flex flex-col items-center gap-12 py-8 md:gap-16 md:py-8'>
+  <div class='flex w-full max-w-174 flex-col items-center gap-4 border border-line bg-surface/40 px-4 py-12 text-center md:gap-6 md:px-12 md:py-16'>
+    {art && <PixelArt art={art} label={String(code)} class='mb-2 w-79' />}
+    <h1 class='text-title font-semibold text-pretty text-fg'>{title}</h1>
+    <div class='flex items-center gap-3'>
+      {showSpinner && <Spinner client:load />}
+      <p class='text-body text-pretty text-fg-muted'>{message}</p>
+    </div>
+    {code && (
+      <Button href='/' variant='ghost' class='mt-2'>
+        &lt;- back home
+      </Button>
+    )}
   </div>
 
-  <div
-    class='flex max-w-md flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:gap-3 sm:text-left'
-  >
-    {showSpinner ? <Spinner client:load /> : null}
-    <p class='text-sm/relaxed text-pretty text-muted-foreground sm:text-base'>
-      {message}
-    </p>
-  </div>
+  {code && <p class='text-micro whitespace-pre text-fg-subtle'>{curlLine}</p>}
 </section>
