@@ -38,7 +38,7 @@ const TocList = ({ items, activeId, itemClassName, onNavigate }: ListProps) => (
 
 export const TableOfContents = ({ items }: Props) => {
   const activeId = useActiveHeading(items);
-  const drawer = useToggle();
+  const modal = useToggle();
 
   return (
     <>
@@ -55,20 +55,22 @@ export const TableOfContents = ({ items }: Props) => {
       </nav>
 
       <div className='lg:hidden'>
-        {drawer.isOpen && (
+        {modal.isOpen && (
           <div
             className='fixed inset-0 z-40 bg-bg/70'
-            onClick={drawer.close}
+            onClick={modal.close}
             aria-hidden='true'
           />
         )}
 
         <div
-          id='toc-drawer'
+          id='toc-modal'
           role='dialog'
           aria-label='Table of contents'
-          className={`fixed inset-y-0 right-0 z-50 flex w-75 max-w-[85vw] flex-col gap-4 border-l border-line bg-surface p-4 transition-transform duration-300 ease-in-out ${
-            drawer.isOpen ? 'translate-x-0' : 'translate-x-[110%]'
+          className={`fixed top-1/2 left-1/2 z-50 flex max-h-[70vh] w-[calc(100vw-2rem)] max-w-sm -translate-1/2 flex-col gap-4 border border-line bg-surface p-4 transition duration-200 ease-out ${
+            modal.isOpen
+              ? 'scale-100 opacity-100'
+              : 'pointer-events-none invisible scale-95 opacity-0'
           }`}
         >
           <div className='flex items-center justify-between'>
@@ -77,7 +79,7 @@ export const TableOfContents = ({ items }: Props) => {
             </p>
             <button
               type='button'
-              onClick={drawer.close}
+              onClick={modal.close}
               className='cursor-pointer text-body font-semibold text-fg'
               aria-label='Close table of contents'
             >
@@ -89,16 +91,16 @@ export const TableOfContents = ({ items }: Props) => {
               items={items}
               activeId={activeId}
               itemClassName='py-2 text-body'
-              onNavigate={drawer.close}
+              onNavigate={modal.close}
             />
           </div>
         </div>
 
         <button
           type='button'
-          onClick={drawer.toggle}
-          aria-expanded={drawer.isOpen}
-          aria-controls='toc-drawer'
+          onClick={modal.toggle}
+          aria-expanded={modal.isOpen}
+          aria-controls='toc-modal'
           className='fixed right-4 bottom-4 z-30 cursor-pointer bg-fg px-4 py-2 text-small text-bg'
         >
           [≣] contents
