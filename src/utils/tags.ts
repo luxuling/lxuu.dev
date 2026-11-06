@@ -76,3 +76,6 @@ export const tagToAdd = (
 
   return known.find((tag) => sameTag(tag, normalized)) ?? normalized;
 };
+
+export const tagLabel = (tag: string) =>
+  `#${normalizeTag(tag).toLocaleLowerCase().replace(/ /g, '-')}`;

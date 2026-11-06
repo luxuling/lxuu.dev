@@ -1,0 +1,59 @@
+---
+import type { BuildingItem } from '@/types/content';
+
+interface Props {
+  items: BuildingItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<aside class='flex flex-col border border-line bg-surface/40 md:w-80 md:shrink-0'>
+  <header class='flex items-center justify-between border-b border-line px-4 py-3'>
+    <h2 class='text-small text-fg-muted'>── now building ──</h2>
+    <span class='text-micro text-fg-subtle'>
+      {String(items.length).padStart(2, '0')}
+    </span>
+  </header>
+
+  <ul>
+    {items.map((item) => (
+      <li class='flex flex-col gap-1 border-b border-line px-4 py-3'>
+        <div class='flex items-center justify-between gap-4'>
+          <a
+            href={`/projects/${item.slug}`}
+            class='text-body font-semibold text-fg hover:underline'
+          >
+            <span class='text-fg-subtle'>[*]</span> {item.title}
+          </a>
+          {item.live ? (
+            <a
+              href={item.live}
+              target='_blank'
+              rel='noreferrer'
+              class='shrink-0 text-small text-fg hover:underline'
+            >
+              (•) live
+            </a>
+          ) : (
+            item.github && (
+              <a
+                href={item.github}
+                target='_blank'
+                rel='noreferrer'
+                class='shrink-0 text-small text-fg hover:underline'
+              >
+                &lt;/&gt; src
+              </a>
+            )
+          )}
+        </div>
+        <p class='truncate pl-8 text-small text-fg-muted'>{item.description}</p>
+      </li>
+    ))}
+  </ul>
+
+  <a href='/projects' class='px-4 py-3 text-small text-fg hover:underline'>
+    -&gt; all projects
+  </a>
+</aside>

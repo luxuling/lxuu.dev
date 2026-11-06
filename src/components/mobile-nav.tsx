@@ -1,72 +1,87 @@
 import { useMobileMenu } from '@/hooks/use-mobile-menu';
-
-interface NavItem {
-  href: string;
-  label: string;
-}
+import { EMAIL, NAV_ITEMS, SOCIAL_LINKS, isActivePath } from '@/data/site';
+import { buttonClass } from '@/utils/button-class';
 
 interface Props {
-  navItems: NavItem[];
+  currentPath: string;
 }
 
-const LINK_CLASS = 'text-fg no-underline underline-offset-4 hover:underline';
+const MENU_ITEMS = [{ href: '/', label: 'home' }, ...NAV_ITEMS];
 
-export const MobileNav = ({ navItems }: Props) => {
+export const MobileNav = ({ currentPath }: Props) => {
   const { isOpen, close, toggle } = useMobileMenu();
 
   return (
     <>
       <button
         type='button'
-        className='inline-flex size-9 items-center justify-center text-fg-muted hover:text-fg md:hidden'
-        aria-label='Toggle menu'
+        className='cursor-pointer text-body font-semibold text-fg md:hidden'
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
         aria-controls='mobile-menu-panel'
         onClick={toggle}
       >
-        <svg
-          className='size-6 shrink-0'
-          width='24'
-          height='24'
-          viewBox='0 0 24 24'
-          aria-hidden='true'
-        >
-          <use
-            href={
-              isOpen ? '/icons/close.svg#icon' : '/icons/hamburger.svg#icon'
-            }
-          />
-        </svg>
+        {isOpen ? '[x]' : '[≡]'}
       </button>
 
       <nav
         id='mobile-menu-panel'
-        className={`absolute inset-x-0 top-full z-40 min-h-[calc(100dvh-5.5rem)] border-t border-line bg-bg px-6 py-8 md:hidden ${
-          isOpen ? '' : 'hidden'
+        className={`absolute inset-x-0 top-full z-40 h-[calc(100dvh-3.5rem)] flex-col overflow-y-auto border-t border-line bg-black bg-linear-to-b from-white/4 to-transparent to-35% md:hidden ${
+          isOpen ? 'flex' : 'hidden'
         }`}
         aria-hidden={!isOpen}
       >
-        <div className='flex flex-col gap-6 text-sm text-fg'>
-          <a href='/' className={LINK_CLASS} onClick={close}>
-            Home
-          </a>
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={LINK_CLASS}
-              onClick={close}
-            >
-              {item.label}
-            </a>
-          ))}
+        <ul className='flex flex-col px-4 py-8'>
+          {MENU_ITEMS.map((item, index) => {
+            const isActive = isActivePath(currentPath, item.href);
+
+            return (
+              <li key={item.href} className='border-b border-line'>
+                <a
+                  href={item.href}
+                  onClick={close}
+                  className='flex items-center justify-between py-4'
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <span className='flex items-center gap-4'>
+                    <span className='text-small text-fg-subtle'>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span
+                      className={`text-h1 font-bold ${isActive ? 'text-fg' : 'text-fg-muted'}`}
+                    >
+                      {item.label}
+                    </span>
+                  </span>
+                  <span className='text-body text-fg-subtle'>-&gt;</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div className='flex flex-col gap-4 px-4'>
           <a
-            href='mailto:antonisaputra049@gmail.com'
-            className={LINK_CLASS}
+            href={`mailto:${EMAIL}`}
             onClick={close}
+            className={`${buttonClass()} w-full`}
           >
-            Hire Me
+            [@] hire me
           </a>
+          <div className='flex gap-4 text-small text-fg-muted'>
+            {SOCIAL_LINKS.map((link) => (
+              <a
+                key={link.key}
+                href={link.href}
+                target='_blank'
+                rel='noreferrer'
+                aria-label={link.label}
+                className='hover:text-fg'
+              >
+                [{link.key}]
+              </a>
+            ))}
+          </div>
         </div>
       </nav>
     </>

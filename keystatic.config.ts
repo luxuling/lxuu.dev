@@ -70,6 +70,10 @@ export default config({
           label: 'Thumbnail',
           ...contentImageOptions('projects'),
         }),
+        logo: fields.image({
+          label: 'Logo',
+          ...contentImageOptions('projects'),
+        }),
         links: fields.object({
           github: fields.url({ label: 'GitHub URL' }),
           live: fields.url({ label: 'Live URL' }),

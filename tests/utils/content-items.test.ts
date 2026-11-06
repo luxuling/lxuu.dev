@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  logoInitials,
   sortByNewest,
   toPostListItem,
   toProjectListItem,
@@ -37,6 +38,7 @@ describe('toPostListItem', () => {
       description: 'Description',
       tags: ['astro'],
       dateLabel: 'Jul 2026',
+      thumbnail: null,
     });
   });
 });
@@ -61,5 +63,16 @@ describe('toProjectListItem', () => {
       hasGithubLink: true,
       hasLiveLink: false,
     });
+  });
+});
+
+describe('logoInitials', () => {
+  it('uses the first two capitals of a camel-cased title', () => {
+    expect(logoInitials('BlastJok')).toBe('bj');
+  });
+
+  it('falls back to the first two letters', () => {
+    expect(logoInitials('lxuu-dev')).toBe('lx');
+    expect(logoInitials('Dotfiles')).toBe('do');
   });
 });

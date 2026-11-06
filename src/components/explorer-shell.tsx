@@ -1,43 +1,44 @@
 import type { ReactNode } from 'react';
+import { PageHeader } from '@/components/page-header';
+import { PAGE_CLASS } from '@/utils/layout-class';
 
 interface Props {
+  path: string;
   title: string;
   subtitle: string;
   children: ReactNode;
 }
 
-export const ExplorerShell = ({ title, subtitle, children }: Props) => (
-  <section className='py-8 sm:py-12'>
-    <div className='mx-auto flex w-full max-w-269.5 flex-col gap-8 px-4 md:px-20'>
-      <div className='px-1'>
-        <h1 className='text-xl font-semibold tracking-tight text-fg'>
-          {title}
-          <span className='text-fg-muted'>.</span>
-        </h1>
-        <p className='mt-1 text-sm text-fg-subtle'>{subtitle}</p>
-      </div>
+export const ExplorerShell = ({ path, title, subtitle, children }: Props) => (
+  <div className={PAGE_CLASS}>
+    <PageHeader path={path} title={title} subtitle={subtitle} />
+    {children}
+  </div>
+);
 
-      {children}
-    </div>
-  </section>
+interface ListProps {
+  children: ReactNode;
+}
+
+export const ExplorerList = ({ children }: ListProps) => (
+  <div className='flex flex-col gap-4'>{children}</div>
 );
 
 interface EmptyProps {
   message: string;
+  onClear: () => void;
 }
 
-export const ExplorerEmpty = ({ message }: EmptyProps) => (
-  <div className='border border-line bg-surface p-4 text-sm text-fg-subtle sm:p-6'>
-    {message}
+export const ExplorerEmpty = ({ message, onClear }: EmptyProps) => (
+  <div className='flex flex-col items-center gap-2 border border-line px-6 py-16 text-center'>
+    <p className='text-h1 font-bold text-fg-muted'>(._.)</p>
+    <p className='text-body text-fg-muted'>{message}</p>
+    <button
+      type='button'
+      onClick={onClear}
+      className='cursor-pointer text-small text-fg hover:underline'
+    >
+      [x] clear filters
+    </button>
   </div>
-);
-
-interface LabelProps {
-  children: ReactNode;
-}
-
-export const SectionLabel = ({ children }: LabelProps) => (
-  <span className='px-1 font-mono text-xs tracking-widest text-fg-subtle uppercase'>
-    {children}
-  </span>
 );

@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
+import GitHubContribution from '@/components/github-contribution.astro';
 import GitHubHome from '@/components/github-home.astro';
+import Page from '@/components/page.astro';
 import HomeHighlights from '@/components/home-highlights.astro';
 import StatusPage from '@/components/status-page.astro';
 import { getGithubProfileCredentials } from '@/config/env';
@@ -8,9 +10,12 @@ import Layout from '@/layouts/layout.astro';
 import { fetchGithubHome, type GithubHome } from '@/services/github';
 import {
   sortByNewest,
+  toBuildingItem,
   toPostListItem,
   toProjectListItem,
 } from '@/utils/content-items';
+
+const BUILDING_LIMIT = 3;
 
 export const prerender = false;
 
@@ -39,15 +44,22 @@ const postEntries = await getCollection(
 
 const highlightedProjects = sortByNewest(projectEntries).map(toProjectListItem);
 const highlightedPosts = sortByNewest(postEntries).map(toPostListItem);
+const building = sortByNewest(projectEntries)
+  .filter((entry) => entry.data.status === 'active')
+  .slice(0, BUILDING_LIMIT)
+  .map(toBuildingItem);
 ---
 
-<Layout pageTitle='welcome — lxuu.dev'>
-  {
-    data ? (
-      <GitHubHome data={data} />
+<Layout pageTitle='welcome — lxuu.dev' hero='home'>
+  <Page>
+    {data ? (
+      <>
+        <GitHubHome data={data} building={building} />
+        <GitHubContribution data={data} />
+      </>
     ) : (
       <StatusPage title='Could not load GitHub profile' message={loadError} />
-    )
-  }
-  <HomeHighlights projects={highlightedProjects} posts={highlightedPosts} />
+    )}
+    <HomeHighlights projects={highlightedProjects} posts={highlightedPosts} />
+  </Page>
 </Layout>

@@ -43,5 +43,21 @@ export const useListFilter = <Item extends Filterable>(items: Item[]) => {
         : [...previous, tag],
     );
 
-  return { query, setQuery, selectedTags, toggleTag, allTags, filtered };
+  const clearTags = () => setSelectedTags([]);
+
+  const clear = () => {
+    setQuery('');
+    clearTags();
+  };
+
+  return {
+    query,
+    setQuery,
+    selectedTags,
+    toggleTag,
+    clearTags,
+    clear,
+    allTags,
+    filtered,
+  };
 };

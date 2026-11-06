@@ -1,0 +1,57 @@
+---
+import { HOME_CAT, PAGE_CAT } from '@/utils/ascii-art';
+
+export type HeroVariant = 'home' | 'page';
+
+interface Props {
+  variant: HeroVariant;
+}
+
+const { variant } = Astro.props;
+---
+
+<div class='hero-bg' data-variant={variant} data-hero-bg aria-hidden='true'>
+  <div class='hero-glow'></div>
+  <pre class='ascii hero-cat'>{variant === 'home' ? HOME_CAT : PAGE_CAT}</pre>
+</div>
+
+<script>
+  const EASE = 0.08;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  let target: { x: number; y: number } | null = null;
+  let current: { x: number; y: number } | null = null;
+  let frame = 0;
+
+  const step = () => {
+    const el = document.querySelector<HTMLElement>('[data-hero-bg]');
+    if (!el || !target || !current) {
+      frame = 0;
+      return;
+    }
+
+    current.x += (target.x - current.x) * EASE;
+    current.y += (target.y - current.y) * EASE;
+    el.style.setProperty('--glow-x', `${current.x}px`);
+    el.style.setProperty('--glow-y', `${current.y}px`);
+
+    const isSettled =
+      Math.abs(target.x - current.x) < 0.5 &&
+      Math.abs(target.y - current.y) < 0.5;
+    frame = isSettled ? 0 : requestAnimationFrame(step);
+  };
+
+  document.addEventListener('pointermove', (event) => {
+    const el = document.querySelector<HTMLElement>('[data-hero-bg]');
+    if (!el || reducedMotion.matches) return;
+
+    const rect = el.getBoundingClientRect();
+    target = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    current ??= { x: rect.width / 2, y: 0 };
+    if (!frame) frame = requestAnimationFrame(step);
+  });
+
+  document.addEventListener('astro:after-swap', () => {
+    current = null;
+  });
+</script>

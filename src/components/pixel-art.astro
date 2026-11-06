@@ -1,0 +1,24 @@
+---
+import { CELL_WIDTH, pixelRects, pixelViewBox } from '@/utils/pixel-art';
+
+interface Props {
+  art: string;
+  label: string;
+  class?: string;
+}
+
+const { art, label, class: className = '' } = Astro.props;
+---
+
+<svg
+  viewBox={pixelViewBox(art)}
+  class:list={['h-auto shrink-0 text-fg', className]}
+  fill='currentColor'
+  shape-rendering='crispEdges'
+  role='img'
+  aria-label={label}
+>
+  {pixelRects(art).map((rect) => (
+    <rect x={rect.x} y={rect.y} width={CELL_WIDTH} height={rect.height} />
+  ))}
+</svg>

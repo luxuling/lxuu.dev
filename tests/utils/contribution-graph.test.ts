@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  glyphForCount,
   columnCells,
   fillForCount,
   monthLabelsForWeeks,
@@ -44,5 +45,12 @@ describe('monthLabelsForWeeks', () => {
     ]);
 
     expect(labels).toEqual(['Sep', '', 'Oct', '']);
+  });
+});
+
+describe('glyphForCount', () => {
+  it('draws a dot for empty days and a block otherwise', () => {
+    expect(glyphForCount(0)).toBe('·');
+    expect(glyphForCount(3)).toBe('■');
   });
 });

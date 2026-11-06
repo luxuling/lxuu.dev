@@ -1,16 +1,26 @@
+import { tagLabel } from '@/utils/tags';
+
 interface Props {
   tags: string[];
 }
 
 export const TagList = ({ tags }: Props) => (
-  <div className='flex flex-wrap gap-1.5'>
+  <ul className='flex flex-wrap gap-2'>
     {tags.map((tag) => (
-      <span
+      <li
         key={tag}
-        className='border border-line px-2 py-0.5 font-mono text-xs text-fg-subtle'
+        className='border border-line px-3 py-1 text-small text-fg-muted'
       >
-        {tag}
-      </span>
+        {tagLabel(tag)}
+      </li>
     ))}
-  </div>
+  </ul>
+);
+
+export const TagLine = ({ tags }: Props) => (
+  <p className='flex flex-wrap gap-x-3.5 text-small text-fg-subtle'>
+    {tags.map((tag) => (
+      <span key={tag}>{tagLabel(tag)}</span>
+    ))}
+  </p>
 );

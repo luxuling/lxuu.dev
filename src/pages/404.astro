@@ -1,11 +1,15 @@
 ---
 import StatusPage from '@/components/status-page.astro';
+import Page from '@/components/page.astro';
 import Layout from '@/layouts/layout.astro';
 ---
 
-<Layout>
-  <StatusPage
-    title='404: page not found (T_T)'
-    message='that route does not exist (._.). try going back home.'
-  />
+<Layout pageTitle='404 — lxuu.dev'>
+  <Page>
+    <StatusPage
+      code={404}
+      title='404: page not found (T_T)'
+      message='that route does not exist (._.). try going back home.'
+    />
+  </Page>
 </Layout>

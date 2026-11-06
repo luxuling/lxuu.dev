@@ -4,13 +4,17 @@ import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import Navbar from '@/components/navbar.astro';
 import Footer from '@/components/footer.astro';
+import HeroBackground, {
+  type HeroVariant,
+} from '@/components/hero-background.astro';
 import { Toaster } from '@/components/toaster';
 
 interface Props {
   pageTitle?: string;
+  hero?: HeroVariant;
 }
 
-const { pageTitle } = Astro.props;
+const { pageTitle, hero = 'page' } = Astro.props;
 ---
 
 <!doctype html>
@@ -25,14 +29,15 @@ const { pageTitle } = Astro.props;
     <title>{pageTitle}</title>
     <ClientRouter />
   </head>
-  <body class='bg-bg'>
-    <main class='mx-auto flex min-h-screen w-full max-w-260 flex-col border-x border-line bg-bg text-fg'>
-      <Navbar transition:persist />
-      <section class='flex-1' transition:animate='fade'>
+  <body class='text-fg'>
+    <div class='relative isolate flex min-h-screen flex-col'>
+      <HeroBackground variant={hero} />
+      <Navbar />
+      <main class='flex-1' transition:animate='fade'>
         <slot />
-      </section>
-    </main>
-    <Footer />
+      </main>
+      <Footer />
+    </div>
     <Toaster client:idle transition:persist />
   </body>
 </html>

@@ -1,20 +1,31 @@
 ---
+import { buttonClass, type ButtonVariant } from '@/utils/button-class';
+
 interface Props {
+  href?: string;
+  variant?: ButtonVariant;
   type?: 'button' | 'submit' | 'reset';
   class?: string;
   [key: string]: unknown;
 }
 
-const { type = 'button', class: className = '', ...rest } = Astro.props;
+const {
+  href,
+  variant,
+  type = 'button',
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const classes = [buttonClass(variant), className];
 ---
 
-<button
-  type={type}
-  {...rest}
-  class:list={[
-    'inline-flex items-center bg-fg px-3 py-2 text-sm font-medium text-bg transition-opacity hover:cursor-pointer hover:opacity-90',
-    className,
-  ]}
->
-  <slot />
-</button>
+{href ? (
+  <a href={href} class:list={classes} {...rest}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class:list={classes} {...rest}>
+    <slot />
+  </button>
+)}

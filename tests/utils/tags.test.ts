@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  tagLabel,
   parseTagListResponse,
   parseTags,
   tagSuggestions,
@@ -67,5 +68,12 @@ describe('tagToAdd', () => {
   it('returns nothing for a blank value or a tag already selected', () => {
     expect(tagToAdd([], [], '   ')).toBeNull();
     expect(tagToAdd(['React'], ['React'], 'react')).toBeNull();
+  });
+});
+
+describe('tagLabel', () => {
+  it('prefixes a hash and kebab-cases the tag', () => {
+    expect(tagLabel('Vue.js')).toBe('#vue.js');
+    expect(tagLabel(' TanStack  Query ')).toBe('#tanstack-query');
   });
 });

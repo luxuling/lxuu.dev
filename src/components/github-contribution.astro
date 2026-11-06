@@ -1,78 +1,79 @@
 ---
-import BaseCard from '@/components/base-card.astro';
+import { SectionLabel } from '@/components/section-label';
 import type { GithubHome } from '@/services/github';
 import {
   CONTRIBUTION_LEGEND_LEVELS,
   columnCells,
   fillForCount,
+  glyphForCount,
   monthLabelsForWeeks,
 } from '@/utils/contribution-graph';
 
 interface Props {
-  data: Pick<GithubHome, 'totalContributions' | 'weeks'>;
+  data: Pick<
+    GithubHome,
+    'totalContributions' | 'weeks' | 'login' | 'profileUrl'
+  >;
 }
 
 const { data } = Astro.props;
 const monthLabels = monthLabelsForWeeks(data.weeks);
+const DAY_LABELS = ['', 'mon', '', 'wed', '', 'fri', ''];
 ---
 
-<BaseCard>
-  <div class='flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between'>
-    <p class='text-sm text-fg'>
-      <span class='font-medium'>
-        {data.totalContributions.toLocaleString()}
-      </span>
-      <span class='text-fg-muted'> contributions in the last year</span>
-    </p>
-  </div>
+<section class='flex flex-col gap-4'>
+  <SectionLabel meta='github'>contributions</SectionLabel>
 
-  <div
-    class='mt-4 flex gap-2'
-    role='img'
-    aria-label={`${data.totalContributions} GitHub contributions in the last year`}
-  >
-    <div
-      class='hidden w-7 shrink-0 flex-col justify-between py-px text-[10px] leading-none text-fg-subtle sm:flex'
-      aria-hidden='true'
-    >
-      <span class='invisible'>.</span>
-      <span>Mon</span>
-      <span class='invisible'>.</span>
-      <span>Wed</span>
-      <span class='invisible'>.</span>
-      <span>Fri</span>
-      <span class='invisible'>.</span>
-      <span class='invisible'>.</span>
+  <div class='flex flex-col gap-4 border border-line bg-surface/40 p-4 md:p-6'>
+    <div class='flex items-center justify-between gap-4'>
+      <p class='text-small font-semibold text-fg-muted'>
+        <span class='text-fg'>{data.totalContributions.toLocaleString()}</span>
+        contributions in the last year
+      </p>
+      <a
+        href={data.profileUrl}
+        target='_blank'
+        rel='noopener noreferrer'
+        class='text-micro text-fg-subtle hover:text-fg'
+      >
+        @{data.login}
+      </a>
     </div>
 
-    <div class='contrib-scroll min-w-0 flex-1 overflow-x-auto pb-1'>
-      <div class='inline-block min-w-max'>
-        <div class='mb-1 flex gap-0.75'>
-          {data.weeks.map((_, i) => (
-            <div class='relative flex h-4 w-2.5 shrink-0 justify-center sm:w-3'>
-              {monthLabels[i] ? (
-                <span class='absolute top-0 left-0 text-[10px] whitespace-nowrap text-fg-subtle'>
-                  {monthLabels[i]}
-                </span>
-              ) : null}
-            </div>
-          ))}
-        </div>
+    <div
+      class='flex text-small/3.5 text-fg-subtle'
+      role='img'
+      aria-label={`${data.totalContributions} GitHub contributions in the last year`}
+    >
+      <div class='flex w-[4ch] shrink-0 flex-col' aria-hidden='true'>
+        <span>&nbsp;</span>
+        {DAY_LABELS.map((label) => (
+          <span>{label || ' '}</span>
+        ))}
+      </div>
 
-        <div class='flex gap-0.75'>
-          {data.weeks.map((week) => (
-            <div class='flex flex-col gap-0.75'>
+      <div dir='rtl' class='contrib-scroll min-w-0 flex-1 overflow-x-auto pb-1'>
+        <div dir='ltr' class='flex min-w-full' aria-hidden='true'>
+          {data.weeks.map((week, index) => (
+            <div class='flex w-[2ch] shrink-0 flex-col'>
+              <span class='relative'>
+                {monthLabels[index] && (
+                  <span class='absolute left-0 whitespace-nowrap lowercase'>
+                    {monthLabels[index]}
+                  </span>
+                )}
+                &nbsp;
+              </span>
               {columnCells(week).map((day) =>
                 day ? (
-                  <div
+                  <span
                     title={`${day.contributionCount} contributions on ${day.date}`}
-                    class='size-2.5 sm:size-3'
-                    style={{
-                      backgroundColor: fillForCount(day.contributionCount),
-                    }}
-                  />
+                    style={{ color: fillForCount(day.contributionCount) }}
+                  >
+                    {glyphForCount(day.contributionCount)}
+                  </span>
                 ) : (
-                  <div class='size-2.5 sm:size-3' />
+                  <span>&nbsp;</span>
                 ),
               )}
             </div>
@@ -80,29 +81,28 @@ const monthLabels = monthLabelsForWeeks(data.weeks);
         </div>
       </div>
     </div>
-  </div>
 
-  <div class='mt-4 flex flex-col gap-3 border-t border-line pt-4 text-[11px] text-fg-subtle sm:flex-row sm:items-center sm:justify-between'>
-    <a
-      href='https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/troubleshooting-missing-contributions'
-      target='_blank'
-      rel='noopener noreferrer'
-      class='text-fg-subtle underline-offset-4 hover:text-fg hover:underline'
-    >
-      How we count contributions
-    </a>
+    <div class='flex flex-col gap-2 text-micro text-fg-subtle md:flex-row md:items-center md:justify-between'>
+      <a
+        href='https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/troubleshooting-missing-contributions'
+        target='_blank'
+        rel='noopener noreferrer'
+        class='hover:text-fg'
+      >
+        how we count contributions [↗]
+      </a>
 
-    <div class='flex items-center gap-2'>
-      <span>Less</span>
-      <div class='flex gap-1'>
-        {CONTRIBUTION_LEGEND_LEVELS.map((level) => (
-          <div
-            class='size-2.5 sm:size-3'
-            style={{ backgroundColor: fillForCount(level) }}
-          />
-        ))}
-      </div>
-      <span>More</span>
+      <p class='flex shrink-0 items-center gap-2'>
+        <span>less</span>
+        <span class='flex gap-[1ch]'>
+          {CONTRIBUTION_LEGEND_LEVELS.map((level) => (
+            <span style={{ color: fillForCount(level) }}>
+              {glyphForCount(level)}
+            </span>
+          ))}
+        </span>
+        <span>more</span>
+      </p>
     </div>
   </div>
-</BaseCard>
+</section>

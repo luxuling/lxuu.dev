@@ -1,19 +1,71 @@
 ---
-import Container from '@/components/container.astro';
+import Button from '@/components/button.astro';
+import LoadingImage from '@/components/loading-image.astro';
+import NowBuilding from '@/components/now-building.astro';
+import PixelArt from '@/components/pixel-art.astro';
 import type { GithubHome } from '@/services/github';
-import GitHubProfileCard from '@/components/github-profile-card.astro';
-import GitHubContribution from '@/components/github-contribution.astro';
+import type { BuildingItem } from '@/types/content';
+import { WORDMARK } from '@/utils/ascii-art';
+import { EMAIL } from '@/data/site';
 
 interface Props {
   data: GithubHome;
+  building: BuildingItem[];
 }
 
-const { data } = Astro.props;
+const { data, building } = Astro.props;
+
+const stats = [
+  `${data.followers} followers`,
+  `${data.following} following`,
+  `${data.publicRepos} repos`,
+  data.location?.toLowerCase(),
+].filter(Boolean);
 ---
 
-<section class='py-8 sm:py-12'>
-  <Container class='flex flex-col gap-8 sm:gap-10'>
-    <GitHubProfileCard data={data} />
-    <GitHubContribution data={data} />
-  </Container>
+<section class='flex flex-col gap-6 md:flex-row md:items-start md:gap-12'>
+  <div class='flex min-w-0 flex-1 flex-col gap-6 md:gap-8'>
+    <h1>
+      <PixelArt art={WORDMARK} label='lxuu.dev' class='w-87 md:w-139' />
+    </h1>
+
+    <div class='flex flex-col gap-6 md:flex-row md:items-end md:gap-8'>
+      <LoadingImage
+        src={data.avatarUrl}
+        alt=''
+        width='128'
+        height='128'
+        frameClass='size-32 shrink-0 border border-line'
+        class='size-full object-cover'
+      />
+
+      <div class='flex min-w-0 flex-col gap-3'>
+        <p class='flex items-center gap-3'>
+          <span class='text-title font-semibold text-fg lowercase'>
+            {data.name ?? data.login}
+          </span>
+          <a
+            href={data.profileUrl}
+            target='_blank'
+            rel='noopener noreferrer'
+            class='text-small text-fg-subtle hover:text-fg'
+          >
+            @{data.login}
+          </a>
+        </p>
+        {data.bio && (
+          <p class='text-body text-pretty text-fg-muted'>{data.bio}</p>
+        )}
+        <p class='text-small text-fg-subtle'>{stats.join(' · ')}</p>
+        <div class='mt-2 flex flex-wrap gap-3 md:gap-4'>
+          <Button href={`mailto:${EMAIL}`}>[@] hire me</Button>
+          <Button href='/me' variant='ghost'>
+            -&gt; about me
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {building.length > 0 && <NowBuilding items={building} />}
 </section>
