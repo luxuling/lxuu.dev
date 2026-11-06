@@ -1,6 +1,5 @@
 import { useState, type KeyboardEvent } from 'react';
 import { CommentInput } from '@/components/comment-input';
-import { TerminalButton } from '@/components/terminal-button';
 import type { EngagementState } from '@/hooks/use-engagement';
 
 interface Props {
@@ -35,8 +34,11 @@ export const CommentForm = ({ placeholder, isBusy, onSubmit }: Props) => {
         submit();
       }}
       onKeyDown={submitOnEnter}
-      className='flex items-end gap-4'
+      className='flex items-start gap-3 border border-line-strong px-4 py-3 transition-colors focus-within:border-fg-muted'
     >
+      <span className='text-fg' aria-hidden='true'>
+        &gt;
+      </span>
       <CommentInput
         name='body'
         aria-label='Comment'
@@ -45,12 +47,13 @@ export const CommentForm = ({ placeholder, isBusy, onSubmit }: Props) => {
         onChange={(event) => setBody(event.currentTarget.value)}
         readOnly={isBusy}
       />
-      <TerminalButton
+      <button
         type='submit'
         disabled={isBusy || body.trim().length === 0}
+        className='shrink-0 cursor-pointer whitespace-pre text-fg disabled:cursor-default disabled:text-fg-subtle'
       >
-        post
-      </TerminalButton>
+        [ post ]
+      </button>
     </form>
   );
 };

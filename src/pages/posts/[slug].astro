@@ -1,13 +1,10 @@
 ---
 import { getEntry, render } from 'astro:content';
 import { z } from 'astro/zod';
-import Container from '@/components/container.astro';
+import ArticleLayout from '@/components/article-layout.astro';
+import { CardStats } from '@/components/card-stats';
 import ContentLink from '@/components/content-link.astro';
-import { Engagement } from '@/components/engagement';
-import Link from '@/components/link.astro';
 import ZoomImage from '@/components/zoom-image.astro';
-import { TableOfContents } from '@/components/table-of-contents';
-import { TagList } from '@/components/tag-list';
 import Layout from '@/layouts/layout.astro';
 import { formatMonthYear } from '@/utils/format-date';
 import { headingsToTocItems } from '@/utils/toc';
@@ -22,61 +19,24 @@ if (!entry || entry.data.status === 'draft') {
 }
 
 const { Content, headings } = await render(entry);
-const { title, description, tags, date, thumbnail } = entry.data;
-const tocItems = headingsToTocItems(headings);
+const { title, description, tags, date } = entry.data;
 ---
 
 <Layout pageTitle={`${title} — lxuu.dev`}>
-  <section class='py-8 pb-20 sm:py-12 xl:pb-12'>
-    <Container class='flex flex-col gap-8'>
-      <div class='flex flex-col gap-4'>
-        <Link href='/posts' class='font-mono text-xs text-fg-subtle'>
-          ← posts
-        </Link>
+  <ArticleLayout
+    target='posts'
+    slug={entry.id}
+    title={title}
+    description={description}
+    tags={tags}
+    tocItems={headingsToTocItems(headings)}
+  >
+    <Fragment slot='meta'>
+      <span class='text-fg-muted'>[posted]</span> ·
+      <span class='lowercase'>{formatMonthYear(date)}</span> ·
+      <CardStats client:load target='posts' slug={entry.id} separator=' · ' />
+    </Fragment>
 
-        <div class='flex flex-col gap-2'>
-          <div class='flex flex-wrap items-center gap-3'>
-            <h1 class='text-xl font-semibold tracking-tight text-fg'>
-              {title}
-            </h1>
-            <span class='font-mono text-xs text-fg-subtle'>
-              {formatMonthYear(date)}
-            </span>
-          </div>
-          <p class='text-sm text-fg-muted'>{description}</p>
-        </div>
-
-        <TagList tags={tags} />
-      </div>
-
-      {thumbnail && (
-        <ZoomImage
-          src={thumbnail}
-          alt={`${title} thumbnail`}
-          frameClass='aspect-video w-full max-w-4xl border border-line'
-          class='size-full object-cover'
-        />
-      )}
-
-      <div class='h-px bg-line'></div>
-
-      <div class='flex gap-12'>
-        <div class='min-w-0 flex-1'>
-          <div class='prose-project'>
-            <Content components={{ a: ContentLink, img: ZoomImage }} />
-          </div>
-
-          <Engagement client:load target='posts' slug={entry.id} />
-        </div>
-
-        {tocItems.length > 0 && (
-          <aside class='xl:w-48 xl:shrink-0'>
-            <div class='sticky top-10'>
-              <TableOfContents client:load items={tocItems} />
-            </div>
-          </aside>
-        )}
-      </div>
-    </Container>
-  </section>
+    <Content components={{ a: ContentLink, img: ZoomImage }} />
+  </ArticleLayout>
 </Layout>

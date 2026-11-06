@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const EngagementSession = ({ path, user }: Props) => (
-  <div className='flex min-w-0 items-center gap-x-2'>
+  <p className='flex min-w-0 items-center gap-2 text-fg-subtle'>
     {user?.avatar_url && (
       <LoadingImage
         src={user.avatar_url}
@@ -18,10 +18,9 @@ export const EngagementSession = ({ path, user }: Props) => (
         className='size-full object-cover'
       />
     )}
-    <span className='whitespace-nowrap text-fg'>
-      {user ? user.display_name : 'guest'}
+    <span className='truncate'>
+      {user ? <span className='text-fg'>{user.display_name}</span> : '$ guest'}{' '}
+      in {path}
     </span>
-    <span className='text-fg-subtle'>in</span>
-    <span className='truncate text-fg-muted'>{path}</span>
-  </div>
+  </p>
 );

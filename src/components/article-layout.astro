@@ -1,0 +1,77 @@
+---
+import { Engagement } from '@/components/engagement';
+import Page from '@/components/page.astro';
+import { TableOfContents } from '@/components/table-of-contents';
+import { TagList } from '@/components/tag-list';
+import ZoomImage from '@/components/zoom-image.astro';
+import type { EngagementTarget } from '@/services/engagement-targets';
+import type { TocItem } from '@/utils/toc';
+
+interface Props {
+  target: EngagementTarget;
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  thumbnail?: string | null;
+  tocItems: TocItem[];
+}
+
+const { target, slug, title, description, tags, thumbnail, tocItems } =
+  Astro.props;
+---
+
+<Page>
+  <div class='flex lg:gap-16'>
+    <article class='flex min-w-0 flex-1 flex-col gap-8 lg:max-w-174'>
+      <header class='flex flex-col gap-3'>
+        <a
+          href={`/${target}`}
+          class='mb-3 self-start text-small text-fg-muted hover:text-fg'
+        >
+          &lt;- {target}
+        </a>
+        <h1 class='text-h1 font-bold text-fg'>{title}</h1>
+        <p class='text-small text-fg-subtle'>
+          <slot name='meta' />
+        </p>
+        <p class='text-body text-fg-muted'>{description}</p>
+        <TagList tags={tags} />
+        <slot name='links' />
+      </header>
+
+      {thumbnail && (
+        <figure class='flex flex-col gap-2'>
+          <ZoomImage
+            src={thumbnail}
+            alt={title}
+            frameClass='aspect-video w-full border border-line'
+            class='size-full object-cover'
+          />
+          <figcaption class='text-micro text-fg-subtle'>
+            fig.01 — {title} · <span class='md:hidden'>tap</span>
+            <span class='max-md:hidden'>click</span> to zoom
+          </figcaption>
+        </figure>
+      )}
+
+      <hr class='border-line' />
+
+      <div class='prose-project'>
+        <slot />
+      </div>
+
+      <hr class='border-line' />
+
+      <Engagement client:load target={target} slug={slug} />
+    </article>
+
+    {tocItems.length > 0 && (
+      <aside class='lg:w-50 lg:shrink-0'>
+        <div class='sticky top-8'>
+          <TableOfContents client:load items={tocItems} />
+        </div>
+      </aside>
+    )}
+  </div>
+</Page>

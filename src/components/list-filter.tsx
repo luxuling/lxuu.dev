@@ -29,7 +29,8 @@ export const ListFilter = ({ filter, placeholder, label }: Props) => (
         aria-label={label}
       />
       <span className='shrink-0 text-micro text-fg-subtle'>
-        {filter.filtered.length} results
+        {filter.filtered.length}{' '}
+        {filter.filtered.length === 1 ? 'result' : 'results'}
       </span>
     </label>
 

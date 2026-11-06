@@ -138,12 +138,18 @@ body {
 .prose-project h2,
 .prose-project h3 {
   color: var(--color-fg);
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.5rem;
   font-weight: 600;
   text-transform: lowercase;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   margin-bottom: 1rem;
+  scroll-margin-top: 2rem;
+}
+
+.prose-project h2::before,
+.prose-project h3::before {
+  color: var(--color-fg-subtle);
 }
 
 .prose-project h2::before {
@@ -196,12 +202,12 @@ body {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .prose-project ul > li {
   position: relative;
-  padding-left: 1.25rem;
+  padding-left: calc(1ch + 0.75rem);
 }
 
 .prose-project ul > li::before {

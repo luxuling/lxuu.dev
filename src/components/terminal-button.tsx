@@ -1,15 +1,9 @@
 import type { ComponentProps } from 'react';
 
-interface Props extends ComponentProps<'button'> {
-  isDanger?: boolean;
-}
-
-export const TerminalButton = ({ isDanger = false, ...button }: Props) => (
+export const TerminalButton = (button: ComponentProps<'button'>) => (
   <button
     type='button'
     {...button}
-    className={`whitespace-nowrap underline-offset-4 transition-colors enabled:hover:underline disabled:cursor-not-allowed disabled:opacity-40 aria-pressed:text-fg ${
-      isDanger ? 'text-fg' : 'text-fg-muted enabled:hover:text-fg'
-    }`}
+    className='cursor-pointer whitespace-nowrap underline-offset-4 transition-colors enabled:hover:text-fg enabled:hover:underline disabled:cursor-not-allowed disabled:opacity-40'
   />
 );
