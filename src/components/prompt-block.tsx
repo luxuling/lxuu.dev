@@ -8,10 +8,10 @@ interface Props {
 export const PromptBlock = ({ isActive = false, children }: Props) => (
   <div className='group relative pl-4'>
     <span
-      className={`absolute top-[0.5lh] bottom-[0.5lh] left-0 w-2 rounded-l-sm border-y border-l ${
+      className={`absolute top-[0.5lh] bottom-[0.5lh] left-0 w-2 border-y border-l ${
         isActive
-          ? 'border-prompt/50 group-focus-within:border-prompt'
-          : 'border-subtle/50'
+          ? 'border-line-strong/50 group-focus-within:border-line-strong'
+          : 'border-fg-subtle/50'
       }`}
       aria-hidden='true'
     />

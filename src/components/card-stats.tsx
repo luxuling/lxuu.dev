@@ -14,9 +14,9 @@ interface StatProps {
 
 const Stat = ({ title, label, count }: StatProps) => (
   <>
-    <span className='text-subtle'>·</span>
-    <span className='text-subtle' title={title}>
-      <span className='text-foreground'>{count}</span> {label}
+    <span className='text-fg-subtle'>·</span>
+    <span className='text-fg-subtle' title={title}>
+      <span className='text-fg'>{count}</span> {label}
     </span>
   </>
 );

@@ -8,10 +8,8 @@ export const TerminalButton = ({ isDanger = false, ...button }: Props) => (
   <button
     type='button'
     {...button}
-    className={`whitespace-nowrap underline-offset-4 transition-colors enabled:hover:underline disabled:cursor-not-allowed disabled:opacity-40 aria-pressed:text-foreground ${
-      isDanger
-        ? 'text-failure'
-        : 'text-muted-foreground enabled:hover:text-foreground'
+    className={`whitespace-nowrap underline-offset-4 transition-colors enabled:hover:underline disabled:cursor-not-allowed disabled:opacity-40 aria-pressed:text-fg ${
+      isDanger ? 'text-fg' : 'text-fg-muted enabled:hover:text-fg'
     }`}
   />
 );

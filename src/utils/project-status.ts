@@ -7,7 +7,7 @@ export const STATUS_LABEL: Record<ProjectStatus, string> = {
 };
 
 export const STATUS_COLOR: Record<ProjectStatus, string> = {
-  active: 'text-foreground',
-  wip: 'text-muted-foreground',
-  archived: 'text-subtle',
+  active: 'text-fg',
+  wip: 'text-fg-muted',
+  archived: 'text-fg-subtle',
 };

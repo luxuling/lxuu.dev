@@ -9,8 +9,7 @@ interface Props {
   navItems: NavItem[];
 }
 
-const LINK_CLASS =
-  'text-foreground no-underline underline-offset-4 hover:underline';
+const LINK_CLASS = 'text-fg no-underline underline-offset-4 hover:underline';
 
 export const MobileNav = ({ navItems }: Props) => {
   const { isOpen, close, toggle } = useMobileMenu();
@@ -19,7 +18,7 @@ export const MobileNav = ({ navItems }: Props) => {
     <>
       <button
         type='button'
-        className='inline-flex size-9 items-center justify-center text-muted-foreground hover:text-foreground md:hidden'
+        className='inline-flex size-9 items-center justify-center text-fg-muted hover:text-fg md:hidden'
         aria-label='Toggle menu'
         aria-expanded={isOpen}
         aria-controls='mobile-menu-panel'
@@ -42,12 +41,12 @@ export const MobileNav = ({ navItems }: Props) => {
 
       <nav
         id='mobile-menu-panel'
-        className={`absolute inset-x-0 top-full z-40 min-h-[calc(100dvh-5.5rem)] border-t border-edge bg-background px-6 py-8 md:hidden ${
+        className={`absolute inset-x-0 top-full z-40 min-h-[calc(100dvh-5.5rem)] border-t border-line bg-bg px-6 py-8 md:hidden ${
           isOpen ? '' : 'hidden'
         }`}
         aria-hidden={!isOpen}
       >
-        <div className='flex flex-col gap-6 text-sm text-foreground'>
+        <div className='flex flex-col gap-6 text-sm text-fg'>
           <a href='/' className={LINK_CLASS} onClick={close}>
             Home
           </a>

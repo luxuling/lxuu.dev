@@ -42,7 +42,7 @@ export const ImageZoom = ({
         type='button'
         onClick={zoom.open}
         aria-label={label}
-        className='block w-full cursor-zoom-in border-0 bg-transparent p-0 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
+        className='block w-full cursor-zoom-in border-0 bg-transparent p-0 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg'
       >
         <LoadingImage
           src={src}
@@ -58,13 +58,13 @@ export const ImageZoom = ({
           onClose={zoom.close}
           onClick={closeIfBackdrop}
           aria-label={alt || 'Enlarged image'}
-          className='image-zoom-dialog fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col border-0 bg-transparent p-4 backdrop:bg-background/80 backdrop:backdrop-blur-sm'
+          className='image-zoom-dialog fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col border-0 bg-transparent p-4 backdrop:bg-bg/80'
         >
           <form method='dialog' className='mb-3 flex shrink-0 justify-end'>
             <button
               type='submit'
               autoFocus
-              className='rounded-sm border border-edge bg-panel px-3 py-1 font-mono text-xs text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
+              className='border border-line bg-surface px-3 py-1 font-mono text-xs text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg'
             >
               close
             </button>

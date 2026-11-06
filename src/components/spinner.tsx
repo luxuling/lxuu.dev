@@ -45,7 +45,7 @@ interface Props {
 }
 
 export const Spinner = ({
-  className = 'flex items-center gap-2 font-mono text-base text-foreground sm:text-sm',
+  className = 'flex items-center gap-2 font-mono text-base text-fg sm:text-sm',
 }: Props) => {
   const frame = useSpinnerFrame(SAND_FRAMES, FRAME_INTERVAL_MS);
 

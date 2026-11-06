@@ -12,7 +12,7 @@ const navItems = [
 ];
 ---
 
-<header class='relative z-50 border-b border-edge bg-background'>
+<header class='relative z-50 border-b border-line bg-bg'>
   <Container class='relative flex items-center justify-between gap-4 p-6'>
     <Link
       href='/'
@@ -21,10 +21,10 @@ const navItems = [
       lxuu.dev
     </Link>
 
-    <nav
-      class='hidden items-center gap-6 text-sm text-muted-foreground md:flex'
-    >
-      {navItems.map((item) => <Link href={item.href}>{item.label}</Link>)}
+    <nav class='hidden items-center gap-6 text-sm text-fg-muted md:flex'>
+      {navItems.map((item) => (
+        <Link href={item.href}>{item.label}</Link>
+      ))}
     </nav>
 
     <Button

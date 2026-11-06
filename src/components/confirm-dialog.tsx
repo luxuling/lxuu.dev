@@ -18,7 +18,7 @@ export const ConfirmDialog = ({
   <dialog
     ref={showModal}
     onClose={onClose}
-    className='m-auto w-80 max-w-[calc(100vw-2rem)] rounded-md border border-edge bg-panel p-5 font-mono text-xs/6 text-foreground backdrop:bg-background/70 backdrop:backdrop-blur-sm'
+    className='m-auto w-80 max-w-[calc(100vw-2rem)] border border-line bg-surface p-5 font-mono text-xs/6 text-fg backdrop:bg-bg/70'
   >
     <p className='text-sm/6'>{message}</p>
     <form method='dialog' className='mt-4 flex justify-end gap-5'>

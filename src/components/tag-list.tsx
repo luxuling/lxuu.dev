@@ -7,7 +7,7 @@ export const TagList = ({ tags }: Props) => (
     {tags.map((tag) => (
       <span
         key={tag}
-        className='rounded-sm border border-edge px-2 py-0.5 font-mono text-xs text-subtle'
+        className='border border-line px-2 py-0.5 font-mono text-xs text-fg-subtle'
       >
         {tag}
       </span>

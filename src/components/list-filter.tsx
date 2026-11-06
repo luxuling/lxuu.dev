@@ -10,13 +10,13 @@ interface Props {
 }
 
 export const ListFilter = ({ filter, placeholder, label }: Props) => (
-  <div className='flex flex-col gap-3 rounded-md border border-edge bg-panel p-4 sm:p-6'>
+  <div className='flex flex-col gap-3 border border-line bg-surface p-4 sm:p-6'>
     <input
       type='text'
       value={filter.query}
       onChange={(event) => filter.setQuery(event.currentTarget.value)}
       placeholder={placeholder}
-      className='w-full rounded-sm border border-edge bg-background px-3 py-2 text-sm text-foreground transition-colors outline-none placeholder:text-subtle focus:border-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
+      className='w-full border border-line bg-bg px-3 py-2 text-sm text-fg transition-colors outline-none placeholder:text-fg-subtle focus:border-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg'
       aria-label={label}
     />
     <div className='flex flex-wrap gap-2'>
@@ -25,10 +25,10 @@ export const ListFilter = ({ filter, placeholder, label }: Props) => (
           key={tag}
           type='button'
           onClick={() => filter.toggleTag(tag)}
-          className={`rounded-sm border px-2 py-1 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.98] ${
+          className={`border px-2 py-1 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg active:scale-[0.98] ${
             filter.selectedTags.includes(tag)
-              ? 'border-foreground text-foreground'
-              : 'border-edge text-subtle hover:text-foreground'
+              ? 'border-fg text-fg'
+              : 'border-line text-fg-subtle hover:text-fg'
           }`}
         >
           {tag}

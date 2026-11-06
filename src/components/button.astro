@@ -12,7 +12,7 @@ const { type = 'button', class: className = '', ...rest } = Astro.props;
   type={type}
   {...rest}
   class:list={[
-    'inline-flex items-center rounded-sm bg-foreground px-3 py-2 text-sm font-medium text-background transition-opacity hover:cursor-pointer hover:opacity-90',
+    'inline-flex items-center bg-fg px-3 py-2 text-sm font-medium text-bg transition-opacity hover:cursor-pointer hover:opacity-90',
     className,
   ]}
 >

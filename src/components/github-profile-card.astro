@@ -17,46 +17,38 @@ const { data } = Astro.props;
       alt=''
       width='120'
       height='120'
-      frameClass='mx-auto size-24 shrink-0 rounded-full border border-edge sm:mx-0 sm:size-30'
+      frameClass='mx-auto size-24 shrink-0 border border-line sm:mx-0 sm:size-30'
       class='size-full object-cover'
     />
     <div class='min-w-0 flex-1 text-center sm:text-left'>
-      <h1
-        class='text-lg font-semibold tracking-tight text-foreground sm:text-xl'
-      >
+      <h1 class='text-lg font-semibold tracking-tight text-fg sm:text-xl'>
         {data.name ?? data.login}
       </h1>
-      <p class='mt-0.5 text-sm text-muted-foreground'>
+      <p class='mt-0.5 text-sm text-fg-muted'>
         <a
           href={data.profileUrl}
           target='_blank'
           rel='noopener noreferrer'
-          class='text-muted-foreground underline-offset-4 hover:text-foreground hover:underline'
+          class='text-fg-muted underline-offset-4 hover:text-fg hover:underline'
         >
           @{data.login}
         </a>
       </p>
-      {
-        data.bio ? (
-          <p class='mt-3 text-sm/relaxed text-pretty text-muted-foreground'>
-            {data.bio}
-          </p>
-        ) : null
-      }
-      <div
-        class='mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 sm:justify-start'
-      >
+      {data.bio ? (
+        <p class='mt-3 text-sm/relaxed text-pretty text-fg-muted'>{data.bio}</p>
+      ) : null}
+      <div class='mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 sm:justify-start'>
         <p class='text-sm'>
-          <span class='text-foreground tabular-nums'>{data.followers}</span>
-          <span class='text-subtle'> followers</span>
+          <span class='text-fg tabular-nums'>{data.followers}</span>
+          <span class='text-fg-subtle'> followers</span>
         </p>
         <p class='text-sm'>
-          <span class='text-foreground tabular-nums'>{data.following}</span>
-          <span class='text-subtle'> following</span>
+          <span class='text-fg tabular-nums'>{data.following}</span>
+          <span class='text-fg-subtle'> following</span>
         </p>
         <p class='text-sm'>
-          <span class='text-foreground tabular-nums'>{data.publicRepos}</span>
-          <span class='text-subtle'> repos</span>
+          <span class='text-fg tabular-nums'>{data.publicRepos}</span>
+          <span class='text-fg-subtle'> repos</span>
         </p>
       </div>
     </div>

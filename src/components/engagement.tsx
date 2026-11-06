@@ -34,7 +34,7 @@ const SECTION_LABEL: Record<EngagementTarget, string> = {
 
 const Count = ({ label, count }: CountProps) => (
   <span>
-    {label} <span className='text-foreground'>{count.toLocaleString()}</span>
+    {label} <span className='text-fg'>{count.toLocaleString()}</span>
   </span>
 );
 
@@ -42,7 +42,7 @@ const EngagementBody = ({ path, engagement }: BodyProps) => (
   <>
     <div className='flex flex-col gap-2'>
       <PromptBlock isActive>
-        <div className='flex flex-wrap items-center gap-x-5 text-subtle'>
+        <div className='flex flex-wrap items-center gap-x-5 text-fg-subtle'>
           <span>
             <Count label='likes' count={engagement.stats?.like_count ?? 0} />
             {engagement.isLiked && ' (liked)'}
@@ -71,15 +71,15 @@ const EngagementBody = ({ path, engagement }: BodyProps) => (
         <dl className='grid grid-cols-[auto_1fr] gap-x-4' role='status'>
           {Object.entries(PROMPT_COMMANDS).map(([name, description]) => (
             <Fragment key={name}>
-              <dt className='text-foreground'>{name}</dt>
-              <dd className='text-subtle'>{description}</dd>
+              <dt className='text-fg'>{name}</dt>
+              <dd className='text-fg-subtle'>{description}</dd>
             </Fragment>
           ))}
         </dl>
       )}
 
       {engagement.error && (
-        <p className='text-failure' role='alert'>
+        <p className='text-fg' role='alert'>
           error: {engagement.error}
         </p>
       )}
@@ -101,7 +101,7 @@ const EngagementBody = ({ path, engagement }: BodyProps) => (
       </ul>
 
       {engagement.comments.length === 0 && !engagement.isLoadingComments && (
-        <p className='text-subtle'>no comments yet</p>
+        <p className='text-fg-subtle'>no comments yet</p>
       )}
 
       {engagement.hasMoreComments && (
@@ -127,17 +127,17 @@ export const Engagement = ({ target, slug }: Props) => {
 
   return (
     <section
-      className='mt-10 flex flex-col gap-6 rounded-md border border-edge bg-panel p-4 font-mono text-xs/6 sm:p-6'
+      className='mt-10 flex flex-col gap-6 border border-line bg-surface p-4 font-mono text-xs/6 sm:p-6'
       aria-label={SECTION_LABEL[target]}
     >
       {engagement.isLoading ? (
         <p
-          className='flex gap-2 text-muted-foreground'
+          className='flex gap-2 text-fg-muted'
           role='status'
           aria-label='Loading engagement'
         >
           fetching
-          <Spinner className='text-foreground' />
+          <Spinner className='text-fg' />
         </p>
       ) : (
         <EngagementBody path={`~/${target}/${slug}`} engagement={engagement} />

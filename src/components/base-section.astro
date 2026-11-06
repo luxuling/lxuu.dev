@@ -8,14 +8,10 @@ interface Props {
 const { title, description, class: className = '' } = Astro.props;
 ---
 
-<section class:list={['border border-edge bg-panel', className]}>
-  <div class='border-b border-edge px-4 py-3 md:px-6'>
+<section class:list={['border border-line bg-surface', className]}>
+  <div class='border-b border-line px-4 py-3 md:px-6'>
     <h2 class='text-sm font-semibold tracking-[0.14em] uppercase'>{title}</h2>
-    {
-      description && (
-        <p class='mt-2 text-sm text-muted-foreground'>{description}</p>
-      )
-    }
+    {description && <p class='mt-2 text-sm text-fg-muted'>{description}</p>}
   </div>
   <div class='px-4 py-5 md:px-6'>
     <slot />

@@ -12,12 +12,12 @@ interface ListProps extends Props {
 }
 
 const HEADING_LABEL_CLASS =
-  'font-mono text-[0.65rem] tracking-widest text-subtle uppercase';
+  'font-mono text-[0.65rem] tracking-widest text-fg-subtle uppercase';
 
 const markerColor = (isActive: boolean, isSubheading: boolean) => {
-  if (!isActive) return 'bg-edge';
+  if (!isActive) return 'bg-line';
 
-  return isSubheading ? 'bg-muted' : 'bg-foreground';
+  return isSubheading ? 'bg-line-strong' : 'bg-fg';
 };
 
 const TocList = ({ items, activeId, onNavigate }: ListProps) => (
@@ -29,15 +29,13 @@ const TocList = ({ items, activeId, onNavigate }: ListProps) => (
       return (
         <li key={item.id} className={`relative ${isSubheading ? 'pl-3' : ''}`}>
           <span
-            className={`absolute inset-y-0 left-0 w-px rounded-full transition-colors duration-200 ${markerColor(isActive, isSubheading)}`}
+            className={`absolute inset-y-0 left-0 w-px transition-colors duration-200 ${markerColor(isActive, isSubheading)}`}
           />
           <a
             href={`#${item.id}`}
             onClick={onNavigate}
             className={`block py-1 pl-3 font-mono text-[0.7rem] leading-snug transition-colors duration-150 ${
-              isActive
-                ? 'text-foreground'
-                : 'text-subtle hover:text-muted-foreground'
+              isActive ? 'text-fg' : 'text-fg-subtle hover:text-fg-muted'
             }`}
           >
             {item.text}
@@ -67,7 +65,7 @@ export const TableOfContents = ({ items }: Props) => {
       <div className='xl:hidden'>
         {drawer.isOpen && (
           <div
-            className='fixed inset-0 z-40 bg-background/70 backdrop-blur-sm'
+            className='fixed inset-0 z-40 bg-bg/70'
             onClick={drawer.close}
             aria-hidden='true'
           />
@@ -77,16 +75,16 @@ export const TableOfContents = ({ items }: Props) => {
           id='toc-drawer'
           role='dialog'
           aria-label='Table of contents'
-          className={`fixed inset-y-0 right-0 z-50 flex w-72 max-w-[85vw] flex-col border-l border-edge bg-panel shadow-2xl transition-transform duration-300 ease-in-out ${
+          className={`fixed inset-y-0 right-0 z-50 flex w-72 max-w-[85vw] flex-col border-l border-line bg-surface transition-transform duration-300 ease-in-out ${
             drawer.isOpen ? 'translate-x-0' : 'translate-x-[110%]'
           }`}
         >
-          <div className='flex items-center justify-between border-b border-edge px-4 py-3'>
+          <div className='flex items-center justify-between border-b border-line px-4 py-3'>
             <p className={HEADING_LABEL_CLASS}>[ contents ]</p>
             <button
               type='button'
               onClick={drawer.close}
-              className='font-mono text-xs text-subtle hover:text-foreground'
+              className='font-mono text-xs text-fg-subtle hover:text-fg'
               aria-label='Close table of contents'
             >
               ✕
@@ -106,10 +104,10 @@ export const TableOfContents = ({ items }: Props) => {
           onClick={drawer.toggle}
           aria-expanded={drawer.isOpen}
           aria-controls='toc-drawer'
-          className='fixed right-4 bottom-4 z-50 flex items-center gap-2 rounded-full border border-edge bg-panel/95 px-4 py-2.5 shadow-lg backdrop-blur-sm'
+          className='fixed right-4 bottom-4 z-50 flex items-center gap-2 border border-line bg-surface/95 px-4 py-2.5'
         >
           <svg
-            className='size-3.5 shrink-0 text-subtle'
+            className='size-3.5 shrink-0 text-fg-subtle'
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
@@ -125,7 +123,7 @@ export const TableOfContents = ({ items }: Props) => {
             <line x1='3' y1='12' x2='3.01' y2='12' />
             <line x1='3' y1='18' x2='3.01' y2='18' />
           </svg>
-          <span className='max-w-[40vw] truncate font-mono text-xs text-muted-foreground'>
+          <span className='max-w-[40vw] truncate font-mono text-xs text-fg-muted'>
             {activeItem?.text ?? 'contents'}
           </span>
         </button>

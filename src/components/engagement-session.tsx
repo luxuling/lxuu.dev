@@ -14,14 +14,14 @@ export const EngagementSession = ({ path, user }: Props) => (
         alt=''
         width={20}
         height={20}
-        frameClassName='size-5 shrink-0 rounded-sm'
+        frameClassName='size-5 shrink-0'
         className='size-full object-cover'
       />
     )}
-    <span className='whitespace-nowrap text-foreground'>
+    <span className='whitespace-nowrap text-fg'>
       {user ? user.display_name : 'guest'}
     </span>
-    <span className='text-subtle'>in</span>
-    <span className='truncate text-muted-foreground'>{path}</span>
+    <span className='text-fg-subtle'>in</span>
+    <span className='truncate text-fg-muted'>{path}</span>
   </div>
 );

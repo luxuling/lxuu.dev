@@ -11,9 +11,9 @@ export const Toaster = () => {
       {toasts.map((toast) => (
         <p
           key={toast.id}
-          className='rounded-md border border-edge bg-panel px-4 py-2 text-foreground shadow-lg transition-opacity duration-300 starting:opacity-0'
+          className='border border-line bg-surface px-4 py-2 text-fg transition-opacity duration-300 starting:opacity-0'
         >
-          <span className='text-prompt'>ok:</span> {toast.message}
+          <span className='text-fg'>ok:</span> {toast.message}
         </p>
       ))}
     </div>

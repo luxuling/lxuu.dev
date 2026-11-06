@@ -54,17 +54,17 @@ export const CommentItem = ({ comment, isBusy, onEdit, onDelete }: Props) => {
                 alt=''
                 width={20}
                 height={20}
-                frameClassName='size-5 shrink-0 rounded-sm'
+                frameClassName='size-5 shrink-0'
                 className='size-full object-cover'
               />
             )}
-            <span className='text-foreground'>
-              {comment.author.display_name}
-            </span>
-            <time dateTime={comment.created_at} className='text-subtle'>
+            <span className='text-fg'>{comment.author.display_name}</span>
+            <time dateTime={comment.created_at} className='text-fg-subtle'>
               {TIMESTAMP.format(new Date(comment.created_at))}
             </time>
-            {comment.edited_at && <span className='text-subtle'>(edited)</span>}
+            {comment.edited_at && (
+              <span className='text-fg-subtle'>(edited)</span>
+            )}
           </div>
 
           {comment.mine && draft === null && (
@@ -94,7 +94,7 @@ export const CommentItem = ({ comment, isBusy, onEdit, onDelete }: Props) => {
         </div>
 
         {draft === null ? (
-          <p className='text-sm/6 wrap-break-word whitespace-pre-wrap text-muted-foreground'>
+          <p className='text-sm/6 wrap-break-word whitespace-pre-wrap text-fg-muted'>
             {comment.body}
           </p>
         ) : (
