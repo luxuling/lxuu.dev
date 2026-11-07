@@ -1,8 +1,11 @@
 ---
 title: zerouch
-description: A small tracker for work I kept losing while using coding agents.
+description: >-
+  Zerouch keeps projects, priorities, and the next piece of work in one precise
+  workspace.
 tags:
   - Golang
+  - MCP
   - PostgreSQL
   - React
   - Tailwind CSS
@@ -19,8 +22,32 @@ links:
   live: https://zerouch.lxuu.dev/
 ---
 
-I kept losing track when I worked with coding agents. A task would move in the editor, then I would not remember where it stood. The tools I looked at were larger than the problem. I did not want a system full of pieces I would never use.
+# Problem
 
-Zerouch is the small version. A workspace, the projects in it, and the next piece of work. An agent can pick an issue up and put it back. That is the whole point.
+The more project that i work on it the more i want to finish the task as fast as possible and the solution that i got is using AI code agent to help me plan and write the code, it fine when i got work on the project that already have a project manager on it so i don't need to think the next move or the next task that i need to do, and everything is tracked.
 
-It is also the first project I serve from my own home lab.
+In my case i got to handle some project that it just me in there, and in different project, the move i do context switching from one to another is make me losing track about what i do, and because i run multiple agent i need to always checking one by one what i already done yesterday and what i need to do now.
+
+## Solutions
+
+Use app like linear, or notion to solve it, it works, sometimes, but i need some specific feature that is better when it there, it's the unlimited workspace, unlimited workspace, and kanban board that can connect to the AI, so i don't need to copy paste something back to back, and the important is it need to be `free` :> .
+
+So i came up with solution, which is like the other developer lol, how about i build it my self, with my custom needs, and i have full control of it, so i do, the progress is slow, but i'm proud of it, the journey of it i will cover it on my post, but here it is, i call it `zerouch.`&#x20;
+
+![](/images/projects/zerouch/2026-11-08-002708-hyprshot-mw6oeqol.png)
+
+## Main features
+
+- User profile and avatar
+- Workspaces with members and invites
+- Projects (create, edit, archive, delete)
+- Kanban tasks: Draft → Todo → In progress → In review → Done
+- Project knowledge: pages, folders, files
+- MCP endpoint for AI agents (Claude Code, Cursor, Codex)
+- Agent tokens with access levels
+- Agents claim tasks
+- Agent activity log
+- Pull request link finishes a task
+- In-app changelog
+
+> It's FREE btw if you want to try it, so try it and give me some feedback, i'm very happy if you do that hehehe :). [https://zerouch.lxuu.dev](https://zerouch.lxuu.dev/)
