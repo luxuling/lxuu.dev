@@ -1,6 +1,9 @@
 import { config, collection, fields, singleton } from '@keystatic/core';
 import { tagsField } from './src/components/tag-field';
-import { contentImageOptions } from './src/utils/content-images';
+import {
+  contentBodyImageOptions,
+  contentImageOptions,
+} from './src/utils/content-images';
 
 export default config({
   storage: { kind: 'local' },
@@ -56,7 +59,7 @@ export default config({
         }),
         content: fields.mdx({
           label: 'Content',
-          options: { image: contentImageOptions('posts') },
+          options: { image: contentBodyImageOptions('posts') },
         }),
       },
     }),
@@ -104,7 +107,7 @@ export default config({
         }),
         content: fields.mdx({
           label: 'Content',
-          options: { image: contentImageOptions('projects') },
+          options: { image: contentBodyImageOptions('projects') },
         }),
       },
     }),
