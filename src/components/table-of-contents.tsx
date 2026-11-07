@@ -23,9 +23,10 @@ const TocList = ({ items, activeId, itemClassName, onNavigate }: ListProps) => (
             href={`#${item.id}`}
             onClick={onNavigate}
             aria-current={isActive ? 'location' : undefined}
+            style={{ marginLeft: `${item.indent * 2}ch` }}
             className={`block pl-4 whitespace-pre transition-colors ${itemClassName} ${
               isActive ? 'text-fg' : 'text-fg-muted hover:text-fg'
-            } ${item.level === 3 ? 'ml-[2ch]' : ''}`}
+            }`}
           >
             {isActive ? '> ' : '  '}
             <span className='whitespace-normal lowercase'>{item.text}</span>

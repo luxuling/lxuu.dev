@@ -3,14 +3,15 @@ import type { MarkdownHeading } from 'astro';
 export interface TocItem {
   id: string;
   text: string;
-  level: number;
+  indent: number;
 }
 
-export const headingsToTocItems = (headings: MarkdownHeading[]): TocItem[] =>
-  headings
-    .filter((heading) => heading.depth >= 2 && heading.depth <= 3)
-    .map((heading) => ({
-      id: heading.slug,
-      text: heading.text,
-      level: heading.depth,
-    }));
+export const headingsToTocItems = (headings: MarkdownHeading[]): TocItem[] => {
+  const shallowestDepth = Math.min(...headings.map((heading) => heading.depth));
+
+  return headings.map((heading) => ({
+    id: heading.slug,
+    text: heading.text,
+    indent: heading.depth - shallowestDepth,
+  }));
+};

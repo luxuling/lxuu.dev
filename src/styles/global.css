@@ -145,11 +145,8 @@ body::after {
   width: 100%;
 }
 
-.prose-project h2,
-.prose-project h3 {
+.prose-project :is(h1, h2, h3, h4, h5, h6) {
   color: var(--color-fg);
-  font-size: 1rem;
-  line-height: 1.5rem;
   font-weight: 600;
   text-transform: lowercase;
   margin-top: 1.5rem;
@@ -157,21 +154,66 @@ body::after {
   scroll-margin-top: 6rem;
 }
 
-.prose-project h2::before,
-.prose-project h3::before {
+.prose-project :is(h1, h2, h3, h4, h5, h6):first-child {
+  margin-top: 0;
+}
+
+.prose-project :is(h1, h2, h3, h4, h5, h6)::before {
   color: var(--color-fg-subtle);
+}
+
+.prose-project h1 {
+  font-size: var(--text-h1);
+  line-height: var(--text-h1--line-height);
+}
+
+.prose-project h1::before {
+  content: '# ';
+}
+
+.prose-project h2 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 .prose-project h2::before {
   content: '## ';
 }
 
+.prose-project h3 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
 .prose-project h3::before {
   content: '### ';
 }
 
-.prose-project h2:first-child {
-  margin-top: 0;
+.prose-project h4 {
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+}
+
+.prose-project h4::before {
+  content: '#### ';
+}
+
+.prose-project h5 {
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+}
+
+.prose-project h5::before {
+  content: '##### ';
+}
+
+.prose-project h6 {
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}
+
+.prose-project h6::before {
+  content: '###### ';
 }
 
 .prose-project p {

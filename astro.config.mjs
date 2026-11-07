@@ -16,6 +16,14 @@ if (process.env.WORKERS_CI)
 const useKeystatic =
   process.argv.includes('dev') && !process.env.SKIP_KEYSTATIC;
 
+const keystaticEditorStyles = {
+  name: 'keystatic-editor-styles',
+  hooks: {
+    'astro:config:setup': ({ injectScript }) =>
+      injectScript('before-hydration', "import '/src/styles/keystatic.css';"),
+  },
+};
+
 // https://astro.build/config
 export default defineConfig({
   // Astro 7 defaults this to 'jsx', which drops spaces between inline elements
@@ -48,7 +56,7 @@ export default defineConfig({
     react(),
     markdoc(),
     mdx(),
-    ...(useKeystatic ? [keystatic()] : []),
+    ...(useKeystatic ? [keystatic(), keystaticEditorStyles] : []),
   ],
 
   env: {

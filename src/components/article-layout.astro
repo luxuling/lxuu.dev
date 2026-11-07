@@ -31,7 +31,10 @@ const { target, slug, title, description, tags, thumbnail, tocItems } =
         >
           &lt;- {target}
         </a>
-        <h1 class='text-h1 font-bold text-fg'>{title}</h1>
+        <div class='flex items-center gap-3'>
+          <slot name='logo' />
+          <h1 class='text-h1 font-bold text-fg'>{title}</h1>
+        </div>
         <p class='text-small text-fg-subtle'>
           <slot name='meta' />
         </p>
