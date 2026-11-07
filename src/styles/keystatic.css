@@ -1,0 +1,4 @@
+/* NOTE: :root outranks the Emotion class Keystatic injects after this file */
+:root [data-keystatic-editor='content'] {
+  min-height: 100vh;
+}
