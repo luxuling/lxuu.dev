@@ -2,18 +2,11 @@ import { GitHub, generateState } from 'arctic';
 import { getGithubOAuthCredentials } from '@/config/env';
 import { BadRequestError } from '@/utils/http-error';
 import { getCookie } from '@/utils/request';
+import { resolveSiteUrl } from '@/utils/site-url';
 
 const STATE_COOKIE = 'oauth_state';
 const RETURN_COOKIE = 'oauth_return';
 const COOKIE_ATTRIBUTES = 'HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600';
-const LOCAL_HOSTS = ['localhost', '127.0.0.1', '[::1]'];
-
-// NOTE: localhost keeps the request origin so local sign-in does not bounce to production
-const resolveSiteUrl = (requestUrl: URL) => {
-  if (LOCAL_HOSTS.includes(requestUrl.hostname)) return requestUrl.origin;
-
-  return import.meta.env.PUBLIC_SITE_URL ?? requestUrl.origin;
-};
 
 const createGithubProvider = (requestUrl: URL) => {
   const { clientId, clientSecret } = getGithubOAuthCredentials();
