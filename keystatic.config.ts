@@ -1,32 +1,25 @@
 import { config, collection, fields, singleton } from '@keystatic/core';
-import { block } from '@keystatic/core/content-components';
 import { tagsField } from './src/components/tag-field';
 import {
   contentBodyImageOptions,
   contentImageOptions,
 } from './src/utils/content-images';
 
-const sizedImage = (kind: 'posts' | 'projects') =>
-  block({
-    label: 'Image',
-    schema: {
-      src: fields.image({
-        label: 'Image',
-        validation: { isRequired: true },
-        ...contentBodyImageOptions(kind),
-      }),
-      alt: fields.text({ label: 'Alt text' }),
-      size: fields.select({
-        label: 'Size',
-        options: [
-          { label: 'Small', value: 'small' },
-          { label: 'Medium', value: 'medium' },
-          { label: 'Full width', value: 'full' },
-        ],
-        defaultValue: 'full',
-      }),
-    },
-  });
+// NOTE: stored as the markdown image title, so `![](src "small")`
+const imageSize = fields.select({
+  label: 'Size',
+  options: [
+    { label: 'Full width', value: '' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'Small', value: 'small' },
+  ],
+  defaultValue: '',
+});
+
+const bodyImageOptions = (kind: 'posts' | 'projects') => ({
+  ...contentBodyImageOptions(kind),
+  schema: { title: imageSize },
+});
 
 const publishDate = fields.datetime({
   label: 'Publish Date',
@@ -84,8 +77,7 @@ export default config({
         }),
         content: fields.mdx({
           label: 'Content',
-          options: { image: contentBodyImageOptions('posts') },
-          components: { Image: sizedImage('posts') },
+          options: { image: bodyImageOptions('posts') },
         }),
       },
     }),
@@ -130,8 +122,7 @@ export default config({
         }),
         content: fields.mdx({
           label: 'Content',
-          options: { image: contentBodyImageOptions('projects') },
-          components: { Image: sizedImage('projects') },
+          options: { image: bodyImageOptions('projects') },
         }),
       },
     }),
