@@ -34,7 +34,7 @@ export const CommentForm = ({ placeholder, isBusy, onSubmit }: Props) => {
         submit();
       }}
       onKeyDown={submitOnEnter}
-      className='flex items-start gap-3 border border-line-strong px-4 py-3 transition-colors focus-within:border-fg-muted'
+      className='flex items-start gap-3 border px-4 py-3 transition-colors focus-within:border-fg-muted'
     >
       <span className='text-fg' aria-hidden='true'>
         &gt;
@@ -50,7 +50,7 @@ export const CommentForm = ({ placeholder, isBusy, onSubmit }: Props) => {
       <button
         type='submit'
         disabled={isBusy || body.trim().length === 0}
-        className='shrink-0 cursor-pointer whitespace-pre text-fg disabled:cursor-default disabled:text-fg-subtle'
+        className='shrink-0 cursor-pointer whitespace-pre text-fg'
       >
         [ post ]
       </button>
