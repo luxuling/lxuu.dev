@@ -78,3 +78,47 @@ const { target, slug, title, description, tags, thumbnail, tocItems } =
     )}
   </div>
 </Page>
+
+<script>
+  const COPY_LABEL = '[copy]';
+
+  const addCopyButtons = () => {
+    for (const pre of document.querySelectorAll('.prose-project pre')) {
+      if (pre.parentElement?.classList.contains('code-block')) continue;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block';
+      pre.replaceWith(wrapper);
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'code-copy';
+      button.textContent = COPY_LABEL;
+      button.setAttribute('aria-label', 'Copy code');
+      button.setAttribute('aria-live', 'polite');
+
+      wrapper.append(pre, button);
+    }
+  };
+
+  const copyCode = async (event: MouseEvent) => {
+    if (!(event.target instanceof Element)) return;
+
+    const button = event.target.closest('.code-copy');
+    if (!button) return;
+
+    const code = button.parentElement?.querySelector('pre')?.textContent ?? '';
+
+    try {
+      await navigator.clipboard.writeText(code);
+      button.textContent = '[copied]';
+    } catch {
+      button.textContent = '[failed]';
+    }
+
+    setTimeout(() => (button.textContent = COPY_LABEL), 1500);
+  };
+
+  document.addEventListener('astro:page-load', addCopyButtons);
+  document.addEventListener('click', copyCode);
+</script>

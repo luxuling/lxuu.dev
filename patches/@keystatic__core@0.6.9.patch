@@ -1,0 +1,52 @@
+diff --git a/dist/index-3c244051.js b/dist/index-3c244051.js
+index 233c8ca00c98b9ceec745b211cb5057911c2bf2d..3bf1454e91be8a0adb974e0916a22ada56705470 100644
+--- a/dist/index-3c244051.js
++++ b/dist/index-3c244051.js
+@@ -23129,6 +23129,35 @@ function withShouldUse(val, shouldShow) {
+     shouldShow
+   });
+ }
++function CodeBlockLanguageCombobox({
++  language,
++  onChange
++}) {
++  const [inputValue, setInputValue] = useState(language ? aliasesToLabel.get(language) ?? language : 'Plain text');
++  const items = useMemo(() => inputValue === 'Plain text' || labelToCanonicalName.has(inputValue) ? languagesWithAliases : matchSorter(languagesWithAliases, inputValue, {
++    keys: ['label', 'value', 'aliases']
++  }), [inputValue]);
++  return /*#__PURE__*/jsx(Combobox, {
++    "aria-label": "Code block language",
++    allowsCustomValue: true,
++    inputValue,
++    onInputChange: setInputValue,
++    selectedKey: language ? aliasesToCanonicalName.get(language) ?? null : 'plain',
++    onSelectionChange: key => {
++      if (key === null) return;
++      onChange(key === 'plain' ? '' : key);
++      setInputValue(canonicalNameToLabel.get(key) ?? 'Plain text');
++    },
++    onBlur: () => {
++      if (inputValue === '' || inputValue === 'Plain text') return onChange('');
++      if (!labelToCanonicalName.has(inputValue) && inputValue !== language) onChange(inputValue);
++    },
++    items,
++    children: item => /*#__PURE__*/jsx(Item, {
++      children: item.label
++    }, item.value)
++  });
++}
+ const popoverComponents = {
+   code_block: function CodeBlockPopover(props) {
+     const dispatchCommand = useEditorDispatchCommand();
+@@ -23137,9 +23166,8 @@ const popoverComponents = {
+     return /*#__PURE__*/jsxs(Flex, {
+       gap: "regular",
+       padding: "regular",
+-      children: [/*#__PURE__*/jsx(TextField, {
+-        "aria-label": "Code block language",
+-        value: props.node.attrs.language,
++      children: [/*#__PURE__*/jsx(CodeBlockLanguageCombobox, {
++        language: props.node.attrs.language,
+         onChange: val => {
+           const view = viewRef.current;
+           view.dispatch(view.state.tr.setNodeAttribute(props.pos, 'language', val));

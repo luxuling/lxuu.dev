@@ -28,6 +28,9 @@ const keystaticEditorStyles = {
 export default defineConfig({
   // Astro 7 defaults this to 'jsx', which drops spaces between inline elements
   compressHTML: true,
+  markdown: {
+    shikiConfig: { theme: 'vesper' },
+  },
   vite: {
     plugins: [tailwindcss()],
     // HACK: Vite 8 answers /@id/astro/runtime/client/dev-toolbar/entrypoint.js

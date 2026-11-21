@@ -13,7 +13,15 @@ export const LoadingImage = ({ frameClassName, ...image }: Props) => {
       className={`image-loading ${frameClassName} ${isLoaded ? 'is-loaded' : ''}`}
     >
       <span className='image-loading-placeholder' aria-hidden='true' />
-      <img {...image} onLoad={markLoaded} onError={markLoaded} />
+      <img
+        {...image}
+        // Cached images can finish before hydration, so onLoad never fires
+        ref={(img) => {
+          if (img?.complete) markLoaded();
+        }}
+        onLoad={markLoaded}
+        onError={markLoaded}
+      />
     </span>
   );
 };

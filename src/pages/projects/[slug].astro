@@ -4,6 +4,7 @@ import { z } from 'astro/zod';
 import ArticleLayout from '@/components/article-layout.astro';
 import { CardStats } from '@/components/card-stats';
 import ContentLink from '@/components/content-link.astro';
+import SizedImage from '@/components/sized-image.astro';
 import { ProjectLogo } from '@/components/project-logo';
 import ZoomImage from '@/components/zoom-image.astro';
 import { getGithubProfileCredentials } from '@/config/env';
@@ -92,6 +93,8 @@ const githubStars = links?.github
       </p>
     )}
 
-    <Content components={{ a: ContentLink, img: ZoomImage }} />
+    <Content
+      components={{ a: ContentLink, img: ZoomImage, Image: SizedImage }}
+    />
   </ArticleLayout>
 </Layout>

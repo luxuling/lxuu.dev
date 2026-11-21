@@ -7,6 +7,9 @@ settings:
 overrides:
   vite: ^8
 
+patchedDependencies:
+  '@keystatic/core@0.6.9': a07b3f93292f0d98e7101e09b9a6abe36344f88cd5661f9f246a8cff80031243
+
 importers:
 
   .:
@@ -25,10 +28,10 @@ importers:
         version: 7.1.2(@types/node@26.1.1)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(esbuild@0.28.2)(jiti@2.7.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(tsx@4.23.15)(yaml@2.9.1)
       '@keystatic/astro':
         specifier: ^6.0.0
-        version: 6.0.0(@keystatic/core@0.6.9(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2))(astro@7.4.6(@types/node@26.1.1)(@vercel/functions@3.7.5(ws@8.21.0))(esbuild@0.28.2)(idb-keyval@6.3.0)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 6.0.0(@keystatic/core@0.6.9(patch_hash=a07b3f93292f0d98e7101e09b9a6abe36344f88cd5661f9f246a8cff80031243)(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2))(astro@7.4.6(@types/node@26.1.1)(@vercel/functions@3.7.5(ws@8.21.0))(esbuild@0.28.2)(idb-keyval@6.3.0)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@keystatic/core':
         specifier: ^0.6.9
-        version: 0.6.9(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2)
+        version: 0.6.9(patch_hash=a07b3f93292f0d98e7101e09b9a6abe36344f88cd5661f9f246a8cff80031243)(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2)
       '@neondatabase/serverless':
         specifier: ^1.2.0
         version: 1.2.0
@@ -4598,16 +4601,16 @@ snapshots:
       react-dom: 19.3.1(react@19.3.1)
       react-stately: 3.48.0(react@19.3.1)
 
-  '@keystatic/astro@6.0.0(@keystatic/core@0.6.9(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2))(astro@7.4.6(@types/node@26.1.1)(@vercel/functions@3.7.5(ws@8.21.0))(esbuild@0.28.2)(idb-keyval@6.3.0)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@keystatic/astro@6.0.0(@keystatic/core@0.6.9(patch_hash=a07b3f93292f0d98e7101e09b9a6abe36344f88cd5661f9f246a8cff80031243)(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2))(astro@7.4.6(@types/node@26.1.1)(@vercel/functions@3.7.5(ws@8.21.0))(esbuild@0.28.2)(idb-keyval@6.3.0)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@babel/runtime': 7.29.7
-      '@keystatic/core': 0.6.9(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2)
+      '@keystatic/core': 0.6.9(patch_hash=a07b3f93292f0d98e7101e09b9a6abe36344f88cd5661f9f246a8cff80031243)(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2)
       '@types/react': 19.3.0
       astro: 7.4.6(@types/node@26.1.1)(@vercel/functions@3.7.5(ws@8.21.0))(esbuild@0.28.2)(idb-keyval@6.3.0)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@keystatic/core@0.6.9(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2)':
+  '@keystatic/core@0.6.9(patch_hash=a07b3f93292f0d98e7101e09b9a6abe36344f88cd5661f9f246a8cff80031243)(@keystar/ui@0.10.0(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1))(react-aria@3.50.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.48.0(react@19.3.1))(react@19.3.1)(supports-color@10.2.2)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@braintree/sanitize-url': 6.0.4

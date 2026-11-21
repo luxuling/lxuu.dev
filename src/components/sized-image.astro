@@ -1,0 +1,21 @@
+---
+import ZoomImage from '@/components/zoom-image.astro';
+
+interface Props {
+  src: string;
+  alt?: string;
+  size?: 'small' | 'medium' | 'full';
+}
+
+const SIZE_CLASS = {
+  small: 'md:w-1/2',
+  medium: 'md:w-3/4',
+  full: '',
+};
+
+const { src, alt = '', size = 'full' } = Astro.props;
+---
+
+<div class:list={['mx-auto', SIZE_CLASS[size]]}>
+  <ZoomImage src={src} alt={alt} />
+</div>

@@ -295,6 +295,44 @@ body::after {
   margin-bottom: 1rem;
 }
 
+.prose-project pre[data-language]::before {
+  content: attr(data-language);
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--color-fg-subtle);
+  font-size: var(--text-micro);
+  line-height: var(--text-micro--line-height);
+  letter-spacing: var(--text-micro--letter-spacing);
+  text-transform: lowercase;
+}
+
+.prose-project .code-block {
+  position: relative;
+}
+
+.code-copy {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--color-fg-subtle);
+  font: inherit;
+  font-size: var(--text-micro);
+  line-height: var(--text-micro--line-height);
+  cursor: pointer;
+}
+
+.code-copy:hover {
+  color: var(--color-fg);
+}
+
+.code-copy:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 2px;
+}
+
 .prose-project pre code {
   background: none;
   border: none;
