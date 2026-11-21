@@ -5,7 +5,6 @@ import ArticleLayout from '@/components/article-layout.astro';
 import { CardStats } from '@/components/card-stats';
 import ContentLink from '@/components/content-link.astro';
 import SizedImage from '@/components/sized-image.astro';
-import ZoomImage from '@/components/zoom-image.astro';
 import Layout from '@/layouts/layout.astro';
 import { formatMonthYear } from '@/utils/format-date';
 import { headingsToTocItems } from '@/utils/toc';
@@ -39,8 +38,6 @@ const { title, description, tags, date, thumbnail } = entry.data;
       <CardStats client:load target='posts' slug={entry.id} separator=' · ' />
     </Fragment>
 
-    <Content
-      components={{ a: ContentLink, img: ZoomImage, Image: SizedImage }}
-    />
+    <Content components={{ a: ContentLink, img: SizedImage }} />
   </ArticleLayout>
 </Layout>

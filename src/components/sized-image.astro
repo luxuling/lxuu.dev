@@ -4,18 +4,18 @@ import ZoomImage from '@/components/zoom-image.astro';
 interface Props {
   src: string;
   alt?: string;
-  size?: 'small' | 'medium' | 'full';
+  // NOTE: Keystatic stores the image size as the markdown title
+  title?: string;
 }
 
-const SIZE_CLASS = {
+const SIZE_CLASS: Record<string, string> = {
   small: 'md:w-1/2',
   medium: 'md:w-3/4',
-  full: '',
 };
 
-const { src, alt = '', size = 'full' } = Astro.props;
+const { src, alt = '', title = '' } = Astro.props;
 ---
 
-<div class:list={['mx-auto', SIZE_CLASS[size]]}>
+<div class:list={SIZE_CLASS[title]}>
   <ZoomImage src={src} alt={alt} />
 </div>
