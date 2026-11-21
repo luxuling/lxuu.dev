@@ -11,3 +11,6 @@ minimumReleaseAgeExclude:
 
 overrides:
   vite: ^8
+
+patchedDependencies:
+  '@keystatic/core@0.6.9': patches/@keystatic__core@0.6.9.patch
