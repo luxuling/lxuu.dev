@@ -1,9 +1,32 @@
 import { config, collection, fields, singleton } from '@keystatic/core';
+import { block } from '@keystatic/core/content-components';
 import { tagsField } from './src/components/tag-field';
 import {
   contentBodyImageOptions,
   contentImageOptions,
 } from './src/utils/content-images';
+
+const sizedImage = (kind: 'posts' | 'projects') =>
+  block({
+    label: 'Image',
+    schema: {
+      src: fields.image({
+        label: 'Image',
+        validation: { isRequired: true },
+        ...contentBodyImageOptions(kind),
+      }),
+      alt: fields.text({ label: 'Alt text' }),
+      size: fields.select({
+        label: 'Size',
+        options: [
+          { label: 'Small', value: 'small' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Full width', value: 'full' },
+        ],
+        defaultValue: 'full',
+      }),
+    },
+  });
 
 export default config({
   storage: { kind: 'local' },
@@ -60,6 +83,7 @@ export default config({
         content: fields.mdx({
           label: 'Content',
           options: { image: contentBodyImageOptions('posts') },
+          components: { Image: sizedImage('posts') },
         }),
       },
     }),
@@ -108,6 +132,7 @@ export default config({
         content: fields.mdx({
           label: 'Content',
           options: { image: contentBodyImageOptions('projects') },
+          components: { Image: sizedImage('projects') },
         }),
       },
     }),
