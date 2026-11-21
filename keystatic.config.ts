@@ -28,6 +28,11 @@ const sizedImage = (kind: 'posts' | 'projects') =>
     },
   });
 
+const publishDate = fields.datetime({
+  label: 'Publish Date',
+  defaultValue: { kind: 'now' },
+});
+
 export default config({
   storage: { kind: 'local' },
   singletons: {
@@ -64,10 +69,7 @@ export default config({
           ],
           defaultValue: 'draft',
         }),
-        date: fields.datetime({
-          label: 'Publish Date',
-          defaultValue: new Date().toISOString(),
-        }),
+        date: publishDate,
         highlight: fields.checkbox({
           label: 'Highlight on homepage',
           defaultValue: false,
@@ -105,10 +107,7 @@ export default config({
           ],
           defaultValue: 'active',
         }),
-        date: fields.datetime({
-          label: 'Publish Date',
-          defaultValue: new Date().toISOString(),
-        }),
+        date: publishDate,
         highlight: fields.checkbox({
           label: 'Highlight on homepage',
           defaultValue: false,
